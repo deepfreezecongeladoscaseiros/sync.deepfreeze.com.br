@@ -1,28 +1,28 @@
 @extends('adminlte::page')
 
-@section('title', 'Edit Product')
+@section('title', 'Editar Produto')
 
 @section('content_header')
-    <h1>Edit Product: {{ $product->name }}</h1>
+    <h1>Editar Produto: {{ $product->name }}</h1>
 @stop
 
 @section('content')
     {{-- Product Edit Form --}}
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Product Details</h3>
+            <h3 class="card-title">Detalhes do Produto</h3>
             <div class="card-tools">
                 <form action="{{ route('admin.products.sync_to_tray', $product) }}" method="POST" style="display: inline;">
                     @csrf
-                    <button type="submit" class="btn btn-success">Sync to Tray</button>
+                    <button type="submit" class="btn btn-success">Sincronizar com Tray</button>
                 </form>
                 <form action="{{ route('admin.products.sync_image', $product) }}" method="POST" style="display: inline;">
                     @csrf
-                    <button type="submit" class="btn btn-info">Sync Image</button>
+                    <button type="submit" class="btn btn-info">Sincronizar Imagem</button>
                 </form>
                 <form action="{{ route('admin.products.sync_properties', $product) }}" method="POST" style="display: inline;">
                     @csrf
-                    <button type="submit" class="btn btn-warning">Sync Properties</button>
+                    <button type="submit" class="btn btn-warning">Sincronizar Propriedades</button>
                 </form>
             </div>
         </div>
@@ -31,7 +31,7 @@
                 @csrf
                 @method('PUT')
                 <div class="form-group">
-                    <label for="tray_id">Tray ID</label>
+                    <label for="tray_id">ID Tray</label>
                     <input type="text" id="tray_id" class="form-control" value="{{ $product->tray_id }}" readonly>
                 </div>
 
@@ -43,10 +43,10 @@
     {{-- Variants Management --}}
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Variants</h3>
+            <h3 class="card-title">Variações</h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#variantModal">
-                    New Variant
+                    Nova Variação
                 </button>
             </div>
         </div>
@@ -54,12 +54,12 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Tray ID</th>
-                        <th>Type</th>
-                        <th>Value</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th style="width: 200px">Actions</th>
+                        <th>ID Tray</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Preço</th>
+                        <th>Estoque</th>
+                        <th style="width: 200px">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,21 +71,21 @@
                             <td>R$ {{ number_format($variant->price ?? $product->price, 2, ',', '.') }}</td>
                             <td>{{ $variant->stock }}</td>
                             <td>
-                                <a href="{{ route('admin.variants.edit', $variant->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('admin.variants.edit', $variant->id) }}" class="btn btn-sm btn-warning">Editar</a>
                                 <form action="{{ route('admin.variants.destroy', $variant->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                                 </form>
                                 <form action="{{ route('admin.variants.sync_to_tray', $variant->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
-                                    <button type="submit" class="btn btn-sm btn-success">Sync</button>
+                                    <button type="submit" class="btn btn-sm btn-success">Sincronizar</button>
                                 </form>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">No variants found.</td>
+                            <td colspan="5">Nenhuma variação encontrada.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -98,7 +98,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="variantModalLabel">New Variant</h5>
+                <h5 class="modal-title" id="variantModalLabel">Nova Variação</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -107,25 +107,25 @@
                 <div class="modal-body">
                     @csrf
                     <div class="form-group">
-                        <label for="type">Type (e.g., Color)</label>
+                        <label for="type">Tipo (ex: Cor)</label>
                         <input type="text" name="type" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="value">Value (e.g., Blue)</label>
+                        <label for="value">Valor (ex: Azul)</label>
                         <input type="text" name="value" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="price">Price (leave blank to use main product price)</label>
+                        <label for="price">Preço (deixe em branco para usar o preço do produto principal)</label>
                         <input type="number" step="0.01" name="price" class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="stock">Stock</label>
+                        <label for="stock">Estoque</label>
                         <input type="number" name="stock" class="form-control" value="0">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Variant</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Variação</button>
                 </div>
             </form>
         </div>

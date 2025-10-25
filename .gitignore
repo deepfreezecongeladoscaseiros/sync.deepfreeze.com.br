@@ -27,3 +27,6 @@ Sync_Deep_Public_API.postman_collection.json
 Sync_Deep_Webhooks.postman_collection.json
 WEBHOOK_ESPECIFICACAO_SISTEMA_LEGADO.md
 WEBHOOK_INTEGRATION_GUIDE.md
+.claude
+/Dump_structure
+.editorconfig

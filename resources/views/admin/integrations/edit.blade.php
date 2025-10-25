@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Edit Integration')
+@section('title', 'Editar Integração')
 
 @section('content_header')
     <h1>Edit Integration: {{ $integration->name }}</h1>

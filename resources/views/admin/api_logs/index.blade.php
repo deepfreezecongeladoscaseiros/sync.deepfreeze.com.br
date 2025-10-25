@@ -106,7 +106,7 @@
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label>IP Address</label>
+                            <label>Endereço IP</label>
                             <input type="text" name="ip_address" class="form-control form-control-sm" value="{{ request('ip_address') }}" placeholder="127.0.0.1">
                         </div>
                     </div>
@@ -152,13 +152,13 @@
                 <thead>
                     <tr>
                         <th style="width: 50px">ID</th>
-                        <th style="width: 70px">Method</th>
+                        <th style="width: 70px">Método</th>
                         <th>Endpoint</th>
                         <th style="width: 100px">Status</th>
                         <th style="width: 100px">Response Time</th>
                         <th style="width: 120px">IP</th>
-                        <th style="width: 150px">Date</th>
-                        <th style="width: 100px">Actions</th>
+                        <th style="width: 150px">Data</th>
+                        <th style="width: 100px">Ações</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'API Documentation')
+@section('title', 'Documentação da API')
 
 @section('content_header')
     <h1>

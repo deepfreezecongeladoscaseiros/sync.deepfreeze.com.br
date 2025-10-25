@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <table class="table table-bordered">
                         <tr>
-                            <th style="width: 150px">Method</th>
+                            <th style="width: 150px">Método</th>
                             <td>
                                 <span class="badge badge-{{ $apiLog->method === 'GET' ? 'info' : 'primary' }}">
                                     {{ $apiLog->method }}
@@ -32,11 +32,11 @@
                             <td><small>{{ $apiLog->full_url }}</small></td>
                         </tr>
                         <tr>
-                            <th>IP Address</th>
+                            <th>Endereço IP</th>
                             <td>{{ $apiLog->ip_address }}</td>
                         </tr>
                         <tr>
-                            <th>User Agent</th>
+                            <th>Navegador</th>
                             <td><small>{{ $apiLog->user_agent }}</small></td>
                         </tr>
                         <tr>

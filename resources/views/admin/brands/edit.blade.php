@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Edit Brand')
+@section('title', 'Editar Marca')
 
 @section('content_header')
-    <h1>Edit Brand</h1>
+    <h1>Editar Marca: {{ $brand->brand }}</h1>
 @stop
 
 @section('content')
@@ -15,16 +15,18 @@
                 @include('admin.brands._form')
 
                 <div class="form-group">
-                    <label for="tray_id">Tray ID</label>
+                    <label for="tray_id">ID Tray</label>
                     <input type="text" id="tray_id" class="form-control" value="{{ $brand->tray_id }}" readonly>
                 </div>
 
+                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary">Cancelar</a>
             </form>
         </div>
         <div class="card-footer">
             <form action="{{ route('admin.brands.sync_to_tray', $brand) }}" method="POST">
                 @csrf
-                <button type="submit" class="btn btn-success">Sync to Tray</button>
+                <button type="submit" class="btn btn-success">Sincronizar com Tray</button>
             </form>
         </div>
     </div>

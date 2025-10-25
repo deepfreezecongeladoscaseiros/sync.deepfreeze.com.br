@@ -14,9 +14,9 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'Deep Sync',
     'title_prefix' => '',
-    'title_postfix' => '',
+    'title_postfix' => ' - Deep Freeze',
 
     /*
     |--------------------------------------------------------------------------
@@ -63,12 +63,12 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
-    'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
-    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo' => '<b>Deep</b> Sync',
+    'logo_img' => 'img/marca_deepfreeze_site_2022.png',
+    'logo_img_class' => 'brand-image elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Admin Logo',
+    'logo_img_alt' => 'Deep Freeze Logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -257,10 +257,10 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'dashboard',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
+    'register_url' => false,
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
     'profile_url' => false,
@@ -301,44 +301,35 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
-        [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
 
         // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
         
-        ['header' => 'CATALOG'],
-        ['text' => 'Categories', 'route'  => 'admin.categories.index', 'icon' => 'fas fa-fw fa-tags'],
-        ['text' => 'Brands', 'route'  => 'admin.brands.index', 'icon' => 'fas fa-fw fa-copyright'],
-        ['text' => 'Manufacturers', 'route'  => 'admin.manufacturers.index', 'icon' => 'fas fa-fw fa-industry'],
-        ['text' => 'Products', 'route'  => 'admin.products.index', 'icon' => 'fas fa-fw fa-box'],
-        ['text' => 'Properties', 'route'  => 'admin.properties.index', 'icon' => 'fas fa-fw fa-list-alt'],
+        ['header' => 'CATÁLOGO'],
+        ['text' => 'Categorias', 'route'  => 'admin.categories.index', 'icon' => 'fas fa-fw fa-tags'],
+        ['text' => 'Marcas', 'route'  => 'admin.brands.index', 'icon' => 'fas fa-fw fa-copyright'],
+        ['text' => 'Fabricantes', 'route'  => 'admin.manufacturers.index', 'icon' => 'fas fa-fw fa-industry'],
+        ['text' => 'Produtos', 'route'  => 'admin.products.index', 'icon' => 'fas fa-fw fa-box'],
+        ['text' => 'Propriedades', 'route'  => 'admin.properties.index', 'icon' => 'fas fa-fw fa-list-alt'],
         
-        ['header' => 'SYNCHRONIZATION'],
-        ['text' => 'Legacy Sync', 'route'  => 'admin.sync.index', 'icon' => 'fas fa-fw fa-sync'],
+        ['header' => 'SINCRONIZAÇÃO'],
+        ['text' => 'Sincronizar Legado', 'route'  => 'admin.sync.index', 'icon' => 'fas fa-fw fa-sync'],
         
-        ['header' => 'INTEGRATIONS'],
-        ['text' => 'Integrations', 'route'  => 'admin.integrations.index', 'icon' => 'fas fa-fw fa-plug'],
+        ['header' => 'INTEGRAÇÕES'],
+        ['text' => 'Integrações', 'route'  => 'admin.integrations.index', 'icon' => 'fas fa-fw fa-plug'],
         ['text' => 'Tray Commerce', 'route'  => 'admin.tray.index', 'icon' => 'fas fa-fw fa-store'],
         
-        ['header' => 'PUBLIC API'],
+        ['header' => 'API PÚBLICA'],
         [
-            'text' => 'Documentation',
+            'text' => 'Documentação',
             'url' => '/docs',
             'icon' => 'fas fa-fw fa-book',
             'target' => '_blank',
         ],
         [
-            'text' => 'API Logs',
+            'text' => 'Logs da API',
             'route' => 'admin.api_logs.index',
             'icon' => 'fas fa-fw fa-chart-line',
         ],
@@ -446,6 +437,16 @@ return [
                     'type' => 'js',
                     'asset' => false,
                     'location' => '//cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js',
+                ],
+            ],
+        ],
+        'DeepFreezeTheme' => [
+            'active' => true,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'css/deep-freeze-theme.css',
                 ],
             ],
         ],

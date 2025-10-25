@@ -1,15 +1,15 @@
 @extends('adminlte::page')
 
-@section('title', 'Integrations')
+@section('title', 'Integrações')
 
 @section('content_header')
-    <h1>Integrations</h1>
+    <h1>Integrações</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
-            <a href="{{ route('admin.integrations.create') }}" class="btn btn-primary">New Integration</a>
+            <a href="{{ route('admin.integrations.create') }}" class="btn btn-primary">Nova Integração</a>
         </div>
         <div class="card-body">
             <table class="table table-bordered">
@@ -17,7 +17,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Status</th>
-                        <th style="width: 200px">Actions</th>
+                        <th style="width: 200px">Ações</th>
                     </tr>
                 </thead>
                 <tbody>

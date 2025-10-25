@@ -9,16 +9,16 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h4>New Value</h4>
+            <h4>Novo Valor</h4>
         </div>
         <div class="card-body">
             <form action="{{ route('admin.properties.values.store', $property) }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">Nome</label>
                     <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}">
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
             </form>
         </div>
     </div>
@@ -31,8 +31,8 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th style="width: 150px">Actions</th>
+                        <th>Nome</th>
+                        <th style="width: 150px">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -40,11 +40,11 @@
                         <tr>
                             <td>{{ $value->name }}</td>
                             <td>
-                                <a href="{{ route('admin.values.edit', $value->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('admin.values.edit', $value->id) }}" class="btn btn-sm btn-warning">Editar</a>
                                 <form action="{{ route('admin.values.destroy', $value->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                                 </form>
                             </td>
                         </tr>

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Edit Property')
+@section('title', 'Editar Propriedade')
 
 @section('content_header')
     <h1>Edit Property</h1>
@@ -21,11 +21,11 @@
 
             </div>
             <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <a href="{{ route('admin.properties.index') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <a href="{{ route('admin.properties.index') }}" class="btn btn-secondary">Cancelar</a>
                 <form action="{{ route('admin.properties.sync_to_tray', $property) }}" method="POST" style="display: inline; float: right;">
                     @csrf
-                    <button type="submit" class="btn btn-success">Sync to Tray</button>
+                    <button type="submit" class="btn btn-success">Sincronizar com Tray</button>
                 </form>
             </form>
         </div>

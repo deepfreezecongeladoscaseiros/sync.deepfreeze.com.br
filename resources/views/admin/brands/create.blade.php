@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'New Brand')
+@section('title', 'Nova Marca')
 
 @section('content_header')
-    <h1>New Brand</h1>
+    <h1>Nova Marca</h1>
 @stop
 
 @section('content')

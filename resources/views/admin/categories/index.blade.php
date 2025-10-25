@@ -1,16 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'Categories')
+@section('title', 'Categorias')
 
 @section('content_header')
-    <h1>Categories</h1>
+    <h1>Categorias</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">New Category</a>
+                <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">Nova Categoria</a>
                 
                 <form action="{{ route('admin.categories.index') }}" method="GET" class="form-inline">
                     <div class="input-group">
@@ -46,10 +46,10 @@
                 <thead>
                     <tr>
                         <th style="width: 10px">#</th>
-                        <th style="width: 100px">Legacy ID</th>
-                        <th>Name</th>
+                        <th style="width: 100px">ID Legado</th>
+                        <th>Nome</th>
                         <th>Slug</th>
-                        <th style="width: 150px">Actions</th>
+                        <th style="width: 150px">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,11 +62,11 @@
                             <td>{{ $category->name }}</td>
                             <td><small class="text-muted">{{ $category->slug }}</small></td>
                             <td>
-                                <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-sm btn-warning">Editar</a>
                                 <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
                                 </form>
                             </td>
                         </tr>

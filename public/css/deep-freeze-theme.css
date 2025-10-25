@@ -1,0 +1,290 @@
+/**
+ * Deep Freeze Theme
+ * Cores oficiais: Azul #4e5296, Verde #0bc862, Branco #ffffff
+ */
+
+/* Primary Color - Azul Deep Freeze */
+.btn-primary,
+.bg-primary,
+.badge-primary,
+.alert-primary {
+    background-color: #4e5296 !important;
+    border-color: #4e5296 !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: #3d4078 !important;
+    border-color: #3d4078 !important;
+}
+
+/* Success Color - Verde Deep Freeze */
+.btn-success,
+.bg-success,
+.badge-success,
+.alert-success {
+    background-color: #0bc862 !important;
+    border-color: #0bc862 !important;
+}
+
+.btn-success:hover,
+.btn-success:focus,
+.btn-success:active {
+    background-color: #09a550 !important;
+    border-color: #09a550 !important;
+}
+
+/* Navbar - Gradiente Deep Freeze */
+.main-header.navbar {
+    background: linear-gradient(135deg, #4e5296 0%, #0bc862 100%) !important;
+    border-bottom: none;
+}
+
+.main-header .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.main-header .navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+}
+
+/* Sidebar */
+.main-sidebar {
+    background-color: #4e5296 !important;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
+.sidebar-dark-primary .nav-sidebar > .nav-item.menu-open > .nav-link {
+    background-color: #0bc862 !important;
+    color: #ffffff !important;
+}
+
+.nav-sidebar .nav-link:hover {
+    background-color: rgba(11, 200, 98, 0.2) !important;
+}
+
+.brand-link {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background-color: #3d4078 !important;
+}
+
+.brand-link .brand-text {
+    color: #ffffff !important;
+}
+
+/* Links e Textos */
+a {
+    color: #4e5296;
+}
+
+a:hover {
+    color: #0bc862;
+}
+
+.text-primary {
+    color: #4e5296 !important;
+}
+
+.text-success {
+    color: #0bc862 !important;
+}
+
+/* Cards */
+.card-primary:not(.card-outline) > .card-header {
+    background-color: #4e5296 !important;
+    border-color: #4e5296 !important;
+}
+
+.card-success:not(.card-outline) > .card-header {
+    background-color: #0bc862 !important;
+    border-color: #0bc862 !important;
+}
+
+.card-primary.card-outline {
+    border-top: 3px solid #4e5296 !important;
+}
+
+.card-success.card-outline {
+    border-top: 3px solid #0bc862 !important;
+}
+
+/* Pagination */
+.pagination .page-item.active .page-link {
+    background-color: #4e5296 !important;
+    border-color: #4e5296 !important;
+    color: #ffffff !important;
+}
+
+.pagination .page-item.active .page-link:hover,
+.pagination .page-item.active .page-link:focus {
+    background-color: #4e5296 !important;
+    border-color: #4e5296 !important;
+    color: #ffffff !important;
+}
+
+.pagination .page-link {
+    color: #4e5296 !important;
+}
+
+.pagination .page-link:hover {
+    background-color: #0bc862 !important;
+    border-color: #0bc862 !important;
+    color: #ffffff !important;
+}
+
+.page-item.active .page-link {
+    background-color: #4e5296 !important;
+    border-color: #4e5296 !important;
+    color: #ffffff !important;
+    z-index: 3;
+}
+
+/* Forms */
+.form-control:focus {
+    border-color: #4e5296 !important;
+    box-shadow: 0 0 0 0.2rem rgba(78, 82, 150, 0.25) !important;
+}
+
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #4e5296 !important;
+    border-color: #4e5296 !important;
+}
+
+/* Tables */
+.table-primary,
+.table-primary > th,
+.table-primary > td {
+    background-color: rgba(78, 82, 150, 0.1) !important;
+}
+
+.table-success,
+.table-success > th,
+.table-success > td {
+    background-color: rgba(11, 200, 98, 0.1) !important;
+}
+
+/* Info Box */
+.info-box .bg-primary {
+    background-color: #4e5296 !important;
+}
+
+.info-box .bg-success {
+    background-color: #0bc862 !important;
+}
+
+/* Small Box */
+.small-box.bg-primary {
+    background-color: #4e5296 !important;
+}
+
+.small-box.bg-success {
+    background-color: #0bc862 !important;
+}
+
+/* Progress Bar */
+.progress-bar-primary {
+    background-color: #4e5296 !important;
+}
+
+.progress-bar-success {
+    background-color: #0bc862 !important;
+}
+
+/* Dropdowns */
+.dropdown-item:active,
+.dropdown-item:focus {
+    background-color: #4e5296 !important;
+    color: #ffffff !important;
+}
+
+/* Brand Image no Sidebar */
+.brand-image {
+    max-height: 40px !important;
+    width: auto !important;
+    border-radius: 0 !important;
+}
+
+/* Gradiente nos botões principais */
+.btn-primary.btn-gradient {
+    background: linear-gradient(135deg, #4e5296 0%, #0bc862 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+}
+
+.btn-primary.btn-gradient:hover {
+    background: linear-gradient(135deg, #3d4078 0%, #09a550 100%) !important;
+}
+
+/* Footer */
+.main-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4e5296;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #0bc862;
+}
+
+/* Loading Overlay */
+.overlay-wrapper .overlay {
+    background-color: rgba(78, 82, 150, 0.7) !important;
+}
+
+/* Select2 */
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default .select2-selection--multiple:focus {
+    border-color: #4e5296 !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #4e5296 !important;
+}
+
+/* Switches */
+.custom-switch .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #0bc862 !important;
+    border-color: #0bc862 !important;
+}
+
+/* Tabs */
+.nav-tabs .nav-link.active {
+    border-top-color: #4e5296 !important;
+}
+
+/* Badges */
+.badge-primary {
+    background-color: #4e5296 !important;
+}
+
+.badge-success {
+    background-color: #0bc862 !important;
+}
+
+/* Alerts */
+.alert-primary {
+    background-color: rgba(78, 82, 150, 0.1) !important;
+    border-color: #4e5296 !important;
+    color: #4e5296 !important;
+}
+
+.alert-success {
+    background-color: rgba(11, 200, 98, 0.1) !important;
+    border-color: #0bc862 !important;
+    color: #0bc862 !important;
+}

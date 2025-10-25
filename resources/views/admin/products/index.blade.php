@@ -1,16 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'Products')
+@section('title', 'Produtos')
 
 @section('content_header')
-    <h1>Products</h1>
+    <h1>Produtos</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('admin.products.create') }}" class="btn btn-primary">New Product</a>
+                <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Novo Produto</a>
                 
                 <form action="{{ route('admin.products.index') }}" method="GET" class="form-inline">
                     <div class="input-group">
@@ -46,14 +46,14 @@
                 <thead>
                     <tr>
                         <th style="width: 10px">#</th>
-                        <th style="width: 80px">Legacy ID</th>
-                        <th style="width: 100px">SKU</th>
-                        <th style="width: 80px">Image</th>
-                        <th>Name</th>
-                        <th>Category</th>
-                        <th>Brand</th>
-                        <th>Price</th>
-                        <th style="width: 150px">Actions</th>
+                        <th style="width: 80px">ID Legado</th>
+                        <th style="width: 100px">Código</th>
+                        <th style="width: 80px">Imagem</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Marca</th>
+                        <th>Preço</th>
+                        <th style="width: 150px">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,7 +74,7 @@
                                     <img src="{{ asset('storage/' . $mainImage->path) }}" alt="{{ $product->name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
                                 @else
                                     <div style="width: 60px; height: 60px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 9px; color: #999;">
-                                        No Image
+                                        Sem Imagem
                                     </div>
                                 @endif
                             </td>
@@ -83,11 +83,11 @@
                             <td>{{ $product->brand->brand ?? 'N/A' }}</td>
                             <td>R$ {{ number_format($product->price, 2, ',', '.') }}</td>
                             <td>
-                                <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-warning">Editar</a>
                                 <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
                                 </form>
                             </td>
                         </tr>

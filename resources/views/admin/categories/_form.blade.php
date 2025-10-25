@@ -9,8 +9,8 @@
 @endif
 
 <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" class="form-control" value="{{ $category->name ?? old('name') }}">
+    <label for="name">Nome</label>
+    <input type="text" name="name" id="name" class="form-control" value="{{ $category->name ?? old('name') }}" required>
 </div>
 
-<button type="submit" class="btn btn-primary">Save</button>
+<button type="submit" class="btn btn-primary">Salvar</button>

@@ -9,8 +9,8 @@
 @endif
 
 <div class="form-group">
-    <label for="brand">Name</label>
-    <input type="text" name="brand" id="brand" class="form-control" value="{{ $brand->brand ?? old('brand') }}">
+    <label for="brand">Nome</label>
+    <input type="text" name="brand" id="brand" class="form-control" value="{{ $brand->brand ?? old('brand') }}" required>
 </div>
 
-<button type="submit" class="btn btn-primary">Save</button>
+<button type="submit" class="btn btn-primary">Salvar</button>
