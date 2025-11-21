@@ -21,6 +21,15 @@ class Integration extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'status' => 'boolean',
+    ];
+
+    /**
      * The "booted" method of the model.
      *
      * @return void
