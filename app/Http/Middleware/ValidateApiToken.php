@@ -21,7 +21,7 @@ class ValidateApiToken
         }
 
         $integration = Integration::where('token', $token)
-            ->where('status', 'active')
+            ->where('status', true)
             ->first();
 
         if (!$integration) {
