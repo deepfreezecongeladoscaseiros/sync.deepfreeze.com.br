@@ -1,0 +1,68 @@
+/**
+ * Mapeamento de ícones Font Awesome para Bootstrap Icons (estilo linear)
+ *
+ * Este arquivo substitui as classes do Font Awesome (fa fa-*) por equivalentes
+ * do Bootstrap Icons mantendo compatibilidade com o HTML original.
+ *
+ * Bootstrap Icons CDN: https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css
+ */
+
+/* Reset base para ícones */
+.fa, [class^="fa-"], [class*=" fa-"] {
+    font-family: 'bootstrap-icons' !important;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: inline-block;
+}
+
+/* Mapeamento específico de cada ícone usado no site */
+
+/* Ícones de interface */
+.fa-times::before { content: "\f659"; } /* bi-x-lg */
+.fa-caret-right::before { content: "\f285"; } /* bi-caret-right-fill */
+.fa-caret-down::before { content: "\f282"; } /* bi-caret-down-fill */
+.fa-thumbs-o-up::before { content: "\f634"; } /* bi-hand-thumbs-up */
+
+/* Redes sociais */
+.fa-facebook::before { content: "\f344"; } /* bi-facebook */
+.fa-instagram::before { content: "\f437"; } /* bi-instagram */
+.fa-whatsapp::before { content: "\f618"; } /* bi-whatsapp */
+
+/* Usuário e autenticação */
+.fa-user-o::before { content: "\f4da"; } /* bi-person */
+.fa-share::before { content: "\f10e"; } /* bi-box-arrow-in-right */
+
+/* Localização e contato */
+.fa-map-marker::before { content: "\f3f4"; } /* bi-geo-alt-fill */
+.fa-envelope::before { content: "\f32f"; } /* bi-envelope */
+
+/* Ações de produto */
+.fa-heart-o::before { content: "\f417"; } /* bi-heart */
+.fa-minus::before { content: "\f286"; } /* bi-dash-lg */
+.fa-plus::before { content: "\f4fe"; } /* bi-plus-lg */
+
+/* Classes customizadas do tema */
+.icon-perfil::before {
+    margin-right: 5px;
+}
+
+.icon-entrar::before {
+    margin-right: 5px;
+}
+
+.icon-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: currentColor;
+}
+
+.icon-bar + .icon-bar {
+    margin-top: 4px;
+}

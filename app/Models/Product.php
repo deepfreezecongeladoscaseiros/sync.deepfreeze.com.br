@@ -135,4 +135,243 @@ class Product extends Model
     {
         return $this->belongsToMany(PropertyValue::class, 'product_property_value');
     }
+
+    // ==================== HELPERS ====================
+
+    /**
+     * Gera o slug do produto baseado no nome
+     * @return string
+     */
+    public function getSlugAttribute(): string
+    {
+        return \Illuminate\Support\Str::slug($this->name);
+    }
+
+    /**
+     * Retorna a URL do produto
+     * @return string
+     */
+    public function getUrlAttribute(): string
+    {
+        // Se pertence a uma categoria, inclui o slug da categoria
+        if ($this->category) {
+            return url("/{$this->category->slug}/{$this->slug}");
+        }
+        return url("/produto/{$this->slug}");
+    }
+
+    /**
+     * Retorna a imagem principal do produto
+     * @return ProductImage|null
+     */
+    public function getMainImage(): ?ProductImage
+    {
+        // Primeiro tenta pegar a marcada como principal
+        $main = $this->images()->where('is_main', true)->first();
+        if ($main) return $main;
+
+        // Senão, pega a primeira da lista
+        return $this->images()->first();
+    }
+
+    /**
+     * Retorna a URL da imagem principal
+     * @param string $size Tamanho da imagem (thumb, medium, large)
+     * @return string
+     */
+    public function getMainImageUrl(string $size = 'medium'): string
+    {
+        $image = $this->getMainImage();
+
+        if ($image && $image->path) {
+            // Se é URL externa (CDN), retorna direto
+            if (str_starts_with($image->path, 'http')) {
+                return $image->path;
+            }
+            // Se é path local
+            return asset('storage/' . $image->path);
+        }
+
+        // Placeholder caso não tenha imagem
+        return asset('storefront/img/no-image.jpg');
+    }
+
+    /**
+     * Verifica se o produto está em promoção
+     * @return bool
+     */
+    public function isOnPromotion(): bool
+    {
+        if (!$this->promotional_price || $this->promotional_price <= 0) {
+            return false;
+        }
+
+        $today = now()->startOfDay();
+
+        // Verifica período da promoção
+        if ($this->start_promotion && $today->lt($this->start_promotion)) {
+            return false;
+        }
+
+        if ($this->end_promotion && $today->gt($this->end_promotion)) {
+            return false;
+        }
+
+        return $this->promotional_price < $this->price;
+    }
+
+    /**
+     * Retorna o preço atual (considerando promoção)
+     * @return float
+     */
+    public function getCurrentPrice(): float
+    {
+        if ($this->isOnPromotion()) {
+            return (float) $this->promotional_price;
+        }
+        return (float) $this->price;
+    }
+
+    /**
+     * Retorna o preço original (sem promoção)
+     * @return float
+     */
+    public function getOriginalPrice(): float
+    {
+        return (float) $this->price;
+    }
+
+    /**
+     * Calcula o percentual de desconto
+     * @return int
+     */
+    public function getDiscountPercentage(): int
+    {
+        if (!$this->isOnPromotion() || $this->price <= 0) {
+            return 0;
+        }
+
+        $discount = (($this->price - $this->promotional_price) / $this->price) * 100;
+        return (int) round($discount);
+    }
+
+    /**
+     * Formata preço para exibição
+     * @param float $value
+     * @return string
+     */
+    public static function formatPrice(float $value): string
+    {
+        return 'R$ ' . number_format($value, 2, ',', '.');
+    }
+
+    /**
+     * Retorna o preço atual formatado
+     * @return string
+     */
+    public function getFormattedPriceAttribute(): string
+    {
+        return self::formatPrice($this->getCurrentPrice());
+    }
+
+    /**
+     * Retorna o preço original formatado
+     * @return string
+     */
+    public function getFormattedOriginalPriceAttribute(): string
+    {
+        return self::formatPrice($this->getOriginalPrice());
+    }
+
+    /**
+     * Verifica se o produto está disponível para venda
+     * @return bool
+     */
+    public function isAvailable(): bool
+    {
+        return $this->active && $this->available && $this->stock > 0;
+    }
+
+    /**
+     * Verifica se é um kit/combo
+     * @return bool
+     */
+    public function isKit(): bool
+    {
+        return $this->is_package || $this->is_combo;
+    }
+
+    // ==================== SCOPES ====================
+
+    /**
+     * Scope: Apenas produtos ativos
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('active', true);
+    }
+
+    /**
+     * Scope: Apenas produtos disponíveis
+     */
+    public function scopeAvailable($query)
+    {
+        return $query->where('active', true)
+                     ->where('available', true)
+                     ->where('stock', '>', 0);
+    }
+
+    /**
+     * Scope: Apenas produtos com imagem
+     */
+    public function scopeWithImage($query)
+    {
+        return $query->whereHas('images');
+    }
+
+    /**
+     * Scope: Produtos visíveis na loja (ativos + com imagem)
+     */
+    public function scopeVisibleInStore($query)
+    {
+        return $query->active()->withImage();
+    }
+
+    /**
+     * Scope: Produtos em promoção
+     */
+    public function scopeOnPromotion($query)
+    {
+        $today = now()->startOfDay();
+
+        return $query->whereNotNull('promotional_price')
+                     ->where('promotional_price', '>', 0)
+                     ->where('promotional_price', '<', \DB::raw('price'))
+                     ->where(function ($q) use ($today) {
+                         $q->whereNull('start_promotion')
+                           ->orWhere('start_promotion', '<=', $today);
+                     })
+                     ->where(function ($q) use ($today) {
+                         $q->whereNull('end_promotion')
+                           ->orWhere('end_promotion', '>=', $today);
+                     });
+    }
+
+    /**
+     * Scope: Ordenação por preço
+     */
+    public function scopeOrderByPrice($query, string $direction = 'asc')
+    {
+        return $query->orderByRaw("
+            CASE
+                WHEN promotional_price IS NOT NULL
+                     AND promotional_price > 0
+                     AND promotional_price < price
+                     AND (start_promotion IS NULL OR start_promotion <= NOW())
+                     AND (end_promotion IS NULL OR end_promotion >= NOW())
+                THEN promotional_price
+                ELSE price
+            END {$direction}
+        ");
+    }
 }

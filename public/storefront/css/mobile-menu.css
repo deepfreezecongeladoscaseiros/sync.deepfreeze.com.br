@@ -1,0 +1,344 @@
+/**
+ * Mobile Menu Styles
+ * Estilos para o menu lateral mobile (hamburger)
+ *
+ * Baseado no padrão original da Naturallis:
+ * - Menu abre pelo lado DIREITO
+ * - Usa margin-right para animação
+ * - Classe js-overlay-toggle controla visibilidade
+ */
+
+/* ============================================
+   CONTAINER DO MENU MOBILE (#menuTopo)
+   ============================================ */
+
+/* Estado fechado - escondido à direita */
+#menuTopo {
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    width: 350px !important;
+    height: 100% !important;
+    min-height: 100vh !important;
+    margin-right: -350px !important; /* Escondido via margin negativo */
+    padding: 0 !important;
+    background-color: #FFF !important;
+    transition: all .4s ease-in-out !important;
+    -moz-transition: all .4s ease-in-out !important;
+    -webkit-transition: all .4s ease-in-out !important;
+    -o-transition: all .4s ease-in-out !important;
+    z-index: 9992 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+/* Estado aberto - classe js-overlay-toggle no body */
+body.js-overlay-toggle #menuTopo {
+    margin-right: 0 !important; /* Menu visível */
+    box-shadow: 0 1px 25px rgba(0,0,0,.35) !important;
+}
+
+/* Fallback: também suporta classe .in no próprio elemento */
+#menuTopo.in {
+    margin-right: 0 !important;
+    box-shadow: 0 1px 25px rgba(0,0,0,.35) !important;
+}
+
+/* ============================================
+   OVERLAY (FUNDO ESCURO)
+   ============================================ */
+
+body.js-overlay-toggle::before,
+body.menu-open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9991;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Previne scroll do body quando menu está aberto */
+body.js-overlay-toggle,
+body.menu-open {
+    overflow: hidden !important;
+}
+
+/* ============================================
+   ASIDE-LEFT (CONTEÚDO DO MENU)
+   ============================================ */
+
+#menuTopo .aside-left {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+}
+
+/* ============================================
+   BOTÃO FECHAR (X)
+   ============================================ */
+
+.navbar-toggle-close {
+    display: none; /* Escondido por padrão */
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50% !important;
+    -webkit-border-radius: 50% !important;
+    font-size: 20px !important;
+    position: fixed !important;
+    z-index: 9993 !important;
+    right: 15px !important; /* Posicionado à direita (mesmo lado do menu) */
+    top: 10px !important;
+    color: #FFF !important;
+    background-color: #FFA733 !important;
+    transition: all .4s ease-in-out;
+    /* Flexbox para centralizar o ícone X */
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+/* Ícone X dentro do botão fechar - ajuste fino de posição */
+.navbar-toggle-close .fa,
+.navbar-toggle-close .fa-times,
+.navbar-toggle-close i {
+    position: relative !important;
+    top: 4px !important; /* Desce o ícone 4px para centralizar */
+}
+
+.navbar-toggle-close:hover,
+.navbar-toggle-close:focus,
+.navbar-toggle-close:active {
+    color: #FFF !important;
+    background-color: #013E3B !important;
+    text-decoration: none;
+}
+
+/* Mostra botão fechar quando menu está aberto */
+body.js-overlay-toggle .navbar-toggle-close,
+body.menu-open .navbar-toggle-close {
+    display: flex !important; /* Flex para centralizar o ícone X */
+}
+
+/* ============================================
+   TÍTULO DO MENU
+   ============================================ */
+
+#menuTopo .group-title,
+#menuTopo .group-title.menu-categorias {
+    padding: 15px 20px 15px 20px !important; /* Alinhado com os ícones dos itens */
+    border-bottom: 1px solid #eee !important;
+    margin-top: 50px !important; /* Espaço para o botão X */
+}
+
+#menuTopo .group-title h4 {
+    margin: 0;
+    font-size: 1.286em !important;
+    font-weight: 700 !important;
+    color: #4D4849 !important;
+    font-family: Comfortaa, cursive !important;
+}
+
+/* ============================================
+   LISTA DE CATEGORIAS
+   ============================================ */
+
+#menuTopo .menu-categorias {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#menuTopo .menu-categorias > li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#menuTopo .menu-categorias > li > a {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+#menuTopo .menu-categorias > li > a:hover {
+    background: #f8f8f8;
+}
+
+#menuTopo .menu-categorias > li.open > a {
+    background: #f0f0f0;
+}
+
+/* ============================================
+   ÍCONE DO MENU (IMAGEM)
+   ============================================ */
+
+#menuTopo .icon-menu {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    object-fit: contain;
+}
+
+/* ============================================
+   SETA DO DROPDOWN
+   ============================================ */
+
+#menuTopo .menu-categorias .fa-caret-right {
+    margin-left: auto;
+    transition: transform 0.2s;
+}
+
+#menuTopo .menu-categorias li.open .fa-caret-right {
+    transform: rotate(90deg);
+}
+
+/* ============================================
+   SUBMENU (DROPDOWN)
+   ============================================ */
+
+/*
+ * IMPORTANTE: O CSS externo da Naturallis usa max-height para animação
+ * Ref: .box-nav-submenu .dropdown .dropdown-menu { max-height:0; display:block; }
+ *      .box-nav-submenu .dropdown.open .dropdown-menu { max-height:900px; }
+ *
+ * NÃO sobrescrever display:none/block - deixar o CSS externo controlar via max-height
+ */
+#menuTopo .dropdown-menu {
+    position: static;
+    float: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background: #f8f8f8;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    /* Removido display:none - CSS externo usa max-height */
+}
+
+#menuTopo .dropdown-menu > li > a {
+    display: block;
+    padding: 10px 20px 10px 54px;
+    color: #555;
+    font-size: 13px;
+    text-decoration: none;
+    border-bottom: 1px solid #eee;
+}
+
+#menuTopo .dropdown-menu > li > a:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+/* ============================================
+   BOTÃO HAMBURGER
+   ============================================ */
+
+.navbar-toggle {
+    position: relative;
+    float: right;
+    display: none; /* Escondido em desktop */
+    padding: 0;
+    margin: 0;
+    background-color: transparent !important;
+    background-image: none;
+    border: none;
+    border-radius: 0;
+}
+
+/* Escala do botão hamburger (como no original) */
+.header .navbar-toggle {
+    transform: scale(1.2);
+    transform-origin: right center;
+}
+
+/* Barras do hamburger - espaçamento original */
+.navbar-toggle .icon-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: #4D4849 !important;
+    margin: 4px 0; /* Espaçamento original entre as barras */
+    transition: 0.3s;
+    border-radius: 1px;
+}
+
+/* Container do hamburger no mobile */
+.css-mobile .navbar-toggle {
+    margin: 0 0 0 4px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    flex-flow: row wrap;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+}
+
+/* ============================================
+   MEDIA QUERIES
+   ============================================ */
+
+/* Mobile - mostra hamburger e esconde menu desktop */
+@media (max-width: 991px) {
+    .navbar-toggle {
+        display: block !important;
+    }
+
+    /* Esconde menu desktop */
+    .menu-principal.css-desktop {
+        display: none !important;
+    }
+
+    /* Esconde botão fechar por padrão no mobile */
+    .css-desktop,
+    .navbar-toggle-close {
+        display: none !important;
+    }
+
+    /* Mostra quando menu aberto */
+    body.js-overlay-toggle .navbar-toggle-close,
+    body.menu-open .navbar-toggle-close {
+        display: block !important;
+    }
+}
+
+/* Telas muito pequenas - menu ocupa 100% */
+@media only screen and (max-width: 375px) {
+    #menuTopo {
+        width: 100% !important;
+        margin-right: -100% !important;
+    }
+
+    body.js-overlay-toggle #menuTopo,
+    #menuTopo.in {
+        margin-right: 0 !important;
+    }
+}
+
+/* Desktop - esconde menu mobile completamente */
+@media (min-width: 992px) {
+    #menuTopo {
+        display: none !important;
+    }
+
+    body.js-overlay-toggle::before,
+    body.menu-open::before {
+        display: none;
+    }
+
+    .navbar-toggle-close {
+        display: none !important;
+    }
+}

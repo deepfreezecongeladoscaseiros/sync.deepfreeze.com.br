@@ -1,0 +1,29 @@
+/**
+ * CSS customizado para Barra de Anúncios (Top Bar)
+ * Garante que as cores configuradas no admin sejam respeitadas
+ */
+
+/* Força todos os elementos dentro da top bar a herdarem a cor */
+.top-bar-announcement,
+.top-bar-announcement * {
+    color: inherit !important;
+}
+
+/* Garante que links também usem a cor configurada */
+.top-bar-announcement a {
+    color: inherit !important;
+    text-decoration: underline;
+}
+
+.top-bar-announcement a:hover,
+.top-bar-announcement a:focus {
+    color: inherit !important;
+    opacity: 0.8;
+}
+
+/* Garante que elementos strong, bold, etc mantenham a cor */
+.top-bar-announcement strong,
+.top-bar-announcement b,
+.top-bar-announcement span {
+    color: inherit !important;
+}

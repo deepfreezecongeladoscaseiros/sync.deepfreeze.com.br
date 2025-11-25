@@ -1,0 +1,36 @@
+# INVENTÁRIO - NATURALLIS CLONE
+Data: 22/11/2025
+
+## Páginas HTML Baixadas:
+✅ home.html (113KB) - Página inicial
+✅ kits.html (162KB) - Listagem de produtos categoria Kits
+✅ produto-kit.html (80KB) - Página de produto KIT
+✅ produto.html (77KB) - Página de produto individual
+✅ carrinho.html (50KB) - Carrinho de compras
+
+## CSS Customizados (css/):
+✅ icon-fonts.css (2.1KB) - Ícones customizados
+✅ style-extend.css (186KB) - Estilos extendidos
+✅ style.css (169KB) - Estilos principais do tema
+
+## JavaScript Customizados (js/):
+✅ loja-triggers.js (421B) - Triggers de eventos
+✅ loja-validations.js (5.5KB) - Validações de formulário
+✅ loja-function.js (25KB) - Funções principais
+✅ loja-script.js (18KB) - Scripts gerais
+
+## CSS CDN (não baixados, usar links):
+- Font Awesome 4.7.0
+- jQuery UI 1.12.1
+- Bootstrap 3.4.1
+- Animate.css 3.7.2
+- Owl Carousel 2.3.4
+- Fancybox 2.1.7
+- Sweet Alert 0.4.5
+
+## PRÓXIMOS PASSOS:
+1. Analisar estrutura HTML de cada página
+2. Identificar componentes reutilizáveis
+3. Criar estrutura de views Blade
+4. Copiar CSS/JS para public/storefront/
+5. Adaptar HTML para Blade (variáveis dinâmicas)

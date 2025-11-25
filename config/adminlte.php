@@ -257,9 +257,9 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'dashboard',
-    'logout_url' => 'logout',
-    'login_url' => 'login',
+    'dashboard_url' => 'admin/dashboard',
+    'logout_url' => 'admin/logout',
+    'login_url' => 'admin/login',
     'register_url' => false,
     'password_reset_url' => 'password/reset',
     'password_email_url' => 'password/email',
@@ -321,6 +321,21 @@ return [
         ['text' => 'Integrações', 'route'  => 'admin.integrations.index', 'icon' => 'fas fa-fw fa-plug'],
         ['text' => 'Tray Commerce', 'route'  => 'admin.tray.index', 'icon' => 'fas fa-fw fa-store'],
         
+        ['header' => 'LOJA VIRTUAL'],
+        ['text' => 'Layout', 'route'  => 'admin.layout.index', 'icon' => 'fas fa-fw fa-paint-brush'],
+        ['text' => 'Banners Hero', 'route'  => 'admin.banners.index', 'icon' => 'fas fa-fw fa-picture-o'],
+        ['text' => 'Blocos de Informações', 'route'  => 'admin.feature-blocks.index', 'icon' => 'fas fa-fw fa-th-large'],
+        ['text' => 'Galerias de Produtos', 'route'  => 'admin.product-galleries.index', 'icon' => 'fas fa-fw fa-images'],
+        ['text' => 'Banners Duplos', 'route'  => 'admin.dual-banners.index', 'icon' => 'fas fa-fw fa-columns'],
+        ['text' => 'Blocos de Informação', 'route'  => 'admin.info-blocks.index', 'icon' => 'fas fa-fw fa-info-circle'],
+        ['text' => 'Blocos de Passos (4 itens)', 'route'  => 'admin.step-blocks.index', 'icon' => 'fas fa-fw fa-list-ol'],
+        ['text' => 'Banners Únicos', 'route'  => 'admin.single-banners.index', 'icon' => 'fas fa-fw fa-image'],
+        ['text' => 'Cookie Consent LGPD', 'route'  => 'admin.cookie-consent.edit', 'icon' => 'fas fa-fw fa-cookie-bite'],
+        ['text' => 'Redes Sociais', 'route'  => 'admin.social-networks.index', 'icon' => 'fas fa-fw fa-share-alt'],
+        ['text' => 'Páginas Internas', 'route'  => 'admin.pages.index', 'icon' => 'fas fa-fw fa-file-alt'],
+        ['text' => 'Contato', 'route'  => 'admin.contact.edit', 'icon' => 'fas fa-fw fa-envelope'],
+        ['text' => 'Menus de Navegação', 'route'  => 'admin.menus.index', 'icon' => 'fas fa-fw fa-bars'],
+
         ['header' => 'API PÚBLICA'],
         [
             'text' => 'Documentação',

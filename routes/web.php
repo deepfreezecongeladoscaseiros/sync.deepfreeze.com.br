@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\IntegrationController;
+use App\Http\Controllers\Storefront\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,26 +16,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+// Rota raiz - Exibe a página inicial da loja virtual
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Rota de categoria - Exibe produtos de uma categoria
+Route::get('/categoria/{slug}', [App\Http\Controllers\Storefront\CategoryController::class, 'show'])->name('category.show');
+
+Route::get('/admin/login', function () {
+    return view('auth.login');
+})->middleware('guest')->name('admin.login');
+
+Route::post('/admin/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('admin.logout');
 
 Route::get('/docs', [App\Http\Controllers\ApiDocsController::class, 'index'])->name('docs');
-
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
 
 require __DIR__.'/auth.php';
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('integrations', IntegrationController::class);
     Route::post('categories/{category}/sync-to-tray', [App\Http\Controllers\Admin\CategoryController::class, 'syncToTray'])->name('categories.sync_to_tray');
     Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
@@ -72,4 +78,97 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::post('brands', [App\Http\Controllers\Admin\TraySyncController::class, 'syncBrands'])->name('brands');
         Route::post('products', [App\Http\Controllers\Admin\TraySyncController::class, 'syncProducts'])->name('products');
     });
+
+    // Rotas de Layout (Cores, Fontes, Logo, Top Bar, etc.)
+    Route::prefix('layout')->name('layout.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\LayoutController::class, 'index'])->name('index');
+        Route::get('/colors', [App\Http\Controllers\Admin\LayoutController::class, 'colors'])->name('colors');
+        Route::put('/colors', [App\Http\Controllers\Admin\LayoutController::class, 'updateColors'])->name('colors.update');
+        Route::get('/logo', [App\Http\Controllers\Admin\LayoutController::class, 'logo'])->name('logo');
+        Route::post('/logo', [App\Http\Controllers\Admin\LayoutController::class, 'updateLogo'])->name('logo.update');
+        Route::get('/topbar', [App\Http\Controllers\Admin\LayoutController::class, 'topBar'])->name('topbar');
+        Route::put('/topbar', [App\Http\Controllers\Admin\LayoutController::class, 'updateTopBar'])->name('topbar.update');
+    });
+
+    // Rotas de Banners Hero
+    Route::resource('banners', App\Http\Controllers\Admin\BannerController::class);
+
+    // Rotas de Blocos de Informações (Feature Blocks)
+    Route::get('feature-blocks', [App\Http\Controllers\Admin\FeatureBlockController::class, 'index'])->name('feature-blocks.index');
+    Route::get('feature-blocks/{featureBlock}/edit', [App\Http\Controllers\Admin\FeatureBlockController::class, 'edit'])->name('feature-blocks.edit');
+    Route::put('feature-blocks/{featureBlock}', [App\Http\Controllers\Admin\FeatureBlockController::class, 'update'])->name('feature-blocks.update');
+
+    // Rotas de Galerias de Produtos
+    Route::resource('product-galleries', App\Http\Controllers\Admin\ProductGalleryController::class);
+
+    // Rotas de Banners Duplos
+    Route::resource('dual-banners', App\Http\Controllers\Admin\DualBannerController::class);
+
+    // Rotas de Blocos de Informação
+    Route::resource('info-blocks', App\Http\Controllers\Admin\InfoBlockController::class);
+
+    // Rotas de Blocos de Passos (4 itens)
+    Route::resource('step-blocks', App\Http\Controllers\Admin\StepBlockController::class);
+
+    // Rotas de Banners Únicos
+    Route::resource('single-banners', App\Http\Controllers\Admin\SingleBannerController::class);
+
+    // Rotas de Cookie Consent LGPD
+    Route::get('cookie-consent', [App\Http\Controllers\Admin\CookieConsentController::class, 'edit'])->name('cookie-consent.edit');
+    Route::put('cookie-consent', [App\Http\Controllers\Admin\CookieConsentController::class, 'update'])->name('cookie-consent.update');
+
+    // Rotas de Redes Sociais
+    Route::resource('social-networks', App\Http\Controllers\Admin\SocialNetworkController::class);
+
+    // Rotas de Páginas Internas (Institucional)
+    Route::resource('pages', App\Http\Controllers\Admin\PageController::class);
+
+    // Rotas de Contato (Configurações e Mensagens)
+    Route::prefix('contact')->name('contact.')->group(function () {
+        // Configurações da página de contato
+        Route::get('/', [App\Http\Controllers\Admin\ContactController::class, 'edit'])->name('edit');
+        Route::put('/', [App\Http\Controllers\Admin\ContactController::class, 'update'])->name('update');
+
+        // Mensagens recebidas pelo formulário de contato
+        Route::get('/messages', [App\Http\Controllers\Admin\ContactController::class, 'messages'])->name('messages');
+        Route::get('/messages/{message}', [App\Http\Controllers\Admin\ContactController::class, 'showMessage'])->name('messages.show');
+        Route::post('/messages/{message}/toggle-read', [App\Http\Controllers\Admin\ContactController::class, 'toggleRead'])->name('messages.toggle-read');
+        Route::delete('/messages/{message}', [App\Http\Controllers\Admin\ContactController::class, 'destroyMessage'])->name('messages.destroy');
+        Route::post('/messages/mark-all-read', [App\Http\Controllers\Admin\ContactController::class, 'markAllRead'])->name('messages.mark-all-read');
+        Route::delete('/messages/clear-old', [App\Http\Controllers\Admin\ContactController::class, 'clearOld'])->name('messages.clear-old');
+    });
+
+    // Rotas de Menus de Navegação
+    Route::prefix('menus')->name('menus.')->group(function () {
+        // CRUD de Menus
+        Route::get('/', [App\Http\Controllers\Admin\MenuController::class, 'index'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\MenuController::class, 'create'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\MenuController::class, 'store'])->name('store');
+        Route::get('/{menu}/edit', [App\Http\Controllers\Admin\MenuController::class, 'edit'])->name('edit');
+        Route::put('/{menu}', [App\Http\Controllers\Admin\MenuController::class, 'update'])->name('update');
+        Route::delete('/{menu}', [App\Http\Controllers\Admin\MenuController::class, 'destroy'])->name('destroy');
+
+        // Gerenciamento de Itens do Menu
+        Route::get('/{menu}/items', [App\Http\Controllers\Admin\MenuController::class, 'items'])->name('items');
+        Route::post('/{menu}/items', [App\Http\Controllers\Admin\MenuController::class, 'addItem'])->name('items.add');
+        Route::put('/{menu}/items/{item}', [App\Http\Controllers\Admin\MenuController::class, 'updateItem'])->name('items.update');
+        Route::delete('/{menu}/items/{item}', [App\Http\Controllers\Admin\MenuController::class, 'destroyItem'])->name('items.destroy');
+        Route::post('/{menu}/items/reorder', [App\Http\Controllers\Admin\MenuController::class, 'reorderItems'])->name('items.reorder');
+        Route::post('/{menu}/items/{item}/toggle', [App\Http\Controllers\Admin\MenuController::class, 'toggleItemStatus'])->name('items.toggle');
+        Route::post('/{menu}/items/{item}/duplicate', [App\Http\Controllers\Admin\MenuController::class, 'duplicateItem'])->name('items.duplicate');
+        Route::delete('/{menu}/items/{item}/icon', [App\Http\Controllers\Admin\MenuController::class, 'removeItemIcon'])->name('items.remove-icon');
+        Route::delete('/{menu}/items/{item}/mega-image', [App\Http\Controllers\Admin\MenuController::class, 'removeMegaMenuImage'])->name('items.remove-mega-image');
+    });
 });
+
+// Rota pública para CSS dinâmico (sem autenticação)
+Route::get('/css/theme.css', [App\Http\Controllers\Admin\LayoutController::class, 'generateCSS'])->name('theme.css');
+
+// Rotas públicas de Contato (formulário e envio)
+Route::get('/contato', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+Route::post('/contato/enviar', [App\Http\Controllers\ContactController::class, 'send'])->name('contact.send');
+
+// IMPORTANTE: Wildcard route para Páginas Internas - DEVE FICAR NO FINAL
+// Captura qualquer URL não encontrada e verifica se é uma página interna
+Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show'])->name('pages.show')
+    ->where('slug', '^(?!admin|login|logout|register|cadastro|api|css|js|storage|images).*$');

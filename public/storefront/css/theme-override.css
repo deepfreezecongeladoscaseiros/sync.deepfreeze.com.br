@@ -1,0 +1,1016 @@
+/**
+ * Theme Override CSS
+ *
+ * Este arquivo aplica as variáveis CSS do tema dinâmico nos elementos
+ * do site, sobrescrevendo as cores hardcoded do CSS original da Naturallis.
+ *
+ * IMPORTANTE: Este arquivo deve ser carregado APÓS o CSS original
+ * para garantir que os overrides funcionem corretamente.
+ */
+
+/* =========================================
+   CORES DA MARCA (BRAND)
+   ========================================= */
+
+/* Cor primária aplicada em headings, navegação, etc */
+h2, h3,
+.navbar-default .navbar-nav > .active > a,
+.menu-principal .dropdown-menu li a:hover,
+.tabela-padrao th {
+    color: var(--color-primary) !important;
+}
+
+/* Backgrounds primários */
+.tabela-padrao th,
+.tabela-1 .tabela-padrao tr td:nth-child(1),
+.box-footer-total .table-color,
+.owl-dots .owl-dot.active span,
+.owl-dots .owl-dot:hover span,
+.calendar-custom .ui-datepicker-current-day,
+.calendar-custom .ui-state-active {
+    background-color: var(--color-primary) !important;
+}
+
+/* Cor secundária (laranja/amarelo) */
+.pagination > li > a,
+.pagination > li > span,
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > .active > a:hover {
+    color: var(--color-secondary) !important;
+}
+
+/* Backgrounds secundários */
+.pagination > .active > a,
+.pagination > .active > span,
+.box-color {
+    background-color: var(--color-secondary) !important;
+}
+
+/* Paginação ativa - texto branco sobre fundo colorido */
+.pagination > .active > a,
+.pagination > .active > span,
+.pagination > .active > a:hover,
+.pagination > .active > a:focus,
+.pagination > .active > span:hover,
+.pagination > .active > span:focus {
+    color: #fff !important;
+}
+
+/* =========================================
+   BOTÕES
+   ========================================= */
+
+/* Botão Primário - Exclui .gallery-btn para permitir cores customizadas */
+.btn:not(.gallery-btn),
+.tabela-3 .tabela-padrao tbody tr td a {
+    background-color: var(--color-btn-primary-bg) !important;
+    color: var(--color-btn-primary-text) !important;
+    border-color: var(--color-btn-primary-bg) !important;
+}
+
+.btn:not(.gallery-btn):hover,
+.btn:not(.gallery-btn):focus,
+.btn:not(.gallery-btn).active,
+.tabela-3 .tabela-padrao tbody tr td a:hover {
+    background-color: var(--color-btn-primary-hover) !important;
+    color: var(--color-btn-primary-text) !important;
+    border-color: var(--color-btn-primary-hover) !important;
+}
+
+/* Botão Secundário */
+.btn-2 {
+    background-color: var(--color-btn-secondary-bg) !important;
+    color: var(--color-btn-secondary-text) !important;
+    border-color: var(--color-btn-secondary-bg) !important;
+}
+
+.btn-2:hover,
+.btn-2:focus,
+.btn-2:active {
+    background-color: var(--color-btn-secondary-hover) !important;
+    color: var(--color-btn-secondary-text) !important;
+    border-color: var(--color-btn-secondary-hover) !important;
+}
+
+/* Botão Outline */
+.btn-line {
+    border-color: var(--color-btn-primary-bg) !important;
+    color: var(--color-btn-primary-bg) !important;
+}
+
+.btn-line:hover {
+    border-color: var(--color-btn-primary-hover) !important;
+    color: var(--color-btn-primary-hover) !important;
+}
+
+/* =========================================
+   BOTÃO COMPRAR (PRODUTOS)
+   ========================================= */
+
+/* Botão "Comprar" nos cards de produtos */
+.box-detalhe-produto .box-adicionar span,
+.box-produto .box-adicionar span,
+.tabela-padrao .box-adicionar span {
+    background-color: var(--color-buy-btn-bg) !important;
+    color: var(--color-buy-btn-text) !important;
+}
+
+.box-detalhe-produto .box-adicionar span:hover,
+.box-produto .box-adicionar span:hover,
+.tabela-padrao .box-adicionar span:hover {
+    background-color: var(--color-buy-btn-hover-bg) !important;
+    color: var(--color-buy-btn-hover-text) !important;
+}
+
+/* Ícones dentro do botão Comprar */
+.box-detalhe-produto .box-adicionar span .fa,
+.box-produto .box-adicionar span .fa,
+.tabela-padrao .box-adicionar span .fa {
+    color: var(--color-buy-btn-text) !important;
+}
+
+.box-detalhe-produto .box-adicionar span:hover .fa,
+.box-produto .box-adicionar span:hover .fa,
+.tabela-padrao .box-adicionar span:hover .fa {
+    color: var(--color-buy-btn-hover-text) !important;
+}
+
+/* =========================================
+   LINKS
+   ========================================= */
+
+a {
+    color: var(--color-link);
+}
+
+a:hover,
+a:focus {
+    color: var(--color-link-hover);
+}
+
+.btn-link {
+    color: var(--color-link);
+}
+
+.btn-link:hover {
+    color: var(--color-link-hover);
+}
+
+/* =========================================
+   TEXTOS
+   ========================================= */
+
+body,
+p,
+.desc-tb,
+.form-control,
+label,
+.txt-color,
+.tabela-padrao {
+    color: var(--color-text-primary) !important;
+}
+
+.desc-tb-footer,
+.calendar-custom .ui-datepicker th {
+    color: var(--color-text-secondary) !important;
+}
+
+/* =========================================
+   FUNDOS
+   ========================================= */
+
+body,
+.box-footer-total.table-subtotal,
+.tabela-padrao tr,
+.modal-content,
+.white-popup-block,
+.table-clean,
+.table-color {
+    background-color: var(--color-bg-main) !important;
+}
+
+.box-text {
+    background-color: var(--color-bg-light) !important;
+}
+
+/* =========================================
+   BORDAS
+   ========================================= */
+
+hr,
+.form-control,
+.tabela-padrao td,
+.tabela-padrao tr,
+.table-clean,
+.pagination > li > a,
+.pagination > li > span {
+    border-color: var(--color-border-light) !important;
+}
+
+/* =========================================
+   INPUTS E FORMS
+   ========================================= */
+
+.form-control {
+    border-color: var(--color-input-border);
+    background-color: var(--color-bg-main);
+}
+
+.form-control:focus {
+    border-color: var(--color-input-focus) !important;
+}
+
+.form-control.invalid {
+    border-color: var(--color-error) !important;
+}
+
+.form-control.valid {
+    border-color: var(--color-success) !important;
+}
+
+/* =========================================
+   STATUS E FEEDBACK
+   ========================================= */
+
+/* Sucesso */
+.alert-success,
+.text-success {
+    color: var(--color-success) !important;
+}
+
+.bg-success {
+    background-color: var(--color-success) !important;
+}
+
+/* Erro */
+.alert-danger,
+.text-danger {
+    color: var(--color-error) !important;
+}
+
+.bg-danger {
+    background-color: var(--color-error) !important;
+}
+
+/* Aviso */
+.alert-warning,
+.text-warning {
+    color: var(--color-warning) !important;
+}
+
+.bg-warning {
+    background-color: var(--color-warning) !important;
+}
+
+/* Info */
+.alert-info,
+.text-info {
+    color: var(--color-info) !important;
+}
+
+.bg-info {
+    background-color: var(--color-info) !important;
+}
+
+/* =========================================
+   COMPONENTES ESPECÍFICOS
+   ========================================= */
+
+/* Carousel */
+.owl-dots .owl-dot span {
+    background-color: var(--color-bg-main);
+    border-color: var(--color-carousel-dots);
+}
+
+.owl-dots .owl-dot.active span,
+.owl-dots .owl-dot:hover span {
+    background-color: var(--color-carousel-dots);
+}
+
+/* Tabelas */
+.tabela-padrao thead tr:nth-child(1) {
+    background-color: var(--color-table-header) !important;
+}
+
+.tabela-padrao tbody tr {
+    background-color: var(--color-table-row) !important;
+}
+
+/* Icons de ação */
+.tabela-padrao .btn-excluir .fa {
+    background-color: var(--color-primary) !important;
+}
+
+.tabela-padrao .btn-excluir .fa:hover {
+    background-color: var(--color-secondary) !important;
+}
+
+/* Checkbox e Radio customizados */
+label input[type=checkbox]:checked ~ i.fa.fa-check-square-o,
+label input[type=radio]:checked ~ i.fa.fa-check-circle-o,
+input[type=checkbox]:checked ~ span {
+    color: var(--color-secondary) !important;
+}
+
+/* =========================================
+   NAVEGAÇÃO E MENU
+   ========================================= */
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: var(--color-link-hover);
+}
+
+/* =========================================
+   SOBRESCREVER CORES HARDCODED ESPECÍFICAS
+   ========================================= */
+
+/* Substitui todos os #013E3B (verde escuro original) */
+[style*="#013E3B"],
+[style*="#013e3b"] {
+    color: var(--color-primary) !important;
+}
+
+[style*="background-color: #013E3B"],
+[style*="background-color: #013e3b"],
+[style*="background:#013E3B"],
+[style*="background:#013e3b"] {
+    background-color: var(--color-primary) !important;
+}
+
+/* Substitui todos os #FFA733 (laranja original) */
+[style*="#FFA733"],
+[style*="#ffa733"] {
+    color: var(--color-secondary) !important;
+}
+
+[style*="background-color: #FFA733"],
+[style*="background-color: #ffa733"],
+[style*="background:#FFA733"],
+[style*="background:#ffa733"] {
+    background-color: var(--color-secondary) !important;
+}
+
+/* Substitui todos os #443E3F (cinza texto original) */
+[style*="#443E3F"],
+[style*="#443e3f"] {
+    color: var(--color-text-primary) !important;
+}
+
+/* =========================================
+   PADRONIZAÇÃO DE IMAGENS DE PRODUTOS
+   ========================================= */
+
+/**
+ * Força todas as imagens de produtos nas galerias a terem o mesmo tamanho
+ * independente da proporção original da imagem.
+ *
+ * Usando object-fit: cover para manter a proporção e preencher o espaço,
+ * cortando as bordas se necessário.
+ */
+
+/* Container da imagem - define altura fixa */
+.box-produto .img-hover-vitrine {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+/* Picture tag dentro do link */
+.box-produto .img-hover-vitrine picture {
+    display: block;
+    width: 100%;
+    height: 280px; /* Altura fixa para desktop */
+    position: relative;
+}
+
+/* Imagem em si - preenche o container mantendo proporção */
+.box-produto .img-hover-vitrine picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Mantém proporção, cortando se necessário */
+    object-position: center; /* Centraliza a imagem */
+}
+
+/* Ajuste para mobile - imagens menores */
+@media (max-width: 768px) {
+    .box-produto .img-hover-vitrine picture {
+        height: 200px; /* Altura menor no mobile */
+    }
+}
+
+/* Ajuste para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .box-produto .img-hover-vitrine picture {
+        height: 240px;
+    }
+}
+
+/* =========================================
+   BOTÕES DAS GALERIAS DE PRODUTOS
+   ========================================= */
+
+/**
+ * Desabilita os estilos globais de .btn para os botões das galerias
+ * permitindo que cada galeria use suas próprias cores customizadas
+ * definidas no admin.
+ */
+
+/*
+ * Estilos para botões das galerias de produtos
+ * Estes botões usam cores customizadas definidas no admin,
+ * aplicadas via estilos inline. As regras globais de .btn foram
+ * modificadas para excluir .gallery-btn usando :not().
+ */
+.btn.gallery-btn {
+    display: inline-block;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 30px; /* Estilo pílula igual aos outros botões do tema */
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -o-border-radius: 30px;
+    transition: none; /* Remove transições para que JS funcione instantaneamente */
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.btn.gallery-btn:hover,
+.btn.gallery-btn:focus,
+.btn.gallery-btn:active {
+    outline: none;
+    text-decoration: none;
+}
+
+/* ============================================
+   STEP BLOCKS (Blocos de Passos - 4 itens)
+   ============================================ */
+
+/* Container do bloco de passos */
+.step-items-block {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 40px;
+}
+
+/* Cada item do bloco */
+.step-items-block .box-item {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin-top: 30px;
+}
+
+/* Ícones dos itens - tamanho fixo 70px como no original */
+.step-items-block .box-item img {
+    width: 70px;
+    margin-bottom: 10px;
+}
+
+/* Títulos dos itens */
+.step-items-block .box-item h3 {
+    text-transform: uppercase;
+    color: #013E3B;
+    font-size: 1.143em;
+    margin-bottom: 10px;
+}
+
+/* Descrições dos itens */
+.step-items-block .box-item p {
+    line-height: 1.2;
+}
+
+/* ============================================
+   COOKIE CONSENT LGPD
+   ============================================ */
+
+/* Container principal do disclaimer - centralizado no bottom da tela */
+.lgpd-cookies {
+    position: fixed;
+    z-index: 991;
+    left: 0;
+    right: 0;
+    bottom: 15px;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    display: inline-flex;
+    animation-name: bounceInUp;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+}
+
+/* Grupo interno com conteúdo e botão - BOX BRANCO */
+.lgpd-cookies-group {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 30px);
+    max-width: 1170px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+
+/* Texto do disclaimer */
+.lgpd-cookies-group p {
+    color: #443E3F;
+    margin: 0;
+    padding-right: 20px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Links dentro do texto */
+.lgpd-cookies-group p a {
+    color: #443E3F;
+    text-decoration: underline;
+}
+
+.lgpd-cookies-group p a:hover,
+.lgpd-cookies-group p a:focus {
+    text-decoration: underline;
+}
+
+/* Container do botão */
+.lgpd-cookies-group-btn {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+/* Botão de aceite */
+.lgpd-cookies-group-btn a {
+    display: inline-block;
+    padding: 10px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
+}
+
+.lgpd-cookies-group-btn a:hover,
+.lgpd-cookies-group-btn a:focus {
+    text-decoration: none;
+}
+
+/* Múltiplos botões */
+.lgpd-cookies-group-btn .btn + .btn {
+    margin-left: 10px;
+}
+
+/* Responsivo - empilha verticalmente em telas pequenas */
+@media (max-width: 768px) {
+    .lgpd-cookies-group {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .lgpd-cookies-group p {
+        padding-right: 0;
+        padding-bottom: 15px;
+    }
+
+    .lgpd-cookies-group-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ============================================
+   REDES SOCIAIS (TOPO E RODAPÉ)
+   ============================================ */
+
+/* Container das redes sociais */
+.rede-social-topo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* Espaçamento entre os ícones */
+}
+
+/* Links das redes sociais */
+.rede-social-topo a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px; /* Espaçamento horizontal */
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.rede-social-topo a:hover {
+    opacity: 0.7;
+}
+
+/* Ícones das redes sociais */
+.rede-social-topo a img {
+    width: 24px;
+    height: 24px;
+    display: block;
+}
+
+/* ============================================
+   SELETOR DE QUANTIDADE INLINE (CARDS DE PRODUTO)
+   ============================================ */
+
+/**
+ * Container principal - flexbox para alinhar quantidade e botão lado a lado
+ * Substitui o botão comprar padrão quando produto não é kit
+ */
+.box-comprar-inline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background: transparent;
+}
+
+/**
+ * Container do seletor de quantidade
+ * Agrupa os botões +/- e o input de quantidade
+ */
+.quantidade-inline {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    height: 36px;
+}
+
+/**
+ * Botões de incremento/decremento (+/-)
+ * Estilo clean sem bordas extras
+ */
+.quantidade-inline .btn-qtd {
+    width: 32px;
+    height: 100%;
+    border: none;
+    background: #f5f5f5;
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    padding: 0;
+    margin: 0;
+    line-height: 1;
+}
+
+.quantidade-inline .btn-qtd:hover {
+    background: #e0e0e0;
+}
+
+.quantidade-inline .btn-qtd:active {
+    background: #d0d0d0;
+}
+
+/* Ícone dentro do botão */
+.quantidade-inline .btn-qtd i {
+    font-size: 10px;
+    line-height: 1;
+}
+
+/**
+ * Input de quantidade
+ * Centralizado entre os botões, sem bordas laterais
+ */
+.quantidade-inline .qtd-input {
+    width: 36px;
+    height: 100%;
+    border: none;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    background: #fff;
+    padding: 0;
+    margin: 0;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+/* Remove setas do input number */
+.quantidade-inline .qtd-input::-webkit-outer-spin-button,
+.quantidade-inline .qtd-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/**
+ * Botão Comprar inline
+ * Ocupa o espaço restante ao lado do seletor de quantidade
+ */
+.btn-comprar-inline {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 15px;
+    background-color: var(--color-buy-btn-bg, #013E3B);
+    color: var(--color-buy-btn-text, #fff);
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-comprar-inline:hover,
+.btn-comprar-inline:focus {
+    background-color: var(--color-buy-btn-hover-bg, #02524E);
+    color: var(--color-buy-btn-hover-text, #fff);
+    text-decoration: none;
+}
+
+.btn-comprar-inline span {
+    line-height: 1;
+}
+
+/* ============================================
+   RESPONSIVO - SELETOR DE QUANTIDADE
+   ============================================ */
+
+/* Tablets e abaixo - ajusta tamanhos */
+@media (max-width: 991px) {
+    .box-comprar-inline {
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .quantidade-inline {
+        height: 32px;
+    }
+
+    .quantidade-inline .btn-qtd {
+        width: 28px;
+    }
+
+    .quantidade-inline .qtd-input {
+        width: 32px;
+        font-size: 13px;
+    }
+
+    .btn-comprar-inline {
+        height: 32px;
+        padding: 0 12px;
+        font-size: 12px;
+    }
+}
+
+/* Mobile pequeno - empilha verticalmente se necessário */
+@media (max-width: 480px) {
+    .box-comprar-inline {
+        flex-direction: row;
+        gap: 5px;
+        padding: 6px;
+    }
+
+    .quantidade-inline {
+        height: 30px;
+    }
+
+    .quantidade-inline .btn-qtd {
+        width: 26px;
+    }
+
+    .quantidade-inline .btn-qtd i {
+        font-size: 9px;
+    }
+
+    .quantidade-inline .qtd-input {
+        width: 28px;
+        font-size: 12px;
+    }
+
+    .btn-comprar-inline {
+        height: 30px;
+        padding: 0 10px;
+        font-size: 11px;
+    }
+}
+
+/* ============================================
+   GRID DE PRODUTOS - FIX PARA ALTURAS VARIÁVEIS
+   ============================================ */
+
+/**
+ * Força o grid de produtos a usar flexbox ao invés de float
+ * Isso evita os "buracos" quando cards têm alturas diferentes
+ */
+.lista-produtos {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+/* Cada item do grid ocupa seu espaço corretamente */
+.lista-produtos > .item {
+    display: flex !important;
+    float: none !important;
+    margin-bottom: 30px; /* Espaçamento entre linhas de produtos */
+}
+
+/* O box-produto preenche toda a altura disponível */
+.lista-produtos > .item > .box-produto {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+/* A descrição do produto fica flexível para ocupar espaço */
+.lista-produtos .box-produto .box-descricao {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* O nome do produto pode crescer */
+.lista-produtos .box-produto .box-descricao .box-left {
+    flex: 1;
+}
+
+/* O botão de comprar sempre fica no final */
+.lista-produtos .box-produto .box-comprar-inline,
+.lista-produtos .box-produto .adicionar {
+    margin-top: auto;
+}
+
+/* ============================================
+   CARD DE PRODUTO - LAYOUT UNIFICADO
+   ============================================ */
+
+/**
+ * Imagem quadrada - aspect-ratio 1:1
+ * Usa padding-bottom trick para manter proporção em todos browsers
+ */
+.box-produto .img-quadrada {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* Aspect ratio 1:1 = quadrado */
+    overflow: hidden;
+    background-color: #f5f5f5;
+}
+
+.box-produto .img-quadrada picture {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.box-produto .img-quadrada img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Preenche o quadrado mantendo proporção */
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.box-produto .img-quadrada:hover img {
+    transform: scale(1.05);
+}
+
+/**
+ * Nome do produto
+ */
+.box-produto .box-nome-produto {
+    padding: 10px 10px 5px;
+    min-height: 50px; /* Altura mínima para alinhar cards */
+}
+
+.box-produto .nome-produto {
+    font-size: 14px;
+    font-weight: 500;
+    color: #333;
+    line-height: 1.3;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limita a 2 linhas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/**
+ * Área de preços - nova estrutura
+ */
+.box-produto .box-precos {
+    padding: 0 10px 10px;
+    text-align: center;
+}
+
+/* Preço atual (normal ou promocional) */
+.box-produto .preco-atual {
+    font-size: 20px;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.2;
+}
+
+/* Preço promocional com destaque */
+.box-produto .preco-atual.preco-promo {
+    color: var(--color-secondary, #f7941d);
+}
+
+/* Preço original riscado */
+.box-produto .preco-original {
+    font-size: 13px;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 2px;
+}
+
+/**
+ * Compatibilidade com classes antigas (group-valor, valor, etc)
+ */
+.box-produto .group-valor .valor,
+.box-produto .group-valor .js-valor {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    margin-bottom: 5px;
+}
+
+.box-produto .group-valor .valor-desconto,
+.box-produto .group-valor .new-price {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: var(--color-secondary, #f7941d) !important;
+}
+
+.box-produto .group-valor .old-price {
+    font-size: 14px !important;
+    color: #999 !important;
+    text-decoration: line-through;
+}
+
+/**
+ * Reduzir espaço entre descrição/preço e área de compra
+ */
+.box-produto .box-descricao {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.box-produto .box-right {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.box-produto .group-valor {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+/**
+ * Ícones dos botões de quantidade - garantir exibição correta
+ */
+.quantidade-inline .btn-qtd i.fa-minus::before {
+    content: "\f068" !important; /* FontAwesome minus */
+}
+
+.quantidade-inline .btn-qtd i.fa-plus::before {
+    content: "\f067" !important; /* FontAwesome plus */
+}
+
+.quantidade-inline .btn-qtd i {
+    font-size: 12px !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+}
+
+/* ============================================
+   FIX: Ícone Hamburger do Menu Mobile
+   ============================================ */
+
+/**
+ * Garante que as barras do ícone hamburger tenham dimensões corretas
+ */
+.navbar-toggle .icon-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background-color: #333;
+    margin: 4px 0;
+    border-radius: 1px;
+}
