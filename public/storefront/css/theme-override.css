@@ -148,13 +148,55 @@ h2, h3,
 }
 
 /* =========================================
-   MENU SIDEBAR CATEGORIAS (Desktop)
+   BANNER INTERNO (Categoria)
    ========================================= */
 
 /**
- * Remove card/sombra do container do menu
+ * Reduz altura do banner (50% do original: 100px -> 50px)
  */
-.aside-left .box-nav-submenu {
+.pg-categoria .banner-interna,
+.pg-departamento .banner-interna,
+.pg-produto-interno .banner-interna {
+    padding: 50px 0 !important;
+}
+
+/* =========================================
+   MENU PRINCIPAL (Header)
+   ========================================= */
+
+/**
+ * Garante que dropdowns do menu principal não abram automaticamente
+ */
+.menu-principal .dropdown .dropdown-menu {
+    display: none !important;
+}
+
+.menu-principal .dropdown:hover .dropdown-menu,
+.menu-principal .dropdown.open .dropdown-menu {
+    display: block !important;
+}
+
+/* Remove classe open que pode ser adicionada incorretamente */
+.menu-principal .dropdown.open:not(:hover) .dropdown-menu {
+    display: none !important;
+}
+
+/* =========================================
+   MENU SIDEBAR CATEGORIAS (Desktop Only)
+   =========================================
+   IMPORTANTE: Estes estilos são APENAS para o sidebar de categorias
+   em DESKTOP (páginas de categoria/departamento/produto).
+
+   Usamos seletores específicos para NÃO afetar o menu mobile (#menuTopo)
+   que também usa .aside-left e .box-nav-submenu.
+   ========================================= */
+
+/**
+ * Remove card/sombra do container do menu (APENAS em páginas específicas, EXCLUINDO menu mobile)
+ */
+.pg-categoria .aside-left .box-nav-submenu,
+.pg-departamento .aside-left .box-nav-submenu,
+.pg-produto-interno .aside-left .box-nav-submenu {
     background: transparent !important;
     box-shadow: none !important;
     border: none !important;
@@ -162,9 +204,11 @@ h2, h3,
 }
 
 /**
- * Título "Categorias" - sem background, apenas texto simples
+ * Título "Categorias" - sem background, apenas texto simples (Desktop)
  */
-.aside-left .box-nav-submenu .group-title.menu-categorias {
+.pg-categoria .aside-left .box-nav-submenu .group-title.menu-categorias,
+.pg-departamento .aside-left .box-nav-submenu .group-title.menu-categorias,
+.pg-produto-interno .aside-left .box-nav-submenu .group-title.menu-categorias {
     background: transparent !important;
     padding: 0 0 15px 0 !important;
     margin: 0 0 20px 0 !important;
@@ -172,7 +216,9 @@ h2, h3,
     text-align: center;
 }
 
-.aside-left .box-nav-submenu .group-title.menu-categorias h4 {
+.pg-categoria .aside-left .box-nav-submenu .group-title.menu-categorias h4,
+.pg-departamento .aside-left .box-nav-submenu .group-title.menu-categorias h4,
+.pg-produto-interno .aside-left .box-nav-submenu .group-title.menu-categorias h4 {
     color: #4D4849 !important;
     font-size: 1.714em !important; /* ~24px */
     font-weight: 700 !important;
@@ -181,16 +227,20 @@ h2, h3,
 }
 
 /**
- * Container dos itens - adiciona margens laterais
+ * Container dos itens - adiciona margens laterais (Desktop)
  */
-.aside-left .box-nav-submenu .nav.menu-categorias {
+.pg-categoria .aside-left .box-nav-submenu .nav.menu-categorias,
+.pg-departamento .aside-left .box-nav-submenu .nav.menu-categorias,
+.pg-produto-interno .aside-left .box-nav-submenu .nav.menu-categorias {
     padding: 0 15px !important;
 }
 
 /**
- * Itens do menu - ajustes de espaçamento e remove bordas
+ * Itens do menu - ajustes de espaçamento e remove bordas (Desktop)
  */
-.aside-left .box-nav-submenu .nav.menu-categorias li {
+.pg-categoria .aside-left .box-nav-submenu .nav.menu-categorias li,
+.pg-departamento .aside-left .box-nav-submenu .nav.menu-categorias li,
+.pg-produto-interno .aside-left .box-nav-submenu .nav.menu-categorias li {
     margin-bottom: 15px !important; /* Espaçamento entre itens */
     border: none !important; /* Remove linhas entre itens */
     border-bottom: none !important;
@@ -198,9 +248,11 @@ h2, h3,
 }
 
 /**
- * Links dos itens - altura, padding e layout flexbox
+ * Links dos itens - altura, padding e layout flexbox (Desktop)
  */
-.aside-left .box-nav-submenu .nav.menu-categorias li a {
+.pg-categoria .aside-left .box-nav-submenu .nav.menu-categorias li a,
+.pg-departamento .aside-left .box-nav-submenu .nav.menu-categorias li a,
+.pg-produto-interno .aside-left .box-nav-submenu .nav.menu-categorias li a {
     min-height: 50px !important; /* Altura maior */
     padding: 12px 20px !important; /* Padding balanceado */
     display: flex !important;
@@ -209,9 +261,11 @@ h2, h3,
 }
 
 /**
- * Ícones - tamanho e espaçamento
+ * Ícones - tamanho e espaçamento (Desktop)
  */
-.aside-left .box-nav-submenu .nav.menu-categorias li a .icon-menu {
+.pg-categoria .aside-left .box-nav-submenu .nav.menu-categorias li a .icon-menu,
+.pg-departamento .aside-left .box-nav-submenu .nav.menu-categorias li a .icon-menu,
+.pg-produto-interno .aside-left .box-nav-submenu .nav.menu-categorias li a .icon-menu {
     width: 28px !important;
     height: 28px !important;
     min-width: 28px !important;
@@ -220,9 +274,11 @@ h2, h3,
 }
 
 /**
- * Seta à direita - posicionamento centralizado
+ * Seta à direita - posicionamento centralizado (Desktop)
  */
-.aside-left .box-nav-submenu .nav.menu-categorias li a.dropdown-toggle .fa {
+.pg-categoria .aside-left .box-nav-submenu .nav.menu-categorias li a.dropdown-toggle .fa,
+.pg-departamento .aside-left .box-nav-submenu .nav.menu-categorias li a.dropdown-toggle .fa,
+.pg-produto-interno .aside-left .box-nav-submenu .nav.menu-categorias li a.dropdown-toggle .fa {
     right: 20px !important;
     top: 50% !important;
     transform: translateY(-50%) !important;

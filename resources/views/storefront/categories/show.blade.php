@@ -87,13 +87,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{-- Descrição da Categoria --}}
-                        @if($category->description)
-                            <div class="col-xs-12 box-desc-categorias">
-                                {!! $category->description !!}
-                            </div>
-                        @endif
                     </div>
 
                     {{-- Grid de Produtos --}}

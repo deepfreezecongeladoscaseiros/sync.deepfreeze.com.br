@@ -2,6 +2,9 @@
  * Mobile Menu Styles
  * Estilos para o menu lateral mobile (hamburger)
  *
+ * IMPORTANTE: Este arquivo contém APENAS estilos de posicionamento e comportamento.
+ * Os estilos visuais dos itens (cores, bordas, etc) vêm do style.css original.
+ *
  * Baseado no padrão original da Naturallis:
  * - Menu abre pelo lado DIREITO
  * - Usa margin-right para animação
@@ -133,10 +136,13 @@ body.menu-open .navbar-toggle-close {
 
 #menuTopo .group-title,
 #menuTopo .group-title.menu-categorias {
-    padding: 15px 20px 15px 20px !important; /* Alinhado com os ícones dos itens */
-    border-bottom: 1px solid #eee !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px !important;
+    height: 52px;
     margin-top: 50px !important; /* Espaço para o botão X */
-    background-color: #fff !important; /* Força fundo branco no título do menu mobile */
+    background-color: #fff !important;
 }
 
 #menuTopo .group-title h4 {
@@ -144,101 +150,17 @@ body.menu-open .navbar-toggle-close {
     font-size: 1.286em !important;
     font-weight: 700 !important;
     color: #4D4849 !important;
-    font-family: Comfortaa, cursive !important;
+    font-family: Comfortaa, cursive !important; /* Fonte original do menu mobile */
+    text-align: left;
+    text-transform: none;
 }
 
 /* ============================================
-   LISTA DE CATEGORIAS
+   LISTA DE CATEGORIAS - Segue estilo do style.css
    ============================================ */
 
-#menuTopo .menu-categorias {
-    list-style: none;
-    padding: 0;
+#menuTopo .box-nav-submenu .nav.menu-categorias {
     margin: 0;
-}
-
-#menuTopo .menu-categorias > li {
-    border-bottom: 1px solid #f0f0f0;
-}
-
-#menuTopo .menu-categorias > li > a {
-    display: flex;
-    align-items: center;
-    padding: 12px 20px;
-    color: #333;
-    font-size: 14px;
-    text-decoration: none;
-    transition: background 0.2s;
-}
-
-#menuTopo .menu-categorias > li > a:hover {
-    background: #f8f8f8;
-}
-
-#menuTopo .menu-categorias > li.open > a {
-    background: #f0f0f0;
-}
-
-/* ============================================
-   ÍCONE DO MENU (IMAGEM)
-   ============================================ */
-
-#menuTopo .icon-menu {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
-    object-fit: contain;
-}
-
-/* ============================================
-   SETA DO DROPDOWN
-   ============================================ */
-
-#menuTopo .menu-categorias .fa-caret-right {
-    margin-left: auto;
-    transition: transform 0.2s;
-}
-
-#menuTopo .menu-categorias li.open .fa-caret-right {
-    transform: rotate(90deg);
-}
-
-/* ============================================
-   SUBMENU (DROPDOWN)
-   ============================================ */
-
-/*
- * IMPORTANTE: O CSS externo da Naturallis usa max-height para animação
- * Ref: .box-nav-submenu .dropdown .dropdown-menu { max-height:0; display:block; }
- *      .box-nav-submenu .dropdown.open .dropdown-menu { max-height:900px; }
- *
- * NÃO sobrescrever display:none/block - deixar o CSS externo controlar via max-height
- */
-#menuTopo .dropdown-menu {
-    position: static;
-    float: none;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    background: #f8f8f8;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    /* Removido display:none - CSS externo usa max-height */
-}
-
-#menuTopo .dropdown-menu > li > a {
-    display: block;
-    padding: 10px 20px 10px 54px;
-    color: #555;
-    font-size: 13px;
-    text-decoration: none;
-    border-bottom: 1px solid #eee;
-}
-
-#menuTopo .dropdown-menu > li > a:hover {
-    background: #f0f0f0;
-    color: #333;
 }
 
 /* ============================================
