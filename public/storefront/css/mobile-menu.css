@@ -136,6 +136,7 @@ body.menu-open .navbar-toggle-close {
     padding: 15px 20px 15px 20px !important; /* Alinhado com os ícones dos itens */
     border-bottom: 1px solid #eee !important;
     margin-top: 50px !important; /* Espaço para o botão X */
+    background-color: #fff !important; /* Força fundo branco no título do menu mobile */
 }
 
 #menuTopo .group-title h4 {

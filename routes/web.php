@@ -168,6 +168,18 @@ Route::get('/css/theme.css', [App\Http\Controllers\Admin\LayoutController::class
 Route::get('/contato', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
 Route::post('/contato/enviar', [App\Http\Controllers\ContactController::class, 'send'])->name('contact.send');
 
+// Rota de produto por SKU (ex: /produto/KR57)
+Route::get('/produto/{sku}', [App\Http\Controllers\Storefront\ProductController::class, 'showBySku'])
+    ->name('product.show.sku')
+    ->where('sku', '[A-Za-z0-9\-]+');
+
+// Rota de produto por slug (ex: /kit-refeicao/roupa-velha-arroz-branco-e-feijao)
+// DEVE vir antes da wildcard route de páginas internas
+Route::get('/{categorySlug}/{productSlug}', [App\Http\Controllers\Storefront\ProductController::class, 'show'])
+    ->name('product.show')
+    ->where('categorySlug', '[a-z0-9_\-]+')
+    ->where('productSlug', '[a-z0-9\-]+');
+
 // IMPORTANTE: Wildcard route para Páginas Internas - DEVE FICAR NO FINAL
 // Captura qualquer URL não encontrada e verifica se é uma página interna
 Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show'])->name('pages.show')

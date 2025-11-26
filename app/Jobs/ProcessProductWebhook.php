@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Manufacturer;
 use App\Models\ProductImage;
+use App\Models\ProductNutritionalInfo;
 use App\Models\ProductWebhookLog;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -116,6 +117,11 @@ class ProcessProductWebhook implements ShouldQueue
 
             if (isset($this->productData['imagens']) && is_array($this->productData['imagens'])) {
                 $this->syncImages($product, $this->productData['imagens']);
+            }
+
+            // Sincroniza informações nutricionais (se enviadas)
+            if (isset($this->productData['informacao_nutricional'])) {
+                $this->syncNutritionalInfo($product, $this->productData['informacao_nutricional']);
             }
 
             $log->update([
@@ -262,6 +268,99 @@ class ProcessProductWebhook implements ShouldQueue
 
         } catch (\Exception $e) {
             Log::error('Failed to sync images for product', [
+                'product_id' => $product->id,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Sincroniza informações nutricionais do produto
+     *
+     * Recebe dados no formato:
+     * [
+     *   'porcao_tamanho' => 350,
+     *   'porcao_unidade' => 'g',
+     *   'porcao_descricao' => '1 unidade (350g)',
+     *   'porcoes_por_embalagem' => 1,
+     *   'valores' => [
+     *     'valor_energetico_kcal' => 805,
+     *     'carboidratos_totais' => 98,
+     *     'proteinas' => 35,
+     *     ...
+     *   ],
+     *   'valores_diarios' => [
+     *     'valor_energetico' => 40,
+     *     'carboidratos_totais' => 33,
+     *     ...
+     *   ]
+     * ]
+     */
+    protected function syncNutritionalInfo(Product $product, array $nutritionalData)
+    {
+        try {
+            $valores = $nutritionalData['valores'] ?? [];
+            $vd = $nutritionalData['valores_diarios'] ?? [];
+
+            ProductNutritionalInfo::updateOrCreate(
+                ['product_id' => $product->id],
+                [
+                    // Informações da porção
+                    'portion_size' => $nutritionalData['porcao_tamanho'] ?? null,
+                    'portion_unit' => $nutritionalData['porcao_unidade'] ?? 'g',
+                    'portion_description' => $nutritionalData['porcao_descricao'] ?? null,
+                    'servings_per_container' => $nutritionalData['porcoes_por_embalagem'] ?? null,
+
+                    // Valores energéticos
+                    'energy_kcal' => $valores['valor_energetico_kcal'] ?? null,
+                    'energy_kj' => $valores['valor_energetico_kj'] ?? null,
+
+                    // Macronutrientes
+                    'carbohydrates' => $valores['carboidratos_totais'] ?? null,
+                    'total_sugars' => $valores['acucares_totais'] ?? null,
+                    'added_sugars' => $valores['acucares_adicionados'] ?? null,
+                    'proteins' => $valores['proteinas'] ?? null,
+
+                    // Gorduras
+                    'total_fat' => $valores['gorduras_totais'] ?? null,
+                    'saturated_fat' => $valores['gorduras_saturadas'] ?? null,
+                    'trans_fat' => $valores['gorduras_trans'] ?? null,
+                    'monounsaturated_fat' => $valores['gorduras_monoinsaturadas'] ?? null,
+                    'polyunsaturated_fat' => $valores['gorduras_poliinsaturadas'] ?? null,
+                    'cholesterol' => $valores['colesterol'] ?? null,
+
+                    // Fibras e sódio
+                    'dietary_fiber' => $valores['fibra_alimentar'] ?? null,
+                    'sodium' => $valores['sodio'] ?? null,
+
+                    // Minerais
+                    'calcium' => $valores['calcio'] ?? null,
+                    'iron' => $valores['ferro'] ?? null,
+                    'potassium' => $valores['potassio'] ?? null,
+
+                    // Vitaminas
+                    'vitamin_a' => $valores['vitamina_a'] ?? null,
+                    'vitamin_c' => $valores['vitamina_c'] ?? null,
+                    'vitamin_d' => $valores['vitamina_d'] ?? null,
+
+                    // Percentuais de Valor Diário (%VD)
+                    'dv_energy' => $vd['valor_energetico'] ?? null,
+                    'dv_carbohydrates' => $vd['carboidratos_totais'] ?? null,
+                    'dv_proteins' => $vd['proteinas'] ?? null,
+                    'dv_total_fat' => $vd['gorduras_totais'] ?? null,
+                    'dv_saturated_fat' => $vd['gorduras_saturadas'] ?? null,
+                    'dv_trans_fat' => $vd['gorduras_trans'] ?? null,
+                    'dv_dietary_fiber' => $vd['fibra_alimentar'] ?? null,
+                    'dv_sodium' => $vd['sodio'] ?? null,
+                ]
+            );
+
+            Log::info('Nutritional info synced successfully', [
+                'product_id' => $product->id,
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Failed to sync nutritional info for product', [
                 'product_id' => $product->id,
                 'error' => $e->getMessage()
             ]);

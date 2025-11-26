@@ -1,0 +1,732 @@
+/**
+ * Product Detail Page Styles
+ * Estilos específicos para a página de detalhes do produto
+ *
+ * Baseado no layout original da Naturallis, adaptado para Deep Freeze
+ *
+ * NOTA: O banner-interna e box-breadcrumb usam os estilos do CSS original
+ * da Naturallis (style.min.css). Não sobrescrever aqui.
+ */
+
+/* ============================================
+   LAYOUT GERAL DA PÁGINA DE PRODUTO
+   ============================================ */
+
+.pg-produto-interno .box-detalhe-produto {
+    margin-bottom: 30px;
+}
+
+/* ============================================
+   GALERIA DE FOTOS
+   ============================================ */
+
+.galeria-fotos-produtos {
+    margin-bottom: 20px;
+}
+
+.galeria-fotos-produtos .item-capa {
+    margin-bottom: 15px;
+}
+
+.galeria-fotos-produtos .item-capa img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.galeria-fotos-produtos .item-thumbs {
+    margin-top: 15px;
+}
+
+.galeria-fotos-produtos .thumb-item {
+    display: block;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+    cursor: pointer;
+}
+
+.galeria-fotos-produtos .thumb-item:hover,
+.galeria-fotos-produtos .thumb-item.active {
+    border-color: var(--primary-color, #013E3B);
+}
+
+.galeria-fotos-produtos .thumb-item img {
+    width: 100%;
+}
+
+/* ============================================
+   INFORMAÇÕES DO PRODUTO
+   ============================================ */
+
+.box-produto-interno {
+    padding: 0 15px;
+}
+
+.box-produto-interno .nome-produto {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 15px;
+    line-height: 1.3;
+    font-family: 'Comfortaa', cursive;
+}
+
+.box-produto-interno .info {
+    display: inline-block;
+    font-size: 0.9em;
+    color: #666;
+    margin-right: 5px;
+}
+
+.box-produto-interno .info .produto-codigo,
+.box-produto-interno .info .kcal,
+.box-produto-interno .info .peso {
+    font-weight: 600;
+    color: var(--primary-color, #013E3B);
+}
+
+.box-produto-interno .desc {
+    margin: 20px 0;
+    color: #555;
+    line-height: 1.6;
+    font-size: 0.95em;
+}
+
+/* ============================================
+   SELETOR DE QUANTIDADE
+   ============================================ */
+
+.box-produto-interno .escolher {
+    margin: 20px 0;
+}
+
+.box-produto-interno .quantidade {
+    display: inline-block;
+}
+
+.box-produto-interno .box-number {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.box-produto-interno .add-qtd {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.box-produto-interno .add-qtd:hover {
+    background: #e0e0e0;
+}
+
+.box-produto-interno .add-qtd i {
+    font-size: 14px;
+    color: #333;
+}
+
+.box-produto-interno .qtd {
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    border: none;
+    font-size: 1em;
+    font-weight: 600;
+}
+
+/* ============================================
+   PREÇO
+   ============================================ */
+
+.box-produto-interno .box-preco {
+    margin: 15px 0;
+}
+
+.box-produto-interno .valor {
+    font-family: 'Comfortaa', cursive;
+}
+
+.box-produto-interno .old-price {
+    font-size: 1em;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 5px;
+}
+
+.box-produto-interno .new-price {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: var(--primary-color, #013E3B);
+}
+
+.box-produto-interno .desconto-badge {
+    display: inline-block;
+    background: #e74c3c;
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+/* ============================================
+   BOTÃO COMPRAR
+   ============================================ */
+
+.box-produto-interno .box-adicionar {
+    display: inline-block;
+    background: var(--primary-color, #013E3B);
+    color: #fff;
+    padding: 15px 40px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background 0.3s ease;
+    cursor: pointer;
+    margin: 15px 0;
+}
+
+.box-produto-interno .box-adicionar:hover {
+    background: var(--secondary-color, #FFA733);
+}
+
+.box-produto-interno .box-adicionar.indisponivel {
+    background: #999;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   TAGS E SELOS
+   ============================================ */
+
+.box-produto-interno .product-tags {
+    margin: 15px 0;
+}
+
+.box-produto-interno .tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.box-produto-interno .tag-warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.box-produto-interno .tag-success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.box-produto-interno .tag-info {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.box-produto-interno .tag-primary {
+    background: var(--primary-color, #013E3B);
+    color: #fff;
+}
+
+/* ============================================
+   INFORMAÇÕES EXTRAS
+   ============================================ */
+
+.box-produto-interno .validade-info,
+.box-produto-interno .estoque-baixo {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 10px;
+}
+
+.box-produto-interno .estoque-baixo {
+    color: #e74c3c;
+}
+
+.box-produto-interno .estoque-baixo i,
+.box-produto-interno .validade-info i {
+    margin-right: 5px;
+}
+
+/* ============================================
+   TABELA NUTRICIONAL
+   ============================================ */
+
+.box-tabela-nutricional {
+    margin: 30px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.box-tabela-nutricional .tabela-padrao {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.box-tabela-nutricional .tb-title th {
+    background: var(--primary-color, #013E3B);
+    color: #fff;
+    padding: 15px;
+    font-size: 1.1em;
+    font-weight: 600;
+    text-align: left;
+}
+
+.box-tabela-nutricional .tb-subtitle th {
+    background: #f0f0f0;
+    padding: 10px 15px;
+    font-size: 0.9em;
+    color: #666;
+    text-align: left;
+}
+
+.box-tabela-nutricional .tb-subtitle .tb-porcao-embalagem {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.box-tabela-nutricional .tb-legend th {
+    background: #e8e8e8;
+    padding: 8px 15px;
+    font-size: 0.85em;
+    color: #666;
+    font-weight: 600;
+}
+
+.box-tabela-nutricional tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9em;
+}
+
+.box-tabela-nutricional tbody td.pl-2 {
+    padding-left: 30px;
+}
+
+.box-tabela-nutricional tbody tr:hover {
+    background: #f9f9f9;
+}
+
+.box-tabela-nutricional .caption {
+    margin-top: 15px;
+    font-size: 0.8em;
+    color: #888;
+    font-style: italic;
+}
+
+/* Placeholder "Em breve" */
+.nutritional-coming-soon {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fff;
+    border-radius: 8px;
+    border: 2px dashed #ddd;
+}
+
+.nutritional-coming-soon .icon {
+    font-size: 3em;
+    color: var(--primary-color, #013E3B);
+    margin-bottom: 15px;
+}
+
+.nutritional-coming-soon h4 {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.nutritional-coming-soon p {
+    color: #666;
+    font-size: 0.95em;
+}
+
+/* ============================================
+   SEÇÕES DE CONTEÚDO (Ingredientes, Preparo, etc)
+   ============================================ */
+
+.group-box {
+    margin: 30px 0;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.group-box .titulo-desc {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--primary-color, #013E3B);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color, #013E3B);
+}
+
+.group-box .titulo-desc i {
+    margin-right: 8px;
+}
+
+/* Ingredientes */
+.box-ingredientes .ingredientes-lista {
+    line-height: 1.8;
+    color: #555;
+}
+
+.box-ingredientes .alergenicos {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff3cd;
+    border-radius: 4px;
+    border-left: 4px solid #856404;
+}
+
+.box-ingredientes .alergenicos h5 {
+    color: #856404;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.box-ingredientes .alergenicos h5 i {
+    margin-right: 8px;
+}
+
+.box-ingredientes .alergenicos-texto {
+    color: #856404;
+    font-size: 0.9em;
+}
+
+/* Forma de Aquecer */
+.box-forma-aquecer .group-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.box-forma-aquecer .icon-preparo {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-right: 20px;
+}
+
+.box-forma-aquecer .detalhes h5 {
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.box-forma-aquecer .instrucoes-texto {
+    color: #555;
+    line-height: 1.6;
+}
+
+/* ============================================
+   BLOCOS COM ÍCONES DESTACADOS
+   ============================================ */
+
+/* Layout comum para todos os blocos com ícone */
+.box-preparo .preparo-conteudo,
+.box-dicas-chef .dicas-conteudo,
+.box-beneficios .beneficios-conteudo,
+.box-propriedades .propriedades-conteudo {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Ícone destacado dentro do bloco */
+.preparo-icon,
+.dica-icon,
+.beneficio-icon,
+.propriedade-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.8em;
+}
+
+/* Cores específicas para cada bloco */
+.box-preparo .preparo-icon {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: #fff;
+}
+
+.box-dicas-chef .dica-icon {
+    background: linear-gradient(135deg, #ffd700 0%, #ffb347 100%);
+    color: #fff;
+}
+
+.box-beneficios .beneficio-icon {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: #fff;
+}
+
+.box-propriedades .propriedade-icon {
+    background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+    color: #fff;
+}
+
+/* Texto dos blocos */
+.preparo-texto,
+.dica-texto,
+.beneficio-texto,
+.propriedade-texto {
+    flex: 1;
+    color: #555;
+    line-height: 1.8;
+}
+
+/* Backgrounds especiais */
+.box-dicas-chef {
+    background: linear-gradient(135deg, #fffbea 0%, #fff 100%);
+    border-left: 4px solid #ffd700;
+}
+
+.box-beneficios {
+    background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%);
+    border-left: 4px solid #28a745;
+}
+
+.box-propriedades {
+    background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);
+    border-left: 4px solid #17a2b8;
+}
+
+.box-preparo {
+    background: linear-gradient(135deg, #fff3e0 0%, #fff 100%);
+    border-left: 4px solid #ff6b35;
+}
+
+.box-ingredientes {
+    background: linear-gradient(135deg, #fce4ec 0%, #fff 100%);
+    border-left: 4px solid #e91e63;
+}
+
+/* Ícone do título */
+.group-box .titulo-desc i {
+    margin-right: 10px;
+    font-size: 1.1em;
+}
+
+/* ============================================
+   PRODUTOS RELACIONADOS
+   ============================================ */
+
+.produtos-relacionados {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+}
+
+.produtos-relacionados .titulo-secao {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 25px;
+    font-family: 'Comfortaa', cursive;
+}
+
+.produtos-relacionados .box-produto {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.produtos-relacionados .box-produto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+.produtos-relacionados .box-foto {
+    position: relative;
+    overflow: hidden;
+}
+
+.produtos-relacionados .box-foto img {
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.produtos-relacionados .box-produto:hover .box-foto img {
+    transform: scale(1.05);
+}
+
+.produtos-relacionados .selo-desconto {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #e74c3c;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    font-weight: 600;
+}
+
+.produtos-relacionados .box-info {
+    padding: 15px;
+}
+
+.produtos-relacionados .nome {
+    font-size: 0.95em;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.3;
+    height: 2.6em;
+    overflow: hidden;
+}
+
+.produtos-relacionados .box-preco {
+    margin-bottom: 10px;
+}
+
+.produtos-relacionados .preco-de {
+    font-size: 0.85em;
+    color: #999;
+    text-decoration: line-through;
+    display: block;
+}
+
+.produtos-relacionados .preco-por {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--primary-color, #013E3B);
+}
+
+.produtos-relacionados .btn-comprar {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background: var(--primary-color, #013E3B);
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.85em;
+    transition: background 0.3s ease;
+}
+
+.produtos-relacionados .btn-comprar:hover {
+    background: var(--secondary-color, #FFA733);
+    text-decoration: none;
+}
+
+/* ============================================
+   SIDEBAR CATEGORIAS
+   ============================================ */
+
+.aside-left .box-nav-submenu {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.aside-left .group-title {
+    padding: 15px 20px;
+    background: var(--primary-color, #013E3B);
+}
+
+.aside-left .group-title h4 {
+    color: #fff;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 0;
+}
+
+.aside-left .menu-categorias {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.aside-left .menu-categorias > li {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.aside-left .menu-categorias > li:last-child {
+    border-bottom: none;
+}
+
+.aside-left .menu-categorias > li > a {
+    display: block;
+    padding: 12px 20px;
+    color: #555;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.aside-left .menu-categorias > li > a:hover,
+.aside-left .menu-categorias > li.active > a {
+    background: #f5f5f5;
+    color: var(--primary-color, #013E3B);
+    text-decoration: none;
+}
+
+/* ============================================
+   RESPONSIVO
+   ============================================ */
+
+@media (max-width: 991px) {
+    .box-produto-interno .nome-produto {
+        font-size: 1.4em;
+    }
+
+    .box-produto-interno .new-price {
+        font-size: 1.5em;
+    }
+
+    .produtos-relacionados .box-produto {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 767px) {
+    .galeria-fotos-produtos {
+        margin-bottom: 30px;
+    }
+
+    .box-produto-interno {
+        padding: 0;
+    }
+
+    .box-tabela-nutricional {
+        padding: 15px;
+    }
+
+    .box-tabela-nutricional .tabela-padrao {
+        font-size: 0.9em;
+    }
+
+    .group-box {
+        padding: 15px;
+    }
+}

@@ -136,6 +136,11 @@ class Product extends Model
         return $this->belongsToMany(PropertyValue::class, 'product_property_value');
     }
 
+    public function nutritionalInfo()
+    {
+        return $this->hasOne(ProductNutritionalInfo::class);
+    }
+
     // ==================== HELPERS ====================
 
     /**

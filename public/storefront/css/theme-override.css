@@ -828,7 +828,8 @@ input[type=checkbox]:checked ~ span {
 }
 
 /* O box-produto preenche toda a altura disponível */
-.lista-produtos > .item > .box-produto {
+.lista-produtos > .item > .box-produto,
+.carrossel-produtos > .item > .box-produto {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -836,21 +837,43 @@ input[type=checkbox]:checked ~ span {
 }
 
 /* A descrição do produto fica flexível para ocupar espaço */
-.lista-produtos .box-produto .box-descricao {
+.lista-produtos .box-produto .box-descricao,
+.carrossel-produtos .box-produto .box-descricao {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 /* O nome do produto pode crescer */
-.lista-produtos .box-produto .box-descricao .box-left {
+.lista-produtos .box-produto .box-descricao .box-left,
+.carrossel-produtos .box-produto .box-descricao .box-left {
     flex: 1;
 }
 
 /* O botão de comprar sempre fica no final */
 .lista-produtos .box-produto .box-comprar-inline,
-.lista-produtos .box-produto .adicionar {
+.lista-produtos .box-produto .adicionar,
+.carrossel-produtos .box-produto .box-comprar-inline,
+.carrossel-produtos .box-produto .adicionar {
     margin-top: auto;
+}
+
+/**
+ * FIX: Remove position absolute do .box-adicionar dentro do card
+ * O CSS original (style.css) usa position: absolute no .box-adicionar,
+ * o que causa sobreposição com o preço. No contexto do card flexbox,
+ * o posicionamento deve ser relativo para respeitar o fluxo do layout.
+ *
+ * Aplica-se a:
+ * - .lista-produtos: usado nas páginas de categoria e listagem de produtos
+ * - .carrossel-produtos: usado nas galerias de produtos da home
+ */
+.lista-produtos .box-produto .adicionar .box-adicionar,
+.carrossel-produtos .box-produto .adicionar .box-adicionar {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
 }
 
 /* ============================================

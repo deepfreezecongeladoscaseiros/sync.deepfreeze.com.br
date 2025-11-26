@@ -214,8 +214,16 @@ if (!function_exists('hero_banners')) {
         }
         $mobileHtml .= '</div>';
 
-        // Retorna ambos os carousels concatenados
-        return $desktopHtml . "\n\n" . $mobileHtml;
+        // Retorna ambos os carousels envolvidos na estrutura de container Bootstrap
+        // A estrutura section.container > row > col-xs-12 garante que o banner respeite
+        // a largura máxima do site, igual aos demais blocos da página
+        return '<section class="container">'
+            . '<div class="row">'
+            . '<div class="col-xs-12">'
+            . $desktopHtml . "\n\n" . $mobileHtml
+            . '</div>'
+            . '</div>'
+            . '</section>';
     }
 }
 
