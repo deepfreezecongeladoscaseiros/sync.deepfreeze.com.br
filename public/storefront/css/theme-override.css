@@ -135,6 +135,99 @@ h2, h3,
     color: var(--color-buy-btn-hover-text) !important;
 }
 
+/* Botão "Indisponível" - cor cinza para indicar produto sem estoque */
+.box-produto .adicionar.indisponivel .box-adicionar span,
+.box-produto .box-adicionar.indisponivel span {
+    background-color: #999 !important;
+    cursor: not-allowed;
+}
+
+.box-produto .adicionar.indisponivel .box-adicionar span:hover,
+.box-produto .box-adicionar.indisponivel span:hover {
+    background-color: #888 !important; /* Hover mais escuro mas ainda cinza */
+}
+
+/* =========================================
+   MENU SIDEBAR CATEGORIAS (Desktop)
+   ========================================= */
+
+/**
+ * Remove card/sombra do container do menu
+ */
+.aside-left .box-nav-submenu {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+/**
+ * Título "Categorias" - sem background, apenas texto simples
+ */
+.aside-left .box-nav-submenu .group-title.menu-categorias {
+    background: transparent !important;
+    padding: 0 0 15px 0 !important;
+    margin: 0 0 20px 0 !important;
+    border: none !important;
+    text-align: center;
+}
+
+.aside-left .box-nav-submenu .group-title.menu-categorias h4 {
+    color: #4D4849 !important;
+    font-size: 1.714em !important; /* ~24px */
+    font-weight: 700 !important;
+    font-family: 'Comfortaa', cursive !important;
+    margin: 0 !important;
+}
+
+/**
+ * Container dos itens - adiciona margens laterais
+ */
+.aside-left .box-nav-submenu .nav.menu-categorias {
+    padding: 0 15px !important;
+}
+
+/**
+ * Itens do menu - ajustes de espaçamento e remove bordas
+ */
+.aside-left .box-nav-submenu .nav.menu-categorias li {
+    margin-bottom: 15px !important; /* Espaçamento entre itens */
+    border: none !important; /* Remove linhas entre itens */
+    border-bottom: none !important;
+    border-top: none !important;
+}
+
+/**
+ * Links dos itens - altura, padding e layout flexbox
+ */
+.aside-left .box-nav-submenu .nav.menu-categorias li a {
+    min-height: 50px !important; /* Altura maior */
+    padding: 12px 20px !important; /* Padding balanceado */
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important; /* Espaço entre ícone e texto */
+}
+
+/**
+ * Ícones - tamanho e espaçamento
+ */
+.aside-left .box-nav-submenu .nav.menu-categorias li a .icon-menu {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    margin: 0 !important;
+    flex-shrink: 0;
+}
+
+/**
+ * Seta à direita - posicionamento centralizado
+ */
+.aside-left .box-nav-submenu .nav.menu-categorias li a.dropdown-toggle .fa {
+    right: 20px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+}
+
 /* =========================================
    LINKS
    ========================================= */

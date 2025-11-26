@@ -186,9 +186,9 @@
 
 .box-produto-interno .box-adicionar {
     display: inline-block;
-    background: var(--primary-color, #013E3B);
+    background: transparent; /* Fundo transparente - o span interno já tem o estilo visual */
     color: #fff;
-    padding: 15px 40px;
+    padding: 0; /* Remove padding do container, deixa no span */
     border-radius: 4px;
     font-weight: 600;
     text-transform: uppercase;
@@ -197,12 +197,27 @@
     margin: 15px 0;
 }
 
-.box-produto-interno .box-adicionar:hover {
+/* O span interno é quem recebe o estilo visual do botão */
+.box-produto-interno .box-adicionar span {
+    display: inline-block;
+    background: var(--primary-color, #013E3B);
+    padding: 15px 40px;
+    border-radius: 30px;
+    transition: background 0.3s ease;
+}
+
+.box-produto-interno .box-adicionar span:hover {
     background: var(--secondary-color, #FFA733);
 }
 
 .box-produto-interno .box-adicionar.indisponivel {
-    background: #999;
+    background: transparent; /* Fundo transparente - o span interno já tem o estilo visual */
+    cursor: not-allowed;
+}
+
+/* Estilo do span dentro do botão indisponível */
+.box-produto-interno .box-adicionar.indisponivel span {
+    background: #999 !important; /* Fundo cinza para indicar indisponibilidade */
     cursor: not-allowed;
 }
 
@@ -695,6 +710,15 @@
    RESPONSIVO
    ============================================ */
 
+@media (min-width: 768px) {
+    /**
+     * Esconde a barra mobile fixa em desktop
+     */
+    .button-fixed-mobile {
+        display: none !important;
+    }
+}
+
 @media (max-width: 991px) {
     .box-produto-interno .nome-produto {
         font-size: 1.4em;
@@ -714,12 +738,104 @@
         margin-bottom: 30px;
     }
 
+    /**
+     * Mantém padding lateral no mobile para o conteúdo não ficar
+     * colado nas bordas da tela
+     */
     .box-produto-interno {
-        padding: 0;
+        padding: 0 15px;
     }
 
     .box-tabela-nutricional {
         padding: 15px;
+    }
+
+    /**
+     * Barra Mobile Fixa (Footer)
+     * Exibe preço/calorias à esquerda e botão comprar à direita
+     */
+    .button-fixed-mobile {
+        display: block !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: #fff;
+        border-top: 3px solid var(--primary-color, #013E3B);
+        padding: 10px 15px;
+        z-index: 999;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .button-fixed-mobile > div {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
+    }
+
+    /* Seção esquerda: Preço e Calorias (40%) */
+    .button-fixed-mobile .descricao-button {
+        flex: 0 0 40%;
+        display: flex !important;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .button-fixed-mobile .preco-button h4 {
+        color: var(--primary-color, #013E3B);
+        font-size: 1.143em;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .button-fixed-mobile .kcal-button {
+        margin-top: 2px;
+    }
+
+    .button-fixed-mobile .kcal {
+        font-size: 0.85em;
+        color: #666;
+        margin: 0;
+        line-height: 1;
+    }
+
+    /* Seção direita: Botão Comprar (60%) */
+    .button-fixed-mobile .adicionar-button {
+        flex: 1;
+        display: flex;
+    }
+
+    .button-fixed-mobile .adicionar-button a,
+    .button-fixed-mobile .adicionar-button .bt {
+        display: block;
+        width: 100%;
+        background: var(--color-buy-btn-bg, #FFA733);
+        color: #fff;
+        text-align: center;
+        padding: 12px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1em;
+        text-transform: uppercase;
+        transition: background 0.3s ease;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .button-fixed-mobile .adicionar-button a:hover,
+    .button-fixed-mobile .adicionar-button a:focus {
+        background: var(--color-buy-btn-hover-bg, #013E3B);
+        text-decoration: none;
+    }
+
+    /* Botão indisponível */
+    .button-fixed-mobile .adicionar-button .bt.indisponivel {
+        background: #999 !important;
+        cursor: not-allowed;
     }
 
     .box-tabela-nutricional .tabela-padrao {

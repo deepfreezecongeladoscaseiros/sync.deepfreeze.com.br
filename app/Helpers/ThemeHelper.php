@@ -828,6 +828,33 @@ if (!function_exists('mobile_menu')) {
     }
 }
 
+if (!function_exists('sidebar_menu')) {
+    /**
+     * Retorna o menu lateral (sidebar) das páginas internas
+     *
+     * Usado para renderizar o menu lateral nas páginas de categoria e produto (desktop).
+     * É um menu independente do menu mobile, permitindo configuração específica.
+     *
+     * Exemplo de uso no Blade:
+     * @foreach(sidebar_menu() as $item)
+     *     {!! renderSidebarMenuItem($item) !!}
+     * @endforeach
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    function sidebar_menu(): \Illuminate\Support\Collection
+    {
+        // Busca o menu específico do sidebar (slug: sidebar-categories)
+        $menu = \App\Models\Menu::getBySlug('sidebar-categories');
+
+        if (!$menu) {
+            return collect();
+        }
+
+        return $menu->getItemsTree('all');
+    }
+}
+
 if (!function_exists('menu')) {
     /**
      * Retorna um menu pelo slug

@@ -138,6 +138,36 @@
         </div>
     </main>
 
+    {{-- Barra Mobile Fixa (Footer) - Somente Mobile --}}
+    <div class="button-fixed-mobile">
+        <div>
+            {{-- Informações: Preço e Calorias --}}
+            <div class="descricao-button">
+                <div class="preco-button">
+                    <h4 class="valor js-valor-barra">{{ $product->formatted_price }}</h4>
+                </div>
+                @if($product->nutritionalInfo && $product->nutritionalInfo->energy_kcal)
+                    <div class="kcal-button">
+                        <p class="kcal">{{ number_format($product->nutritionalInfo->energy_kcal, 0, ',', '.') }} calorias</p>
+                    </div>
+                @endif
+            </div>
+
+            {{-- Botão Comprar --}}
+            <div class="adicionar-button">
+                @if($product->isAvailable())
+                    <a href="javascript:" class="bt adicionar editar js-add-to-cart" data-product-id="{{ $product->id }}">
+                        <span>Comprar</span>
+                    </a>
+                @else
+                    <div class="bt adicionar indisponivel">
+                        <span>Indisponível</span>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @push('scripts')
