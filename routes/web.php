@@ -113,6 +113,24 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Rotas de Banners Únicos
     Route::resource('single-banners', App\Http\Controllers\Admin\SingleBannerController::class);
 
+    // Rotas de Ordenação das Seções da Home (sistema antigo - mantido para compatibilidade)
+    Route::prefix('home-sections')->name('home-sections.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\HomeSectionController::class, 'index'])->name('index');
+        Route::post('/update-order', [App\Http\Controllers\Admin\HomeSectionController::class, 'updateOrder'])->name('update-order');
+        Route::post('/{homeSection}/toggle', [App\Http\Controllers\Admin\HomeSectionController::class, 'toggleActive'])->name('toggle');
+    });
+
+    // Rotas de Blocos Flexíveis da Home (sistema novo - permite intercalar blocos)
+    Route::prefix('home-blocks')->name('home-blocks.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\HomeBlockController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\Admin\HomeBlockController::class, 'store'])->name('store');
+        Route::delete('/{homeBlock}', [App\Http\Controllers\Admin\HomeBlockController::class, 'destroy'])->name('destroy');
+        Route::post('/update-order', [App\Http\Controllers\Admin\HomeBlockController::class, 'updateOrder'])->name('update-order');
+        Route::post('/{homeBlock}/toggle', [App\Http\Controllers\Admin\HomeBlockController::class, 'toggleActive'])->name('toggle');
+        Route::put('/{homeBlock}/title', [App\Http\Controllers\Admin\HomeBlockController::class, 'updateTitle'])->name('update-title');
+        Route::get('/items/{type}', [App\Http\Controllers\Admin\HomeBlockController::class, 'getItems'])->name('items');
+    });
+
     // Rotas de Cookie Consent LGPD
     Route::get('cookie-consent', [App\Http\Controllers\Admin\CookieConsentController::class, 'edit'])->name('cookie-consent.edit');
     Route::put('cookie-consent', [App\Http\Controllers\Admin\CookieConsentController::class, 'update'])->name('cookie-consent.update');

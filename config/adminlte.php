@@ -323,6 +323,7 @@ return [
         
         ['header' => 'LOJA VIRTUAL'],
         ['text' => 'Layout', 'route'  => 'admin.layout.index', 'icon' => 'fas fa-fw fa-paint-brush'],
+        ['text' => 'Montar Home Page', 'route'  => 'admin.home-blocks.index', 'icon' => 'fas fa-fw fa-puzzle-piece'],
         ['text' => 'Banners Hero', 'route'  => 'admin.banners.index', 'icon' => 'fas fa-fw fa-picture-o'],
         ['text' => 'Blocos de Informações', 'route'  => 'admin.feature-blocks.index', 'icon' => 'fas fa-fw fa-th-large'],
         ['text' => 'Galerias de Produtos', 'route'  => 'admin.product-galleries.index', 'icon' => 'fas fa-fw fa-images'],

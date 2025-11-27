@@ -1106,3 +1106,299 @@ if (!function_exists('render_mega_menu_image')) {
     }
 }
 
+if (!function_exists('home_sections')) {
+    /**
+     * Renderiza todas as seções da home na ordem configurada no admin
+     *
+     * Busca as seções ativas da tabela home_sections, ordenadas pelo campo 'order',
+     * e renderiza cada uma chamando sua função helper correspondente.
+     *
+     * Exemplo de uso no Blade:
+     * {!! home_sections() !!}
+     *
+     * Cada seção tem um helper_function associado (ex: hero_banners, feature_blocks)
+     * que é chamado dinamicamente para gerar o HTML.
+     *
+     * @return string HTML de todas as seções concatenadas
+     */
+    function home_sections(): string
+    {
+        // Busca seções ativas ordenadas (usa cache para performance)
+        $sections = Cache::remember('home.sections.ordered', 300, function () {
+            return \App\Models\HomeSection::active()->ordered()->get();
+        });
+
+        $html = '';
+
+        // Renderiza cada seção chamando seu helper
+        foreach ($sections as $section) {
+            $html .= $section->render();
+        }
+
+        return $html;
+    }
+}
+
+if (!function_exists('clear_home_sections_cache')) {
+    /**
+     * Limpa o cache das seções da home
+     *
+     * Deve ser chamado sempre que a ordem ou status das seções for alterado.
+     *
+     * @return void
+     */
+    function clear_home_sections_cache(): void
+    {
+        Cache::forget('home.sections.ordered');
+    }
+}
+
+// ============================================================================
+// FUNÇÕES DE BLOCOS FLEXÍVEIS DA HOME (Sistema de blocos intercalados)
+// ============================================================================
+
+if (!function_exists('home_blocks')) {
+    /**
+     * Renderiza todos os blocos da home na ordem configurada no admin
+     *
+     * Este é o sistema FLEXÍVEL que substitui home_sections().
+     * Permite intercalar diferentes tipos de blocos (galerias, banners, etc.)
+     * em qualquer ordem desejada.
+     *
+     * Exemplo de uso no Blade:
+     * {!! home_blocks() !!}
+     *
+     * @return string HTML de todos os blocos concatenados
+     */
+    function home_blocks(): string
+    {
+        // Busca blocos ativos ordenados (usa cache para performance)
+        $blocks = Cache::remember('home.blocks.ordered', 300, function () {
+            return \App\Models\HomeBlock::active()->ordered()->get();
+        });
+
+        $html = '';
+
+        // Renderiza cada bloco
+        foreach ($blocks as $block) {
+            $html .= $block->render();
+        }
+
+        return $html;
+    }
+}
+
+if (!function_exists('clear_home_blocks_cache')) {
+    /**
+     * Limpa o cache dos blocos da home
+     *
+     * Deve ser chamado sempre que blocos forem adicionados, removidos,
+     * reordenados ou tiverem seu status alterado.
+     *
+     * @return void
+     */
+    function clear_home_blocks_cache(): void
+    {
+        Cache::forget('home.blocks.ordered');
+    }
+}
+
+if (!function_exists('product_gallery')) {
+    /**
+     * Renderiza UMA galeria de produtos específica
+     *
+     * Diferente de product_galleries() que renderiza todas,
+     * esta função renderiza apenas a galeria passada como parâmetro.
+     *
+     * Usada pelo sistema de blocos flexíveis (HomeBlock).
+     *
+     * @param \App\Models\ProductGallery $gallery - Galeria a ser renderizada
+     * @return string - HTML da galeria ou string vazia se inativa
+     */
+    function product_gallery(\App\Models\ProductGallery $gallery): string
+    {
+        // Verifica se a galeria está ativa
+        if (!$gallery->active) {
+            return '';
+        }
+
+        // Usa view para renderizar a galeria com o componente padronizado de produto
+        return view('storefront.partials.product.gallery-single', [
+            'gallery' => $gallery
+        ])->render();
+    }
+}
+
+if (!function_exists('dual_banner')) {
+    /**
+     * Renderiza UM banner duplo específico
+     *
+     * Diferente de dual_banners() que renderiza todos,
+     * esta função renderiza apenas o banner duplo passado como parâmetro.
+     *
+     * Usada pelo sistema de blocos flexíveis (HomeBlock).
+     *
+     * @param \App\Models\DualBanner $dualBanner - Banner duplo a ser renderizado
+     * @return string - HTML do banner duplo ou string vazia se inativo
+     */
+    function dual_banner(\App\Models\DualBanner $dualBanner): string
+    {
+        // Verifica se pelo menos um lado está visível
+        $leftVisible = $dualBanner->isLeftVisible();
+        $rightVisible = $dualBanner->isRightVisible();
+
+        if (!$leftVisible && !$rightVisible) {
+            return '';
+        }
+
+        $html = '<section class="box-destaque-top order">';
+        $html .= '<div class="container">';
+        $html .= '<div class="item-destaque-home">';
+        $html .= '<div class="row">';
+
+        // Banner Esquerdo
+        if ($leftVisible) {
+            $leftLink = $dualBanner->left_link ?: '#';
+            $leftAlt = e($dualBanner->left_alt_text ?: 'Banner');
+            $leftImageUrl = $dualBanner->getLeftImageUrl();
+
+            $html .= '<div class="col-xs-12 col-sm-6 boxHeight">';
+            $html .= '<a class="item" href="' . e($leftLink) . '">';
+            $html .= '<img class="img-responsive" src="' . e($leftImageUrl) . '" ';
+            $html .= 'title="' . $leftAlt . '" ';
+            $html .= 'alt="' . $leftAlt . '" />';
+            $html .= '<div class="text-center">';
+            $html .= '<span class="btn btn-large">Saiba mais</span>';
+            $html .= '</div>';
+            $html .= '</a>';
+            $html .= '</div>';
+        }
+
+        // Banner Direito
+        if ($rightVisible) {
+            $rightLink = $dualBanner->right_link ?: '#';
+            $rightAlt = e($dualBanner->right_alt_text ?: 'Banner');
+            $rightImageUrl = $dualBanner->getRightImageUrl();
+
+            $html .= '<div class="col-xs-12 col-sm-6 boxHeight">';
+            $html .= '<a class="item" href="' . e($rightLink) . '">';
+            $html .= '<img class="img-responsive" src="' . e($rightImageUrl) . '" ';
+            $html .= 'title="' . $rightAlt . '" ';
+            $html .= 'alt="' . $rightAlt . '" />';
+            $html .= '<div class="text-center">';
+            $html .= '<span class="btn btn-large">Saiba mais</span>';
+            $html .= '</div>';
+            $html .= '</a>';
+            $html .= '</div>';
+        }
+
+        $html .= '</div>'; // row
+        $html .= '</div>'; // item-destaque-home
+        $html .= '</div>'; // container
+        $html .= '</section>'; // box-destaque-top
+
+        return $html;
+    }
+}
+
+if (!function_exists('single_banner')) {
+    /**
+     * Renderiza UM banner único específico
+     *
+     * Diferente de single_banners() que renderiza todos,
+     * esta função renderiza apenas o banner passado como parâmetro.
+     *
+     * Usada pelo sistema de blocos flexíveis (HomeBlock).
+     *
+     * @param \App\Models\SingleBanner $banner - Banner a ser renderizado
+     * @return string - HTML do banner ou string vazia se inativo
+     */
+    function single_banner(\App\Models\SingleBanner $banner): string
+    {
+        // Verifica se o banner está visível (ativo e dentro do período)
+        if (!$banner->isVisible()) {
+            return '';
+        }
+
+        $link = $banner->link ?: '#';
+        $altText = e($banner->alt_text ?: 'Banner');
+        $desktopImageUrl = $banner->getDesktopImageUrl();
+        $mobileImageUrl = $banner->getMobileImageUrl();
+
+        $html = '<section class="bg-ban-link">';
+        $html .= '<div class="container">';
+        $html .= '<div class="row">';
+        $html .= '<div class="col-xs-12">';
+
+        $html .= '<a href="' . e($link) . '" target="_blank">';
+
+        // Imagem Desktop
+        $html .= '<img alt="' . $altText . '" ';
+        $html .= 'class="img-responsive hidden-xs hidden-sm" ';
+        $html .= 'src="' . e($desktopImageUrl) . '" />';
+
+        // Imagem Mobile
+        $html .= '<img alt="' . $altText . '" ';
+        $html .= 'class="img-responsive visible-xs visible-sm" ';
+        $html .= 'src="' . e($mobileImageUrl) . '" />';
+
+        $html .= '</a>';
+
+        $html .= '</div>'; // col-xs-12
+        $html .= '</div>'; // row
+        $html .= '</div>'; // container
+        $html .= '</section>'; // bg-ban-link
+
+        return $html;
+    }
+}
+
+if (!function_exists('info_block')) {
+    /**
+     * Renderiza UM bloco de informação específico
+     *
+     * Diferente de info_blocks() que renderiza todos,
+     * esta função renderiza apenas o bloco passado como parâmetro.
+     *
+     * Usada pelo sistema de blocos flexíveis (HomeBlock).
+     *
+     * @param \App\Models\InfoBlock $block - Bloco a ser renderizado
+     * @return string - HTML do bloco ou string vazia se inativo
+     */
+    function info_block(\App\Models\InfoBlock $block): string
+    {
+        // Verifica se o bloco está ativo
+        if (!$block->active) {
+            return '';
+        }
+
+        $bgStyle = $block->background_color ? ' style="background-color: ' . e($block->background_color) . ';"' : '';
+
+        $html = '<section class="bg-refeicoes-saudaveis"' . $bgStyle . '>';
+        $html .= '<div class="container">';
+        $html .= '<div class="row">';
+        $html .= '<div class="flex no-flex-xs box-cover">';
+
+        // Imagem
+        $html .= '<div class="col-xs-12 col-sm-6 col-md-7">';
+        $html .= '<img alt="' . e($block->image_alt ?: $block->title) . '" ';
+        $html .= 'class="img-responsive" src="' . e($block->getImageUrl()) . '" />';
+        $html .= '</div>';
+
+        // Texto
+        $html .= '<div class="col-xs-12 col-sm-6 col-md-5">';
+        $html .= '<h2>' . e($block->title) . '</h2>';
+        if ($block->subtitle) {
+            $html .= '<h3>' . e($block->subtitle) . '</h3>';
+        }
+        $html .= '</div>';
+
+        $html .= '</div>'; // flex
+        $html .= '</div>'; // row
+        $html .= '</div>'; // container
+        $html .= '</section>';
+
+        return $html;
+    }
+}
+

@@ -17,26 +17,24 @@
 @section('body_class', 'pg-home')
 
 @section('content')
-    {{-- Banners Hero (Principal) --}}
-    {!! hero_banners() !!}
+    {{--
+        Sistema de Blocos Flexíveis da Home Page
+        ----------------------------------------
+        Permite montar a home com blocos intercalados (galerias, banners, etc.)
+        em qualquer ordem desejada.
 
-    {{-- Galerias de Produtos --}}
-    {!! product_galleries() !!}
+        Gerenciamento: /admin/home-blocks
 
-    {{-- Blocos de Recursos (Feature Blocks) --}}
-    {!! feature_blocks() !!}
-
-    {{-- Banners Duplos --}}
-    {!! dual_banners() !!}
-
-    {{-- Blocos de Passos --}}
-    {!! step_blocks() !!}
-
-    {{-- Banners Simples --}}
-    {!! single_banners() !!}
-
-    {{-- Blocos de Informação --}}
-    {!! info_blocks() !!}
+        Tipos disponíveis:
+        - hero_banners: Banner principal (carrossel)
+        - feature_blocks: Blocos de informações (régua)
+        - product_gallery: Galeria de produtos (individual)
+        - dual_banner: Banner duplo (individual)
+        - info_block: Bloco de informação (individual)
+        - step_blocks: Blocos de passos
+        - single_banner: Banner único (individual)
+    --}}
+    {!! home_blocks() !!}
 
     {{-- Consentimento de Cookies (LGPD) --}}
     {!! cookie_consent() !!}

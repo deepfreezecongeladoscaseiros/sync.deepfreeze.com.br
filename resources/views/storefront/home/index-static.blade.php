@@ -438,35 +438,27 @@ dataLayer.push({
         </div>
     </nav>
 </header>
-    <section class="container">
-        <div class="row">
-            <div class="col-xs-12">
-                {!! hero_banners() !!}
-            </div>
-        </div>
-    </section>
+    {{--
+        Seções da Home Page - Ordem configurável via admin
+        Rota de administração: /admin/home-sections
 
-    <div class="box-order-mobile">
-        <section class="container-fluid order">
-            <div class="row">
-                    {!! feature_blocks() !!}
-            </div>
-        </section>
+        As seções são renderizadas na ordem definida no painel administrativo.
+        Cada seção pode ser ativada/desativada e reordenada via drag-and-drop.
 
-        {{-- Galerias de Produtos Dinâmicas --}}
-        {!! product_galleries() !!}
+        Seções disponíveis:
+        - hero_banners: Banner principal (carrossel)
+        Sistema de blocos flexíveis - permite intercalar diferentes tipos de blocos:
+        - hero_banners: Banner principal
+        - feature_blocks: Blocos de informações (régua)
+        - product_gallery: Galeria de produtos individual
+        - dual_banner: Banner duplo individual
+        - info_block: Bloco de informação individual
+        - step_blocks: Blocos de passos
+        - single_banner: Banner único individual
 
-        {{-- Banners Duplos --}}
-        {!! dual_banners() !!}
-
-        {{-- Blocos de Informação (ex: Refeições Saudáveis) --}}
-        {!! info_blocks() !!}
-
-        {{-- Blocos de Passos (4 itens com ícone, título e descrição) --}}
-        {!! step_blocks() !!}
-
-        {{-- Banners Únicos (Desktop + Mobile) --}}
-        {!! single_banners() !!}
+        A ordem e composição são configuradas em: /admin/home-blocks
+    --}}
+    {!! home_blocks() !!}
 
         <section class="vitrine-home order">
             <div class="container">
