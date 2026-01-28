@@ -71,11 +71,11 @@ class ContactSetting extends Model
                 $settings = self::create([
                     'page_title' => 'Contato',
                     'intro_text' => 'Entre em contato via telefone ou envie-nos a sua mensagem, depoimento, ou sugestões abaixo. Em breve, entraremos em contato.',
-                    'whatsapp' => '5511947446739',
-                    'whatsapp_display' => '(11) 94744-6739',
-                    'email' => 'contato@naturallisas.com.br',
+                    'whatsapp' => '552134783000',
+                    'whatsapp_display' => '(21) 3478-3000',
+                    'email' => 'contato@deepfreeze.com.br',
                     'business_hours' => "Horário de atendimento de segunda à sexta das 7h às 16h\nTambém efetuamos plantão em 2 domingos do mês",
-                    'form_recipient_email' => 'contato@naturallisas.com.br',
+                    'form_recipient_email' => 'contato@deepfreeze.com.br',
                     'form_subject' => 'Nova mensagem de contato - Deep Freeze',
                     'active' => true,
                 ]);
@@ -139,8 +139,8 @@ class ContactSetting extends Model
     public function getBannerUrl(): ?string
     {
         if (empty($this->banner_image)) {
-            // Retorna banner padrão se não houver imagem configurada
-            return 'https://naturallisas.com.br/lojas/naturallis/conteudo/uploads/ban-interna-1-65aaba6e31de7.jpg';
+            // Retorna banner padrão local se não houver imagem configurada
+            return asset('storefront/img/ban-interna-1.jpg');
         }
 
         return Storage::url($this->banner_image);

@@ -1177,10 +1177,37 @@ if (!function_exists('home_blocks')) {
             return \App\Models\HomeBlock::active()->ordered()->get();
         });
 
+        // Otimização: pré-carrega TODOS os itens referenciados agrupados por tipo
+        // Antes: 1 query por bloco (~550ms cada no banco remoto = N queries)
+        // Depois: 1 query por TIPO de bloco (máximo 3-4 queries)
+        $referencedItems = [];
+        $groupedByType = $blocks->filter(fn($b) => $b->requiresReference() && $b->reference_id)
+            ->groupBy('type');
+
+        foreach ($groupedByType as $type => $typeBlocks) {
+            $config = \App\Models\HomeBlock::BLOCK_TYPES[$type] ?? null;
+            if ($config && $config['model']) {
+                $modelClass = $config['model'];
+                $ids = $typeBlocks->pluck('reference_id')->unique()->toArray();
+                // Busca todos os itens desse tipo de uma vez
+                $items = $modelClass::whereIn('id', $ids)->get()->keyBy('id');
+                foreach ($items as $id => $item) {
+                    $referencedItems[$type . '_' . $id] = $item;
+                }
+            }
+        }
+
         $html = '';
 
-        // Renderiza cada bloco
+        // Renderiza cada bloco, injetando o item pré-carregado quando disponível
         foreach ($blocks as $block) {
+            if ($block->requiresReference() && $block->reference_id) {
+                $key = $block->type . '_' . $block->reference_id;
+                if (isset($referencedItems[$key])) {
+                    // Injeta o item pré-carregado para evitar query individual no render()
+                    $block->setRelation('_preloadedItem', $referencedItems[$key]);
+                }
+            }
             $html .= $block->render();
         }
 
@@ -1350,6 +1377,26 @@ if (!function_exists('single_banner')) {
         $html .= '</section>'; // bg-ban-link
 
         return $html;
+    }
+}
+
+if (!function_exists('contact_settings')) {
+    /**
+     * Retorna as configurações de contato da loja
+     *
+     * Obtém os dados de contato (WhatsApp, email, horário de atendimento)
+     * configurados no admin. Usa cache para performance.
+     *
+     * Exemplo de uso no Blade:
+     * {{ contact_settings()->whatsapp_display }}
+     * {{ contact_settings()->email }}
+     * {!! contact_settings()->getWhatsAppUrl() !!}
+     *
+     * @return \App\Models\ContactSetting
+     */
+    function contact_settings(): \App\Models\ContactSetting
+    {
+        return \App\Models\ContactSetting::getSettings();
     }
 }
 

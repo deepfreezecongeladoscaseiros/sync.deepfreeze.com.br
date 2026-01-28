@@ -10,9 +10,9 @@
 --}}
 @extends('layouts.storefront')
 
-@section('title', config('app.name') . ' - Delivery de marmitas saudáveis ultracongeladas')
+@section('title', config('app.name') . ' - Delivery de congelados artesanais')
 
-@section('meta_description', 'Delivery de marmitas saudáveis ultracongeladas. Praticidade e saúde na sua rotina.')
+@section('meta_description', 'Delivery de congelados artesanais. Praticidade e sabor na sua rotina.')
 
 @section('body_class', 'pg-home')
 

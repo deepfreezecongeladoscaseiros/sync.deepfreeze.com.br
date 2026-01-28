@@ -29,12 +29,19 @@ class ProductController extends Controller
         $category = Category::where('slug', $categorySlug)->firstOrFail();
 
         // Busca o produto pelo slug (gerado a partir do nome) e categoria
-        // O slug é gerado dinamicamente no model Product via getSlugAttribute()
+        // O slug é um accessor (Str::slug(name)), não existe como coluna no banco.
+        // Para evitar carregar TODOS os produtos da categoria e filtrar em PHP (N+1),
+        // convertemos o slug de volta para um padrão LIKE no banco de dados.
+        // Ex: "roupa-velha-arroz-branco" => "%roupa%velha%arroz%branco%"
+        $nameLike = '%' . str_replace('-', '%', $productSlug) . '%';
+
         $product = Product::with(['category', 'images', 'brand', 'nutritionalInfo'])
             ->where('category_id', $category->id)
+            ->where('name', 'LIKE', $nameLike)
             ->active()
             ->get()
             ->first(function ($p) use ($productSlug) {
+                // Confirma match exato pelo accessor slug (LIKE pode trazer falsos positivos)
                 return $p->slug === $productSlug;
             });
 

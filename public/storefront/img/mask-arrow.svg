@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Retângulo_3775" data-name="Retângulo 3775" width="30" height="30" transform="translate(636 1326)" fill="red" opacity="0.11"/>
+    </clipPath>
+  </defs>
+  <g id="mask-arrow" transform="translate(-636 -1326)" clip-path="url(#clip-path)">
+    <path id="Polígono_99" data-name="Polígono 99" d="M24.5,0,49,30H0Z" transform="translate(675 1356) rotate(180)" fill="#f8fcf5"/>
+  </g>
+</svg>

@@ -1,122 +1,93 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $settings->getSeoTitle() }}</title>
+{{--
+    Página de Contato da Loja
+    Usa o layout storefront para herdar header, footer, CSS e JS base.
+    Conteúdo específico: formulário de contato + informações de contato.
+--}}
+@extends('layouts.storefront')
 
-    @if($settings->meta_description)
-        <meta name="description" content="{{ $settings->meta_description }}">
-    @endif
+@section('title', $settings->getSeoTitle())
+@section('body_class', 'pg-contato')
 
-    {{-- CSS --}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/css/jquery.fancybox.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.4.5/sweet-alert.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
-    <link href="https://naturallisas.com.br/assets/css/icon-fonts-octoshop.min.css" rel="stylesheet">
-    <link href="https://naturallisas.com.br/assets/css/style-extend.min.css?v=6921ea036ab4e" rel="stylesheet">
-    <link href="https://naturallisas.com.br/lojas/naturallis/theme/assets/css/style.min.css" rel="stylesheet">
+@if($settings->meta_description)
+    @section('meta_description', $settings->meta_description)
+@endif
 
-    {{-- Bootstrap Icons (Linear style) --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    {{-- Mapeamento de ícones FA para Bootstrap Icons --}}
-    <link href="{{ asset('storefront/css/icons-mapping.css') }}" rel="stylesheet">
-    {{-- CSS Dinâmico do Tema (variáveis de cores) --}}
-    <link href="{{ theme_css_url() }}" rel="stylesheet">
-    {{-- Override de estilos com as cores do tema --}}
-    <link href="{{ asset('storefront/css/theme-override.css') }}" rel="stylesheet">
-    {{-- CSS customizado para logos quadradas --}}
-    <link href="{{ asset('storefront/css/logo-custom.css') }}" rel="stylesheet">
-    {{-- CSS customizado para Top Bar (Barra de Anúncios) --}}
-    <link href="{{ asset('storefront/css/top-bar-custom.css') }}" rel="stylesheet">
+@push('styles')
+<style>
+    /* Estilos específicos da página de contato */
+    .banner-interna {
+        background-size: cover;
+        background-position: center;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+    }
+    .banner-interna .pg-titulo h1 {
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        margin: 0;
+        font-size: 2.5em;
+    }
+    .pg-internas {
+        padding: 40px 0;
+    }
+    .form-contato .form-group {
+        margin-bottom: 20px;
+    }
+    .form-contato label {
+        font-weight: 600;
+        color: var(--color-primary);
+    }
+    .form-contato .btn {
+        padding: 12px 40px;
+        font-size: 16px;
+    }
+    .box-endereco {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        border-left: 4px solid var(--color-primary);
+    }
+    .box-endereco ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .box-endereco ul li {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: flex-start;
+    }
+    .box-endereco ul li:last-child {
+        border-bottom: none;
+    }
+    .box-endereco ul li i {
+        color: var(--color-primary);
+        margin-right: 15px;
+        font-size: 20px;
+        width: 25px;
+        text-align: center;
+    }
+    .box-endereco ul li a {
+        color: #333;
+    }
+    .box-endereco ul li a:hover {
+        color: var(--color-primary);
+    }
+    .intro-text {
+        margin-bottom: 30px;
+        line-height: 1.8;
+        color: #666;
+    }
+    .alert-form {
+        display: none;
+        margin-bottom: 20px;
+    }
+</style>
+@endpush
 
-    {{-- Fontes --}}
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    {{-- CSRF Token para AJAX --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <style>
-        /* Estilos específicos da página de contato */
-        .banner-interna {
-            background-size: cover;
-            background-position: center;
-            min-height: 200px;
-            display: flex;
-            align-items: center;
-        }
-        .banner-interna .pg-titulo h1 {
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            margin: 0;
-            font-size: 2.5em;
-        }
-        .pg-internas {
-            padding: 40px 0;
-        }
-        .form-contato .form-group {
-            margin-bottom: 20px;
-        }
-        .form-contato label {
-            font-weight: 600;
-            color: var(--color-primary);
-        }
-        .form-contato .btn {
-            padding: 12px 40px;
-            font-size: 16px;
-        }
-        .box-endereco {
-            background-color: #f8f9fa;
-            padding: 30px;
-            border-radius: 8px;
-            border-left: 4px solid var(--color-primary);
-        }
-        .box-endereco ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .box-endereco ul li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: flex-start;
-        }
-        .box-endereco ul li:last-child {
-            border-bottom: none;
-        }
-        .box-endereco ul li i {
-            color: var(--color-primary);
-            margin-right: 15px;
-            font-size: 20px;
-            width: 25px;
-            text-align: center;
-        }
-        .box-endereco ul li a {
-            color: #333;
-        }
-        .box-endereco ul li a:hover {
-            color: var(--color-primary);
-        }
-        .intro-text {
-            margin-bottom: 30px;
-            line-height: 1.8;
-            color: #666;
-        }
-        .alert-form {
-            display: none;
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body class="pg-contato">
-
-{{-- Cabeçalho Completo (inclui top bar, menu mobile, busca, carrinho) --}}
-@include('storefront.partials.header')
+@section('content')
 
 {{-- Banner Interno --}}
 <section class="banner-interna" style="background-image: url('{{ $settings->getBannerUrl() }}');">
@@ -253,23 +224,9 @@
 </div>
 @endif
 
-{{-- Rodapé Completo --}}
-@include('storefront.partials.footer')
+@endsection
 
-{{-- JavaScript --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.2.1/owl.carousel.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.2/jquery.matchHeight-min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.4.5/sweet-alert.min.js"></script>
-<script src="https://naturallisas.com.br/assets/js/loja-validations.min.js"></script>
-<script src="https://naturallisas.com.br/assets/js/loja-function.min.js"></script>
-<script src="https://naturallisas.com.br/assets/js/loja-script.min.js"></script>
-
+@push('scripts')
 <script>
 $(document).ready(function() {
     // Máscara de telefone
@@ -308,14 +265,9 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    // Limpa o formulário
                     $form[0].reset();
-
-                    // Mostra mensagem de sucesso
                     $alertSuccess.find('span').text(response.message);
                     $alertSuccess.slideDown();
-
-                    // Scroll para o topo do formulário
                     $('html, body').animate({
                         scrollTop: $('.form-contato').offset().top - 100
                     }, 500);
@@ -326,29 +278,22 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 var message = 'Ocorreu um erro ao enviar sua mensagem. Por favor, tente novamente.';
-
                 if (xhr.responseJSON) {
                     if (xhr.responseJSON.message) {
                         message = xhr.responseJSON.message;
                     } else if (xhr.responseJSON.errors) {
-                        // Erros de validação
                         var errors = xhr.responseJSON.errors;
-                        var firstError = errors[Object.keys(errors)[0]][0];
-                        message = firstError;
+                        message = errors[Object.keys(errors)[0]][0];
                     }
                 }
-
                 $alertError.find('span').text(message);
                 $alertError.slideDown();
             },
             complete: function() {
-                // Reabilita botão
                 $btn.prop('disabled', false).html('<i class="fa fa-paper-plane"></i> Enviar Mensagem');
             }
         });
     });
 });
 </script>
-
-</body>
-</html>
+@endpush

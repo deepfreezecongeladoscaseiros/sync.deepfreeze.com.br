@@ -141,7 +141,10 @@ class ProductGallery extends Model
                 break;
         }
 
-        return $query->limit($this->products_limit)->get();
+        // Eager loading de category e images para evitar N+1 queries na renderização
+        // Cada produto no card precisa de: category (para gerar URL) e images (para imagem principal)
+        // Sem isso, seriam 2 queries extras POR produto (~500ms cada no banco remoto)
+        return $query->with(['category', 'images'])->limit($this->products_limit)->get();
     }
 
     /**

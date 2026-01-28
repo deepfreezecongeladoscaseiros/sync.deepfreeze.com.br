@@ -162,9 +162,18 @@ class HomeBlock extends Model
     /**
      * Retorna o item referenciado (galeria, banner, etc.)
      * Retorna null se o tipo não requer referência ou se o item não existe
+     *
+     * Otimização: se o item foi pré-carregado via home_blocks() (setRelation),
+     * usa o item em memória ao invés de fazer query individual no banco.
+     * Cada query ao banco remoto leva ~550ms de latência de rede.
      */
     public function getReferencedItem(): ?Model
     {
+        // Usa item pré-carregado se disponível (injetado por home_blocks())
+        if ($this->relationLoaded('_preloadedItem')) {
+            return $this->getRelation('_preloadedItem');
+        }
+
         $config = $this->getTypeConfig();
 
         if (!$config || !$config['requires_reference'] || !$this->reference_id) {

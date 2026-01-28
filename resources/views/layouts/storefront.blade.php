@@ -34,9 +34,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/css/jquery.fancybox.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.4.5/sweet-alert.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet">
-    <link href="https://naturallisas.com.br/assets/css/icon-fonts-octoshop.min.css" rel="stylesheet">
-    <link href="https://naturallisas.com.br/assets/css/style-extend.min.css" rel="stylesheet">
-    <link href="https://naturallisas.com.br/lojas/naturallis/theme/assets/css/style.min.css" rel="stylesheet">
+    {{-- CSS locais (substituindo referências externas ao naturallisas) --}}
+    <link href="{{ asset('storefront/css/icon-fonts.css') }}" rel="stylesheet">
+    <link href="{{ asset('storefront/css/style-extend.css') }}" rel="stylesheet">
+    <link href="{{ asset('storefront/css/style.css') }}" rel="stylesheet">
 
     {{-- Bootstrap Icons --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -109,8 +110,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/0.4.5/sweet-alert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script>
-    <script src="https://naturallisas.com.br/assets/js/loja-triggers.min.js"></script>
-    <script src="https://naturallisas.com.br/lojas/naturallis/theme/assets/js/scripts.min.js"></script>
+    {{-- JS locais (substituindo referências externas ao naturallisas) --}}
+    {{-- Ordem de carregamento: triggers -> function -> script --}}
+    {{-- loja-function.js define funções (setPaginasTimeout, etc.) usadas por loja-script.js --}}
+    <script src="{{ asset('storefront/js/loja-triggers.js') }}"></script>
+    <script src="{{ asset('storefront/js/loja-function.js') }}"></script>
+    <script src="{{ asset('storefront/js/loja-script.js') }}"></script>
 
     {{-- Menu Mobile Handler --}}
     {{-- Baseado no padrão original da Naturallis: usa classe js-overlay-toggle no body --}}

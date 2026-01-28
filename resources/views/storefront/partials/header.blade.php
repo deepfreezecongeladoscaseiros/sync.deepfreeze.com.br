@@ -15,7 +15,7 @@
             <i class="fa fa-times"></i><span class="sr-only">Fechar busca</span>
         </a>
         <div class="busca mod-full flex-center">
-            <form action="https://naturallisas.com.br/busca" method="get">
+            <form action="{{ url('/busca') }}" method="get">
                 <span class="item-titulo flex-center"><h2>Digite o nome do produto</h2></span>
                 <input type="text" class="form-control autocompletar" name="palavra" id="busca">
                 <h6 class="hidden-xs">Digite o nome do produto e aperte o <span>Enter</span> ou selecione um produto da lista.</h6>
@@ -32,7 +32,7 @@
 
 <!-- alterado variavel do valor da cesta topo, estava uma variavel errado estava a sub_total -->
 <div class="icon-topo">
-    <a href="https://naturallisas.com.br/cesta" class="dropdown-toggle">R$ 0,00</a>
+    <a href="{{ url('/carrinho') }}" class="dropdown-toggle">R$ 0,00</a>
     <h4 style="display: none;">Meu Carrinho</h4>
 </div>
 
@@ -73,7 +73,7 @@
                                     {!! social_networks() !!}
                                 </div>
                                                                 <div class="contato-topo">
-                                    <p>Delivery de marmitas saud&aacute;veis ultracongeladas</p>                                </div>
+                                    <p>Delivery de congelados artesanais</p>                                </div>
                                                             </div>
                         </div>
                         <div class="col-xs-8 col-lg-7">
@@ -105,8 +105,8 @@
         </div>
     </li>
 
-            <li class="cadastre-se"><a href="https://naturallisas.com.br/cadastro"><i class="icon-perfil fa fa-user-o"></i>Cadastre-se</a></li>
-        <li class="entrar"><a href="https://naturallisas.com.br/login"><i class="icon-entrar fa fa-share"></i>Login</a></li>
+            <li class="cadastre-se"><a href="{{ route('register') }}"><i class="icon-perfil fa fa-user-o"></i>Cadastre-se</a></li>
+        <li class="entrar"><a href="{{ route('login') }}"><i class="icon-entrar fa fa-share"></i>Login</a></li>
 
 </ul>                                </div>
                             </div>
@@ -142,7 +142,7 @@
                                         </a>
                                         <div class="flex-end">
                                             <a href="javascript:" class="item-busca btn-abrir js-abrir-busca"><span class="sr-only">Busca</span></a>
-                                                                                            <a href="https://naturallisas.com.br/login" class="item-login"><span class="sr-only">Entrar</span></a>
+                                                                                            <a href="{{ route('login') }}" class="item-login"><span class="sr-only">Entrar</span></a>
                                                                                         <div class="box-carrinho-mobile">
                                                 <a href="javascript:" onclick="openCarrinhoRight()" class="btn-open">
                                                     <span class="badge js-cesta-total-produtos-notext">

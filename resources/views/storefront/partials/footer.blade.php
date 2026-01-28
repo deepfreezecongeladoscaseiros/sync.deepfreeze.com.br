@@ -44,25 +44,24 @@
             <div class="col-xs-12 col-sm-4 col-md-3 boxHeight">
                 <div class="menu-contato">
                     <h5>Contato</h5>
+                    @php $contact = contact_settings(); @endphp
                     <ul class="list-unstyled footer-links">
-	<li><i class="fa fa-whatsapp"></i><a href="https://api.whatsapp.com/send?phone=5511947446739" target="_blank">(11) 94744-6739</a></li>
-	<li><i class="fa fa-envelope"></i><a href="/cdn-cgi/l/email-protection#2a4945445e4b5e456a444b5e5f584b464643594b5904494547044858"><span class="__cf_email__" data-cfemail="5636393822372239163837222324373a3a3f2537257835393b783424">[email&#160;protected]</span></a></li>
-</ul>                    <div class="rede-social-topo">
+                        <li><i class="fa fa-whatsapp"></i><a href="{{ $contact->getWhatsAppUrl() }}" target="_blank">{{ $contact->whatsapp_display }}</a></li>
+                        <li><i class="fa fa-envelope"></i><a href="mailto:{{ $contact->email }}">{{ $contact->email }}</a></li>
+                    </ul>                    <div class="rede-social-topo">
                         {{-- Redes sociais gerenciadas via admin --}}
                         {!! social_networks() !!}
                     </div>
                 </div>
             </div>
 
+            {{-- Seção de selos - usando assets locais --}}
             <div class="col-xs-12 col-sm-4 col-md-2 boxHeight">
                 <div class="site-seguro">
                     <h5>Site seguro</h5>
-                    <a href="https://transparencyreport.google.com/safe-browsing/search?url=https://naturallisas.com.br/">
-                        <img class="img-responsive" src="https://naturallisas.com.br/lojas/naturallis/theme/assets/img/google-safe-browsing.svg" alt="Você está em uma navegação segura." title="Google Safe Browsing">
-                    </a>
-                    <img class="img-responsive" src="https://naturallisas.com.br/lojas/naturallis/theme/assets/img/selo-rapidssl.svg" alt="Você está em um site seguro." title="Site Seguro">
-                                        <img class="img-responsive img-pagar-me" src="https://naturallisas.com.br/lojas/naturallis/theme/assets/img/selo-pagar-me.svg" alt="Pagamento seguro" title="Pagar.me">
-                                    </div>
+                    {{-- Selos de segurança serão adicionados quando os assets locais estiverem disponíveis --}}
+                    {{-- TODO: Adicionar selos locais em public/storefront/img/selos/ --}}
+                </div>
             </div>
 
         </div>
@@ -73,20 +72,11 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="flex-center">
-                        <p>&copy;<span id="anoAtual"></span>&nbsp;Naturallis Alimenta&ccedil;&atilde;o Saud&aacute;vel - Todos os direitos reservados</p>
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  document.getElementById("anoAtual").textContent = new Date().getFullYear();
-</script>
-
-<p>&nbsp;</p>
-
-<p>&nbsp;</p>                        <a class="safe-browsing" href="https://transparencyreport.google.com/safe-browsing/search?url=https://naturallisas.com.br/">
-    <img class="img-responsive" src="https://cdn.oceanserver.com.br/cdn/google-safe-browsing.png" alt="Você está em uma navegação segura." title="Google Safe Browsing" width="118" height="38" style="margin-left:15px;">
-</a>
-<a class="logo-by" href="https://octofood.com.br/" target="_blank" rel="noopener">
-    <img src="https://cdn.oceanserver.com.br/cdn/byoctofood4.svg" alt="Octofood - Plataforma de E-commerce Especializada em Alimentos." title="Octofood - Plataforma de E-commerce Especializada em Alimentos." width="35" height="25">
-</a>                    </div>
+                        <p>&copy;<span id="anoAtual"></span>&nbsp;Deep Freeze Congelados Artesanais ltda - Todos os direitos reservados - Rua Ant&ocirc;nio Bas&iacute;lio 562, Rio de Janeiro, RJ - CNPJ 20.025.886/0001-35 - IE 86.665.603</p>
+                        <script>
+                            document.getElementById("anoAtual").textContent = new Date().getFullYear();
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>

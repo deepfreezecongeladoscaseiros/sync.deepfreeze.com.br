@@ -167,16 +167,26 @@ class Product extends Model
 
     /**
      * Retorna a imagem principal do produto
+     *
+     * Otimização: se a relação 'images' já foi carregada via eager loading,
+     * usa a collection em memória ao invés de fazer novas queries.
+     * Antes: 2 queries por produto (busca main + fallback)
+     * Depois: 0 queries extras quando eager loaded, ou 1 query quando não
+     *
      * @return ProductImage|null
      */
     public function getMainImage(): ?ProductImage
     {
-        // Primeiro tenta pegar a marcada como principal
-        $main = $this->images()->where('is_main', true)->first();
-        if ($main) return $main;
+        // Se as imagens já foram carregadas via eager loading, filtra na collection
+        if ($this->relationLoaded('images')) {
+            $images = $this->images;
+            return $images->firstWhere('is_main', true) ?? $images->first();
+        }
 
-        // Senão, pega a primeira da lista
-        return $this->images()->first();
+        // Fallback: query única ordenando por is_main DESC para priorizar a principal
+        return $this->images()
+            ->orderByDesc('is_main')
+            ->first();
     }
 
     /**

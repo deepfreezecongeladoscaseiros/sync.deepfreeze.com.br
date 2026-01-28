@@ -316,10 +316,21 @@ class MenuItem extends Model
     // =========================================================================
 
     /**
-     * Verifica se tem filhos
+     * Verifica se tem filhos ativos
+     *
+     * Otimização: se a relação 'activeChildren' já foi carregada via eager loading,
+     * usa a collection em memória ao invés de executar COUNT no banco.
+     * Antes: 1 query COUNT por item de menu (N+1 no menu inteiro)
+     * Depois: 0 queries extras quando eager loaded
      */
     public function hasChildren(): bool
     {
+        // Se já foi carregado via eager loading, usa a collection em memória
+        if ($this->relationLoaded('activeChildren')) {
+            return $this->activeChildren->isNotEmpty();
+        }
+
+        // Fallback: query COUNT no banco
         return $this->activeChildren()->count() > 0;
     }
 
@@ -369,7 +380,10 @@ class MenuItem extends Model
     }
 
     /**
-     * Verifica se este item ou algum filho está ativo
+     * Verifica se este item ou algum filho está ativo (recursivo)
+     *
+     * Otimização: usa relationLoaded para evitar N+1 na relação activeChildren.
+     * Se não estiver carregada, busca apenas uma vez e reutiliza.
      */
     public function isActiveOrHasActiveChild(): bool
     {
@@ -377,7 +391,12 @@ class MenuItem extends Model
             return true;
         }
 
-        foreach ($this->activeChildren as $child) {
+        // Usa a relação já carregada via eager loading quando disponível
+        $children = $this->relationLoaded('activeChildren')
+            ? $this->activeChildren
+            : $this->activeChildren()->get();
+
+        foreach ($children as $child) {
             if ($child->isActiveOrHasActiveChild()) {
                 return true;
             }
