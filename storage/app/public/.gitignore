@@ -1,2 +1,21 @@
+## Ignora tudo por padrão (ex: products/ com 312MB de imagens de produtos)
 *
 !.gitignore
+
+## Permite pastas de assets do tema (necessárias para deploy)
+!logos/
+!logos/**
+!banners/
+!banners/**
+!feature-blocks/
+!feature-blocks/**
+!dual-banners/
+!dual-banners/**
+!social-icons/
+!social-icons/**
+!menus/
+!menus/**
+!step-icons/
+!step-icons/**
+!info-blocks/
+!info-blocks/**
