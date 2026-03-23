@@ -139,7 +139,8 @@ class MenuController extends Controller
             ->get();
 
         // Dados para selects no modal de adição
-        $categories = Category::orderBy('name')->get();
+        // Coluna legado: 'nome' (não 'name'), filtrar apenas visíveis no site
+        $categories = Category::where('site', 1)->orderBy('nome')->get();
         $pages = Page::active()->orderBy('title')->get();
         $itemTypes = MenuItem::TYPES;
         $showOnOptions = MenuItem::SHOW_ON_OPTIONS;

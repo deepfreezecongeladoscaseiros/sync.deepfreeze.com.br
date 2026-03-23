@@ -74,7 +74,7 @@ class ProductController extends Controller
                   $q->where('nome', 'like', "%{$searchTerm}%");     // category name
               })
               ->orWhereHas('brand', function ($q) use ($searchTerm) {
-                  $q->where('nome', 'like', "%{$searchTerm}%");     // brand name
+                  $q->where('nome_marca', 'like', "%{$searchTerm}%"); // brand name (coluna legado: nome_marca)
               });
         });
 

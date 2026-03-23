@@ -30,8 +30,12 @@ class CategoryController extends Controller
      */
     public function show(Request $request, string $slug)
     {
-        // Busca a categoria pelo slug (coluna 'slug' existe no legado)
-        $category = Category::where('slug', $slug)->firstOrFail();
+        // Busca a categoria pelo slug ou slug_underscore (aceita ambos, como o legado)
+        // Ex: 'sopas_e_caldinhos' (slug) ou 'sopas-e-caldinhos' (slug_underscore)
+        $category = Category::where('slug', $slug)
+            ->orWhere('slug_underscore', $slug)
+            ->where('site', 1)
+            ->firstOrFail();
 
         // Query base: produtos da categoria, ativos, com imagem, com estoque calculado
         // categoria_id = coluna real no legado (mesmo nome)

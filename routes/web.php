@@ -32,15 +32,24 @@ Route::middleware('customer.guard')->group(function () {
     // Rota raiz - Exibe a página inicial da loja virtual
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    // Rota de categoria - Exibe produtos de uma categoria
-    Route::get('/categoria/{slug}', [App\Http\Controllers\Storefront\CategoryController::class, 'show'])->name('category.show');
+    // Rota de categoria - Padrão legado: /congelados/{slug}
+    // Mantém compatibilidade com URLs já indexadas no Google
+    Route::get('/congelados/{slug}', [App\Http\Controllers\Storefront\CategoryController::class, 'show'])->name('category.show');
 
-// Login do painel administrativo — view separada do login de clientes
+    // Redirect 301 da rota antiga para manter links antigos do sync funcionando
+    Route::get('/categoria/{slug}', function ($slug) {
+        return redirect("/congelados/{$slug}", 301);
+    });
+
+}); // Fim do grupo customer.guard para rotas acima (categoria, redirect)
+
+Route::get('/docs', [App\Http\Controllers\ApiDocsController::class, 'index'])->name('docs');
+
+// Login do painel administrativo — FORA do customer.guard para usar guard 'web'
 Route::get('/admin/login', function () {
     return view('auth.login');
 })->middleware('guest')->name('admin.login');
 
-// POST do login admin — reutiliza o AuthenticatedSessionController
 Route::post('/admin/login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store'])
     ->middleware('guest')
     ->name('admin.login.store');
@@ -48,8 +57,6 @@ Route::post('/admin/login', [App\Http\Controllers\Auth\AuthenticatedSessionContr
 Route::post('/admin/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('admin.logout');
-
-Route::get('/docs', [App\Http\Controllers\ApiDocsController::class, 'index'])->name('docs');
 
 require __DIR__.'/auth.php';
 
@@ -200,6 +207,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 // Rota pública para CSS dinâmico (sem autenticação)
 Route::get('/css/theme.css', [App\Http\Controllers\Admin\LayoutController::class, 'generateCSS'])->name('theme.css');
+
+// Rotas da storefront (guard customer) - carrinho, checkout, entrega, pagamento, etc.
+Route::middleware('customer.guard')->group(function () {
 
     // Rotas públicas de Contato (formulário e envio)
     Route::get('/contato', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');

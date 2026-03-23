@@ -21,8 +21,8 @@ class BrandController extends Controller
             $search = $request->input('search');
             
             $query->where(function($q) use ($search) {
-                $q->where('brand', 'like', "%{$search}%")
-                  ->orWhere('legacy_id', 'like', "%{$search}%");
+                $q->where('nome_marca', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
             });
         }
 

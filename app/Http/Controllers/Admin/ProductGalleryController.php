@@ -49,7 +49,7 @@ class ProductGalleryController extends Controller
         }
 
         // Lista de categorias para o filtro
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('site', 1)->orderBy('nome')->get();
 
         return view('admin.product-galleries.create', compact('categories', 'nextOrder'));
     }
@@ -103,7 +103,7 @@ class ProductGalleryController extends Controller
      */
     public function edit(ProductGallery $productGallery)
     {
-        $categories = Category::orderBy('name')->get();
+        $categories = Category::where('site', 1)->orderBy('nome')->get();
 
         return view('admin.product-galleries.edit', compact('productGallery', 'categories'));
     }

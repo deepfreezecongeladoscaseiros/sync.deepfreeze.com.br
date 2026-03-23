@@ -101,27 +101,17 @@
             </div>
         </div>
 
-        {{-- Produtos em Estoque --}}
-        <div class="col-lg-3 col-6">
-            <div class="info-box">
-                <span class="info-box-icon bg-primary"><i class="fas fa-cubes"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Com Estoque</span>
-                    <span class="info-box-number">{{ number_format($stats['products_with_stock']) }}</span>
-                </div>
-            </div>
-        </div>
-
         {{-- Produtos em Promoção --}}
         <div class="col-lg-3 col-6">
             <div class="info-box">
-                <span class="info-box-icon bg-warning"><i class="fas fa-percentage"></i></span>
+                <span class="info-box-icon bg-primary"><i class="fas fa-tags"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Em Promoção</span>
                     <span class="info-box-number">{{ number_format($stats['products_on_sale']) }}</span>
                 </div>
             </div>
         </div>
+
     </div>
 
     <div class="row">

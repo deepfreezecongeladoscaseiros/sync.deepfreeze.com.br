@@ -20,8 +20,8 @@ class CategoryController extends Controller
             $search = $request->input('search');
             
             $query->where(function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('legacy_id', 'like', "%{$search}%");
+                $q->where('nome', 'like', "%{$search}%")
+                  ->orWhere('id', 'like', "%{$search}%");
             });
         }
 

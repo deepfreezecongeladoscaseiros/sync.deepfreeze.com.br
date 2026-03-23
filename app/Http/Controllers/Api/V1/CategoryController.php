@@ -16,11 +16,11 @@ class CategoryController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('name', 'like', "%{$search}%");
+            $query->where('nome', 'like', "%{$search}%");
         }
 
         $perPage = min($request->input('per_page', 50), 100);
-        $categories = $query->orderBy('name', 'asc')->paginate($perPage);
+        $categories = $query->orderBy('nome', 'asc')->paginate($perPage);
         
         return CategoryResource::collection($categories);
     }
@@ -37,7 +37,7 @@ class CategoryController extends Controller
         
         $query = $category->products()
             ->with(['category', 'brand', 'manufacturer', 'images'])
-            ->where('active', true);
+            ->where('ativo', 1);
 
         $sortBy = $request->input('sort_by', 'name');
         $sortOrder = $request->input('sort_order', 'asc');

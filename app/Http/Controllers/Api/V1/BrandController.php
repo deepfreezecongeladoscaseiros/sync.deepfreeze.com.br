@@ -16,11 +16,11 @@ class BrandController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('brand', 'like', "%{$search}%");
+            $query->where('nome_marca', 'like', "%{$search}%");
         }
 
         $perPage = min($request->input('per_page', 50), 100);
-        $brands = $query->orderBy('brand', 'asc')->paginate($perPage);
+        $brands = $query->orderBy('nome_marca', 'asc')->paginate($perPage);
         
         return BrandResource::collection($brands);
     }
@@ -37,7 +37,7 @@ class BrandController extends Controller
         
         $query = $brand->products()
             ->with(['category', 'brand', 'manufacturer', 'images'])
-            ->where('active', true);
+            ->where('ativo', 1);
 
         $sortBy = $request->input('sort_by', 'name');
         $sortOrder = $request->input('sort_order', 'asc');

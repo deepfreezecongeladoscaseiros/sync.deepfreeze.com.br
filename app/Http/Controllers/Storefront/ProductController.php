@@ -36,8 +36,8 @@ class ProductController extends Controller
         $nameLike = '%' . str_replace('-', '%', $productSlug) . '%';
 
         $product = Product::with(['category', 'images', 'brand', 'nutritionalInfo'])
-            ->where('category_id', $category->id)
-            ->where('name', 'LIKE', $nameLike)
+            ->where('categoria_id', $category->id)
+            ->where('descricao', 'LIKE', $nameLike)
             ->active()
             ->get()
             ->first(function ($p) use ($productSlug) {

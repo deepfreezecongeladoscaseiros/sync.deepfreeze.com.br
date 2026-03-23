@@ -219,8 +219,9 @@ class MenuItem extends Model
 
             case 'category':
                 // Se tem linkable (Category), usa o slug dela
+                // Padrão legado: /congelados/{slug} (compatível com URLs do site antigo)
                 if ($this->linkable) {
-                    return url('/categoria/' . $this->linkable->slug);
+                    return url('/congelados/' . $this->linkable->slug);
                 }
                 return $this->url;
 
