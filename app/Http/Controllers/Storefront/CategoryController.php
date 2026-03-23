@@ -14,6 +14,10 @@ use Illuminate\Http\Request;
  * - Listar produtos de uma categoria
  * - Aplicar filtros e ordenação
  * - Paginação de resultados
+ *
+ * IMPORTANTE: Queries usam nomes reais das colunas do banco legado (português).
+ * O mapeamento inglês→português acontece apenas no Model (via $columnMap),
+ * para uso nos templates Blade.
  */
 class CategoryController extends Controller
 {
@@ -26,16 +30,17 @@ class CategoryController extends Controller
      */
     public function show(Request $request, string $slug)
     {
-        // Busca a categoria pelo slug
+        // Busca a categoria pelo slug (coluna 'slug' existe no legado)
         $category = Category::where('slug', $slug)->firstOrFail();
 
-        // Query base de produtos da categoria
-        // Apenas produtos visíveis (ativos + com imagem)
-        $query = Product::where('category_id', $category->id)
+        // Query base: produtos da categoria, ativos, com imagem, com estoque calculado
+        // categoria_id = coluna real no legado (mesmo nome)
+        $query = Product::where('categoria_id', $category->id)
             ->visibleInStore()
+            ->withStockQuantity()
             ->with(['images', 'category']);
 
-        // Aplicar filtros
+        // Aplicar filtros (preço, selos, busca)
         $query = $this->applyFilters($query, $request);
 
         // Aplicar ordenação
@@ -67,9 +72,12 @@ class CategoryController extends Controller
     /**
      * Aplica filtros à query de produtos
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param Request $request
-     * @return \Illuminate\Database\Eloquent\Builder
+     * Colunas legado usadas:
+     * - in_sem_lactose (tinyint) = lactose_free
+     * - in_contem_gluten (tinyint) = contains_gluten
+     * - preco (varchar) = price
+     * - preco_promocional (varchar) = promotional_price
+     * - descricao (varchar) = name
      */
     protected function applyFilters($query, Request $request)
     {
@@ -77,41 +85,43 @@ class CategoryController extends Controller
         if ($request->filled('selo')) {
             $selo = $request->input('selo');
 
-            // Mapeia selos para campos do produto
             switch ($selo) {
                 case '1': // Sem Lactose
-                    $query->where('lactose_free', true);
+                    $query->where('in_sem_lactose', 1);
                     break;
                 case '2': // Sem Glúten
-                    $query->where('contains_gluten', false);
-                    break;
-                case '3': // Vegetariano
-                    // Implementar conforme necessidade
+                    // in_contem_gluten: NULL ou 0 = sem glúten
+                    $query->where(function ($q) {
+                        $q->whereNull('in_contem_gluten')
+                          ->orWhere('in_contem_gluten', 0);
+                    });
                     break;
             }
         }
 
-        // Filtro de preço mínimo
+        // Filtro de preço mínimo (preco é varchar no legado - precisa CAST)
         if ($request->filled('preco_min')) {
-            $query->where(function ($q) use ($request) {
-                $min = (float) $request->input('preco_min');
-                $q->where('price', '>=', $min)
-                  ->orWhere('promotional_price', '>=', $min);
+            $min = (float) $request->input('preco_min');
+            $query->where(function ($q) use ($min) {
+                $q->whereRaw('CAST(preco AS DECIMAL(10,2)) >= ?', [$min])
+                  ->orWhereRaw(
+                      "preco_promocional IS NOT NULL AND preco_promocional != '' AND preco_promocional != '0.00'
+                       AND CAST(preco_promocional AS DECIMAL(10,2)) >= ?",
+                      [$min]
+                  );
             });
         }
 
         // Filtro de preço máximo
         if ($request->filled('preco_max')) {
-            $query->where(function ($q) use ($request) {
-                $max = (float) $request->input('preco_max');
-                $q->where('price', '<=', $max);
-            });
+            $max = (float) $request->input('preco_max');
+            $query->whereRaw('CAST(preco AS DECIMAL(10,2)) <= ?', [$max]);
         }
 
-        // Filtro de busca por nome
+        // Filtro de busca por nome (coluna legado: descricao)
         if ($request->filled('q')) {
             $search = $request->input('q');
-            $query->where('name', 'like', "%{$search}%");
+            $query->where('descricao', 'like', "%{$search}%");
         }
 
         return $query;
@@ -120,9 +130,10 @@ class CategoryController extends Controller
     /**
      * Aplica ordenação à query de produtos
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param Request $request
-     * @return \Illuminate\Database\Eloquent\Builder
+     * Colunas legado usadas:
+     * - ordem_exibicao_site (int) = display_order
+     * - descricao (varchar) = name
+     * - preco/preco_promocional (varchar) = price (via scope orderByPrice)
      */
     protected function applySort($query, Request $request)
     {
@@ -138,19 +149,17 @@ class CategoryController extends Controller
                 break;
 
             case '5': // A - Z
-                $query->orderBy('name', 'asc');
+                $query->orderBy('descricao', 'asc');
                 break;
 
             case '6': // Z - A
-                $query->orderBy('name', 'desc');
+                $query->orderBy('descricao', 'desc');
                 break;
 
             default:
-                // Ordenação padrão: por posição/destaque
-                $query->orderBy('display_order', 'asc')
-                      ->orderBy('hot', 'desc')
-                      ->orderBy('release', 'desc')
-                      ->orderBy('name', 'asc');
+                // Ordenação padrão: por posição de exibição, depois alfabético
+                $query->orderBy('ordem_exibicao_site', 'asc')
+                      ->orderBy('descricao', 'asc');
         }
 
         return $query;

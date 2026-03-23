@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Guard para clientes da loja — autentica contra tabela 'pessoas' do banco legado (MD5)
+        'customer' => [
+            'driver' => 'session',
+            'provider' => 'legacy_customers',
+        ],
     ],
 
     /*
@@ -65,10 +71,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        // Provider para clientes da loja — usa tabela 'pessoas' do banco legado
+        'legacy_customers' => [
+            'driver' => 'legacy_pessoa',
+        ],
     ],
 
     /*

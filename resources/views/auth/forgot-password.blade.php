@@ -251,7 +251,7 @@
                 </button>
 
                 <div class="back-to-login">
-                    <a href="{{ route('login') }}">
+                    <a href="{{ route('admin.login') }}">
                         <i class="fas fa-arrow-left mr-1"></i>Voltar para o login
                     </a>
                 </div>

@@ -15,13 +15,24 @@ class RedirectIfAuthenticated
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+    /**
+     * Redireciona usuários autenticados para o destino correto.
+     * Se está acessando rota /admin/*, vai para o dashboard admin.
+     * Caso contrário, vai para a home da loja.
+     */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect()->route('admin.dashboard');
+                // Se está tentando acessar área admin, redireciona para dashboard
+                if ($request->is('admin/*') || $request->is('admin')) {
+                    return redirect()->route('admin.dashboard');
+                }
+
+                // Caso contrário, redireciona para a home da loja
+                return redirect('/');
             }
         }
 

@@ -103,47 +103,59 @@ class ProductGallery extends Model
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
+    /**
+     * Retorna os produtos filtrados para esta galeria
+     *
+     * IMPORTANTE: Queries usam nomes reais das colunas do banco legado.
+     * - categoria_id (não category_id)
+     * - preco_promocional (não promotional_price)
+     * - Estoque vem de otm_estoques_lojas (não campo stock)
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getProducts()
     {
         $query = Product::query()
-            ->visibleInStore(); // Scope: ativos + com imagem
+            ->visibleInStore()        // Scope: ativos + com imagem
+            ->withStockQuantity();    // Subquery: calcula estoque de otm_estoques_lojas
 
         // Aplica filtro baseado no tipo
         switch ($this->filter_type) {
             case 'category':
+                // coluna legado: categoria_id
                 if ($this->filter_value) {
-                    $query->where('category_id', $this->filter_value);
+                    $query->where('categoria_id', $this->filter_value);
                 }
                 break;
 
             case 'best_sellers':
-                // TODO: Implementar lógica de mais vendidos (requer tabela de pedidos)
+                // TODO: Implementar lógica de mais vendidos (requer análise de pedidos)
                 // Por enquanto, ordena por ID decrescente
                 $query->orderBy('id', 'desc');
                 break;
 
             case 'on_sale':
-                // Produtos com promotional_price preenchido e dentro do período de promoção
-                $query->whereNotNull('promotional_price')
-                    ->where(function ($q) {
-                        $q->whereNull('start_promotion')
-                            ->orWhere('start_promotion', '<=', now());
-                    })
-                    ->where(function ($q) {
-                        $q->whereNull('end_promotion')
-                            ->orWhere('end_promotion', '>=', now());
-                    });
+                // Usa scope onPromotion() que trata varchar com CAST
+                // No legado NÃO existem datas de promoção (start/end_promotion)
+                $query->onPromotion();
                 break;
 
             case 'low_stock':
-                // Produtos com estoque baixo (< 10 unidades)
-                $query->where('stock', '<', 10)->where('stock', '>', 0);
+                // Estoque vem da subquery withStockQuantity() como '_stock'
+                // Filtra produtos com estoque baixo (< 10 unidades e > 0)
+                $query->havingRaw(
+                    '(SELECT COALESCE(SUM(estoque_atual_calculado - giro_balcao), 0)
+                      FROM otm_estoques_lojas
+                      WHERE otm_estoques_lojas.produto_id = produtos.id) < 10
+                     AND
+                     (SELECT COALESCE(SUM(estoque_atual_calculado - giro_balcao), 0)
+                      FROM otm_estoques_lojas
+                      WHERE otm_estoques_lojas.produto_id = produtos.id) > 0'
+                );
                 break;
         }
 
-        // Eager loading de category e images para evitar N+1 queries na renderização
-        // Cada produto no card precisa de: category (para gerar URL) e images (para imagem principal)
-        // Sem isso, seriam 2 queries extras POR produto (~500ms cada no banco remoto)
+        // Eager loading: category (URL) e images (imagem principal)
         return $query->with(['category', 'images'])->limit($this->products_limit)->get();
     }
 

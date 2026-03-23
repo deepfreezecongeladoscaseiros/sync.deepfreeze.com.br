@@ -19,8 +19,25 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
+        'person_type',
+        'cpf',
+        'cnpj',
+        'company_name',
+        'state_registration',
+        'gender',
+        'birth_date',
+        'phone',
+        'zip_code',
+        'address',
+        'number',
+        'complement',
+        'neighborhood',
+        'city',
+        'state',
+        'newsletter',
     ];
 
     /**
@@ -41,5 +58,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'birth_date' => 'date',
+        'newsletter' => 'boolean',
     ];
+
 }

@@ -265,7 +265,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('login') }}" method="post" id="loginForm">
+            <form action="{{ route('admin.login.store') }}" method="post" id="loginForm">
                 @csrf
 
                 <div class="input-group">

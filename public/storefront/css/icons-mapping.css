@@ -45,6 +45,8 @@
 .fa-heart-o::before { content: "\f417"; } /* bi-heart */
 .fa-minus::before { content: "\f286"; } /* bi-dash-lg */
 .fa-plus::before { content: "\f4fe"; } /* bi-plus-lg */
+.fa-trash-o::before { content: "\f5de"; } /* bi-trash */
+.fa-shopping-cart::before { content: "\f217"; } /* bi-cart3 */
 
 /* Classes customizadas do tema */
 .icon-perfil::before {

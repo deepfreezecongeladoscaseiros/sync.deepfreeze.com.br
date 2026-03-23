@@ -29,25 +29,12 @@
     <a href="javascript:" onclick="closeCarrinhoRight()" class="btn-close"><i class="fa fa-times"></i></a>
     <div class="overlay-content">
         <div id="cesta-topo1">
-
-<!-- alterado variavel do valor da cesta topo, estava uma variavel errado estava a sub_total -->
-<div class="icon-topo">
-    <a href="{{ url('/carrinho') }}" class="dropdown-toggle">R$ 0,00</a>
-    <h4 style="display: none;">Meu Carrinho</h4>
-</div>
-
-<form id="form-minha-compra" action="" method="post" autocomplete="off" class="clearfix" name="frm_cesta_topo">
-    <ul class="dropdown-menu">
-
-            <li>
-                <div class="box-subtotal">
-                    <p class="mens">Seu carrinho está vazio.</p>
-                </div>
-            </li>
-
-
-    </ul>
-</form>        </div>
+            @include('storefront.partials.cart-sidebar', [
+                'cart' => app(\App\Services\CartService::class)->getCart(),
+                'count' => app(\App\Services\CartService::class)->getCount(),
+                'subtotal' => app(\App\Services\CartService::class)->getSubtotal(),
+            ])
+        </div>
     </div>
 </div>
 
@@ -100,7 +87,8 @@
         <div class="box-carrinho-mobile">
             <a href="javascript:" onclick="openCarrinhoRight()" class="btn-open">
                 <span class="badge js-cesta-total-produtos-notext">
-                    0                </span>
+                    {{ app(\App\Services\CartService::class)->getCount() }}
+                </span>
             </a>
         </div>
     </li>
@@ -146,7 +134,8 @@
                                                                                         <div class="box-carrinho-mobile">
                                                 <a href="javascript:" onclick="openCarrinhoRight()" class="btn-open">
                                                     <span class="badge js-cesta-total-produtos-notext">
-                                                        0                                                    </span>
+                                                        {{ app(\App\Services\CartService::class)->getCount() }}
+                                                    </span>
                                                 </a>
                                             </div>
                                             <button type="button" class="navbar-toggle" data-toggle="no-collapse" data-target="#menu-topo">

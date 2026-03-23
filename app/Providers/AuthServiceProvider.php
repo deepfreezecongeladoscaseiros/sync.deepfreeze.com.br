@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
+use App\Auth\LegacyCustomerProvider;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,10 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Registra o provider customizado para autenticação de clientes
+        // contra a tabela 'pessoas' do banco legado (senha MD5)
+        Auth::provider('legacy_pessoa', function ($app, array $config) {
+            return new LegacyCustomerProvider();
+        });
     }
 }

@@ -16,15 +16,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Rota raiz - Exibe a página inicial da loja virtual
-Route::get('/', [HomeController::class, 'index'])->name('home');
+/*
+|--------------------------------------------------------------------------
+| Rotas da Storefront (guard: customer)
+|--------------------------------------------------------------------------
+|
+| Todas as rotas da loja usam o middleware 'customer.guard' que define
+| Auth::shouldUse('customer') — assim @auth, @guest e auth()->user()
+| funcionam automaticamente com a tabela 'pessoas' do banco legado.
+*/
 
-// Rota de categoria - Exibe produtos de uma categoria
-Route::get('/categoria/{slug}', [App\Http\Controllers\Storefront\CategoryController::class, 'show'])->name('category.show');
+// Todas as rotas da storefront usam o guard 'customer' (tabela pessoas)
+Route::middleware('customer.guard')->group(function () {
 
+    // Rota raiz - Exibe a página inicial da loja virtual
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    // Rota de categoria - Exibe produtos de uma categoria
+    Route::get('/categoria/{slug}', [App\Http\Controllers\Storefront\CategoryController::class, 'show'])->name('category.show');
+
+// Login do painel administrativo — view separada do login de clientes
 Route::get('/admin/login', function () {
     return view('auth.login');
 })->middleware('guest')->name('admin.login');
+
+// POST do login admin — reutiliza o AuthenticatedSessionController
+Route::post('/admin/login', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store'])
+    ->middleware('guest')
+    ->name('admin.login.store');
 
 Route::post('/admin/logout', [App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
@@ -182,23 +201,70 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 // Rota pública para CSS dinâmico (sem autenticação)
 Route::get('/css/theme.css', [App\Http\Controllers\Admin\LayoutController::class, 'generateCSS'])->name('theme.css');
 
-// Rotas públicas de Contato (formulário e envio)
-Route::get('/contato', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
-Route::post('/contato/enviar', [App\Http\Controllers\ContactController::class, 'send'])->name('contact.send');
+    // Rotas públicas de Contato (formulário e envio)
+    Route::get('/contato', [App\Http\Controllers\ContactController::class, 'index'])->name('contact');
+    Route::post('/contato/enviar', [App\Http\Controllers\ContactController::class, 'send'])->name('contact.send');
 
-// Rota de produto por SKU (ex: /produto/KR57)
-Route::get('/produto/{sku}', [App\Http\Controllers\Storefront\ProductController::class, 'showBySku'])
-    ->name('product.show.sku')
-    ->where('sku', '[A-Za-z0-9\-]+');
+    // Rotas do Carrinho de Compras (session-based, sem autenticação)
+    Route::prefix('carrinho')->name('cart.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Storefront\CartController::class, 'index'])->name('index');
+        Route::post('/adicionar', [App\Http\Controllers\Storefront\CartController::class, 'add'])->name('add');
+        Route::post('/atualizar', [App\Http\Controllers\Storefront\CartController::class, 'update'])->name('update');
+        Route::post('/remover', [App\Http\Controllers\Storefront\CartController::class, 'remove'])->name('remove');
+        Route::get('/sidebar', [App\Http\Controllers\Storefront\CartController::class, 'sidebar'])->name('sidebar');
+    });
 
-// Rota de produto por slug (ex: /kit-refeicao/roupa-velha-arroz-branco-e-feijao)
-// DEVE vir antes da wildcard route de páginas internas
-Route::get('/{categorySlug}/{productSlug}', [App\Http\Controllers\Storefront\ProductController::class, 'show'])
-    ->name('product.show')
-    ->where('categorySlug', '[a-z0-9_\-]+')
-    ->where('productSlug', '[a-z0-9\-]+');
+    // Rotas do Checkout (login obrigatório para finalizar)
+    Route::prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Storefront\CheckoutController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\Storefront\CheckoutController::class, 'store'])->name('store');
+        Route::get('/confirmacao/{orderNumber}', [App\Http\Controllers\Storefront\CheckoutController::class, 'confirmation'])->name('confirmation');
+    });
 
-// IMPORTANTE: Wildcard route para Páginas Internas - DEVE FICAR NO FINAL
-// Captura qualquer URL não encontrada e verifica se é uma página interna
-Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show'])->name('pages.show')
-    ->where('slug', '^(?!admin|login|logout|register|cadastro|api|css|js|storage|images).*$');
+    // Rotas de endereços do cliente (AJAX, requer login)
+    Route::prefix('enderecos')->name('address.')->middleware('auth:customer')->group(function () {
+        Route::get('/', [App\Http\Controllers\Storefront\AddressController::class, 'list'])->name('list');
+        Route::post('/', [App\Http\Controllers\Storefront\AddressController::class, 'store'])->name('store');
+    });
+
+    // Rotas de pagamento (callback do gateway e retorno do cliente)
+    Route::prefix('pagamento')->name('payment.')->group(function () {
+        Route::post('/callback', [App\Http\Controllers\Storefront\PaymentController::class, 'callback'])->name('callback');
+        Route::get('/retorno', [App\Http\Controllers\Storefront\PaymentController::class, 'returnFromGateway'])->name('return');
+    });
+
+    // Rota de validação de cupom (AJAX para checkout)
+    Route::post('/cupom/validar', [App\Http\Controllers\Storefront\CouponController::class, 'check'])->name('coupon.validate');
+
+    // Área do cliente (requer login)
+    Route::prefix('minha-conta')->middleware('auth:customer')->group(function () {
+        Route::get('/pedidos', [App\Http\Controllers\Storefront\CustomerController::class, 'orders'])->name('customer.orders');
+        Route::get('/pedidos/{id}', [App\Http\Controllers\Storefront\CustomerController::class, 'orderDetail'])->name('customer.order.detail');
+    });
+
+    // Rotas de entrega/frete (AJAX para checkout)
+    Route::prefix('entrega')->name('shipping.')->group(function () {
+        Route::get('/consultar-cep', [App\Http\Controllers\Storefront\ShippingController::class, 'consultarCep'])->name('lookup');
+        Route::post('/calcular-frete', [App\Http\Controllers\Storefront\ShippingController::class, 'calcularFrete'])->name('calculate');
+        Route::get('/periodos', [App\Http\Controllers\Storefront\ShippingController::class, 'periodos'])->name('slots');
+        Route::get('/lojas-retirada', [App\Http\Controllers\Storefront\ShippingController::class, 'lojasRetirada'])->name('pickup_stores');
+    });
+
+    // Rota de produto por SKU (ex: /produto/KR57)
+    Route::get('/produto/{sku}', [App\Http\Controllers\Storefront\ProductController::class, 'showBySku'])
+        ->name('product.show.sku')
+        ->where('sku', '[A-Za-z0-9\-]+');
+
+    // Rota de produto por slug (ex: /kit-refeicao/roupa-velha-arroz-branco-e-feijao)
+    // DEVE vir antes da wildcard route de páginas internas
+    Route::get('/{categorySlug}/{productSlug}', [App\Http\Controllers\Storefront\ProductController::class, 'show'])
+        ->name('product.show')
+        ->where('categorySlug', '[a-z0-9_\-]+')
+        ->where('productSlug', '[a-z0-9\-]+');
+
+    // IMPORTANTE: Wildcard route para Páginas Internas - DEVE FICAR NO FINAL
+    // Captura qualquer URL não encontrada e verifica se é uma página interna
+    Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show'])->name('pages.show')
+        ->where('slug', '^(?!admin|login|logout|register|cadastro|api|css|js|storage|images|carrinho|contato|checkout).*$');
+
+}); // Fim do grupo customer.guard

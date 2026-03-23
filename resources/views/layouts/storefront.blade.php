@@ -262,6 +262,16 @@
         });
 
         /**
+         * Atualiza o conteúdo da sidebar do carrinho via AJAX.
+         * Faz GET em /carrinho/sidebar e substitui o HTML de #cesta-topo1.
+         */
+        function refreshCartSidebar() {
+            $.get(sys_site + 'carrinho/sidebar', function(html) {
+                $('#meuCarrinho #cesta-topo1').html(html);
+            });
+        }
+
+        /**
          * Adicionar ao carrinho com quantidade selecionada
          * Envia produto + quantidade via AJAX
          */
@@ -297,9 +307,17 @@
                         });
                     }
 
-                    // Atualiza contador do carrinho se existir
+                    // Atualiza badges do carrinho (desktop e mobile)
                     if (response.cart_count !== undefined) {
-                        $('.cart-count, .js-cart-count').text(response.cart_count);
+                        $('.js-cesta-total-produtos-notext').text(response.cart_count);
+                    }
+
+                    // Atualiza sidebar do carrinho com conteúdo do servidor
+                    refreshCartSidebar();
+
+                    // Abre a sidebar do carrinho para mostrar o item adicionado
+                    if (typeof openCarrinhoRight === 'function') {
+                        openCarrinhoRight();
                     }
 
                     // Reseta quantidade para 1 após adicionar
@@ -325,6 +343,42 @@
                 complete: function() {
                     // Remove feedback visual
                     $btn.removeClass('loading').prop('disabled', false);
+                }
+            });
+        });
+
+        /**
+         * Remover item do carrinho via sidebar.
+         * Handler delegado para .js-cart-remove (botão lixeira na sidebar).
+         * Usa event delegation pois a sidebar é atualizada via AJAX.
+         */
+        $(document).on('click', '.js-cart-remove', function(e) {
+            e.preventDefault();
+            var $btn = $(this);
+            var productId = $btn.data('product-id');
+
+            $.ajax({
+                url: sys_site + 'carrinho/remover',
+                method: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    product_id: productId
+                },
+                success: function(response) {
+                    // Atualiza badges do carrinho
+                    if (response.cart_count !== undefined) {
+                        $('.js-cesta-total-produtos-notext').text(response.cart_count);
+                    }
+
+                    // Atualiza sidebar com novo conteúdo
+                    refreshCartSidebar();
+                },
+                error: function(xhr) {
+                    var msg = 'Erro ao remover produto do carrinho.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        msg = xhr.responseJSON.message;
+                    }
+                    alert(msg);
                 }
             });
         });
