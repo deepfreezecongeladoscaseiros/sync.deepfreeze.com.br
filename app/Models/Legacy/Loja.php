@@ -46,6 +46,9 @@ class Loja extends Model
         'image'              => 'imagem_loja',
         'maps_link'          => 'link_google_maps',
         'email_address'      => 'email_loja',
+        'cielo_merchant_id'  => 'merchant_id',     // MerchantId para Cielo Checkout API
+        'rede_pv'            => 'pv',              // Ponto de Venda para Rede e-Rede
+        'rede_token'         => 'token',           // Token de autenticação Rede e-Rede
     ];
 
     public function getAttribute($key)
