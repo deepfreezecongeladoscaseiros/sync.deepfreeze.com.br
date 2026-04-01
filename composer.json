@@ -29,6 +29,9 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
+        "classmap": [
+            "app/Libraries/Rede"
+        ],
         "files": [
             "app/Helpers/ThemeHelper.php"
         ]
