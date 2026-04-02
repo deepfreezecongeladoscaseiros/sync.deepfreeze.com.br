@@ -385,8 +385,85 @@
     });
     </script>
 
+    {{-- Modal: Entrega na minha região --}}
+    @include('storefront.partials.modal-entrega')
+
     {{-- Page Scripts --}}
     @stack('scripts')
+
+    {{-- JS do modal de entrega (sobrescreve verificaEntregaCep do JS minificado legado) --}}
+    <script>
+    // Sobrescreve a função verificaEntregaCep() que existia no JS minificado
+    // e tentava abrir um iframe fancybox que gerava 404
+    function verificaEntregaCep() {
+        $('#entrega-form-section').show();
+        $('#entrega-result-ok, #entrega-result-nao, #entrega-result-erro').hide();
+        $('#entrega-nova-consulta').hide();
+        $('#entrega-cep-input').val('');
+        $('#modalEntregaCep').modal('show');
+        setTimeout(function() { $('#entrega-cep-input').focus(); }, 500);
+    }
+
+    $(document).ready(function() {
+        // Máscara de CEP (Inputmask já carregado via CDN)
+        $('#entrega-cep-input').inputmask('99999-999');
+
+        // Consulta ao clicar no botão ou pressionar Enter
+        $('#entrega-cep-btn').on('click', function() { consultarEntregaCep(); });
+        $('#entrega-cep-input').on('keypress', function(e) {
+            if (e.which === 13) { consultarEntregaCep(); }
+        });
+
+        // Botão "Consultar outro CEP"
+        $('#entrega-nova-consulta').on('click', function() {
+            $('#entrega-form-section').show();
+            $('#entrega-result-ok, #entrega-result-nao, #entrega-result-erro').hide();
+            $(this).hide();
+            $('#entrega-cep-input').val('').focus();
+        });
+
+        function consultarEntregaCep() {
+            var cep = $('#entrega-cep-input').val().replace(/\D/g, '');
+            if (cep.length !== 8) { return; }
+
+            var $btn = $('#entrega-cep-btn');
+            var $icon = $('#entrega-cep-icon');
+            $btn.prop('disabled', true);
+            $icon.removeClass('fa-search').addClass('fa-spinner fa-spin');
+
+            $.ajax({
+                url: '/entrega/consultar-cep',
+                method: 'GET',
+                data: { cep: cep },
+                success: function(response) {
+                    $('#entrega-form-section').hide();
+                    $('#entrega-nova-consulta').show();
+
+                    if (response.atendido) {
+                        $('#entrega-result-endereco').text(response.endereco || '');
+                        $('#entrega-result-ok').fadeIn(300);
+
+                        // Atualiza texto no header
+                        $('.js-entrega-msg').hide();
+                        $('.js-entrega-msg-ok').show();
+                        $('.js-entrega-msg-endereco').text(response.endereco || response.regiao || '');
+                    } else {
+                        $('#entrega-result-nao').fadeIn(300);
+                    }
+                },
+                error: function() {
+                    $('#entrega-form-section').hide();
+                    $('#entrega-result-erro').fadeIn(300);
+                    $('#entrega-nova-consulta').show();
+                },
+                complete: function() {
+                    $btn.prop('disabled', false);
+                    $icon.removeClass('fa-spinner fa-spin').addClass('fa-search');
+                }
+            });
+        }
+    });
+    </script>
 
     {{-- Ícones Flutuantes (WhatsApp + Instagram) --}}
     @include('storefront.partials.floating-buttons')
