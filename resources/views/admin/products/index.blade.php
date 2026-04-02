@@ -10,14 +10,17 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('admin.products.create') }}" class="btn btn-primary">Novo Produto</a>
-                
+                <span class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Dados do sistema legado (somente leitura). Para editar, acesse o SIV.
+                </span>
+
                 <form action="{{ route('admin.products.index') }}" method="GET" class="form-inline">
                     <div class="input-group">
-                        <input type="text" 
-                               name="search" 
-                               class="form-control" 
-                               placeholder="Buscar por nome, código, legacy_id ou marca..." 
+                        <input type="text"
+                               name="search"
+                               class="form-control"
+                               placeholder="Buscar por nome, código ou marca..."
                                value="{{ request('search') }}"
                                style="min-width: 350px;">
                         <div class="input-group-append">
@@ -41,55 +44,35 @@
                     <a href="{{ route('admin.products.index') }}" class="float-right">Limpar busca</a>
                 </div>
             @endif
-            
-            <table class="table table-bordered">
+
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th style="width: 10px">#</th>
-                        <th style="width: 80px">ID Legado</th>
-                        <th style="width: 100px">Código</th>
-                        <th style="width: 80px">Imagem</th>
+                        <th style="width: 60px">ID</th>
+                        <th style="width: 80px">Código</th>
+                        <th style="width: 70px">Imagem</th>
                         <th>Nome</th>
                         <th>Categoria</th>
                         <th>Marca</th>
-                        <th>Preço</th>
-                        <th style="width: 150px">Ações</th>
+                        <th style="width: 100px">Preço</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($products as $product)
                         <tr>
                             <td>{{ $product->id }}</td>
+                            <td><small class="text-muted">{{ $product->sku ?? '-' }}</small></td>
                             <td>
-                                <span class="badge badge-info">{{ $product->legacy_id ?? '-' }}</span>
-                            </td>
-                            <td>
-                                <small class="text-muted">{{ $product->sku ?? '-' }}</small>
-                            </td>
-                            <td>
-                                @php
-                                    $mainImage = $product->images->where('is_main', true)->first() ?? $product->images->first();
-                                @endphp
-                                @if ($mainImage)
-                                    <img src="{{ asset('storage/' . $mainImage->path) }}" alt="{{ $product->name }}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
-                                @else
-                                    <div style="width: 60px; height: 60px; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 9px; color: #999;">
-                                        Sem Imagem
-                                    </div>
-                                @endif
+                                {{-- Usa getMainImageUrl() que busca do img.deepfreeze.com.br --}}
+                                <img src="{{ $product->getMainImageUrl('small') }}"
+                                     alt="{{ $product->name }}"
+                                     style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+                                     loading="lazy">
                             </td>
                             <td>{{ $product->name }}</td>
-                            <td>{{ $product->category->name ?? 'N/A' }}</td>
-                            <td>{{ $product->brand->brand ?? 'N/A' }}</td>
-                            <td>R$ {{ number_format($product->price, 2, ',', '.') }}</td>
-                            <td>
-                                <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                                <form action="{{ route('admin.products.destroy', $product->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
-                                </form>
-                            </td>
+                            <td><small>{{ $product->category->name ?? '-' }}</small></td>
+                            <td><small>{{ $product->brand->brand ?? '-' }}</small></td>
+                            <td>{{ $product->formatted_price }}</td>
                         </tr>
                     @endforeach
                 </tbody>

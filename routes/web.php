@@ -80,10 +80,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::delete('api-logs/{apiLog}', [App\Http\Controllers\Admin\ApiLogController::class, 'destroy'])->name('api_logs.destroy');
     Route::delete('api-logs-clear-old', [App\Http\Controllers\Admin\ApiLogController::class, 'clearOld'])->name('api_logs.clearOld');
     Route::get('api-docs', [App\Http\Controllers\Admin\ApiDocsController::class, 'index'])->name('api_docs.index');
-    Route::post('products/{product}/sync-to-tray', [App\Http\Controllers\Admin\ProductController::class, 'syncToTray'])->name('products.sync_to_tray');
-    Route::post('products/{product}/sync-image', [App\Http\Controllers\Admin\ProductController::class, 'syncImage'])->name('products.sync_image');
-    Route::post('products/{product}/sync-properties', [App\Http\Controllers\Admin\ProductController::class, 'syncProperties'])->name('products.sync_properties');
-    Route::resource('products', App\Http\Controllers\Admin\ProductController::class);
+    // Produtos: somente listagem (CRUD é feito no SIV legado)
+    Route::get('products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
     Route::post('properties/{property}/sync-to-tray', [App\Http\Controllers\Admin\PropertyController::class, 'syncToTray'])->name('properties.sync_to_tray');
     Route::resource('properties', App\Http\Controllers\Admin\PropertyController::class);
     Route::resource('products.variants', App\Http\Controllers\Admin\VariantController::class)->shallow();

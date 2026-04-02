@@ -136,9 +136,7 @@
                                 @foreach($recentProducts as $product)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('admin.products.show', $product->id) }}">
-                                                {{ Str::limit($product->name, 30) }}
-                                            </a>
+                                            {{ Str::limit($product->name, 30) }}
                                         </td>
                                         <td>
                                             <span class="badge badge-info">
@@ -245,9 +243,7 @@
                                         <span class="badge badge-danger">{{ $product->stock }} unidades</span>
                                     </td>
                                     <td class="text-right">
-                                        <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </a>
+                                        <span class="text-muted"><i class="fas fa-eye"></i></span>
                                     </td>
                                 </tr>
                             @endforeach
