@@ -98,6 +98,9 @@
                             {{-- Informações do Produto --}}
                             @include('storefront.product.partials.info')
 
+                            {{-- Avaliações dos Clientes (primeiro bloco após info do produto) --}}
+                            @include('storefront.product.partials.reviews')
+
                             {{-- Descrição do Produto --}}
                             <div class="col-xs-12">
                                 <article class="conteudo">
@@ -123,9 +126,6 @@
 
                                 </article>
                             </div>
-
-                            {{-- Avaliações dos Clientes --}}
-                            @include('storefront.product.partials.reviews')
 
                         </div>
                     </div>
