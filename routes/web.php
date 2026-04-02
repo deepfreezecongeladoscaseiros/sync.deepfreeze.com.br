@@ -82,25 +82,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('api-docs', [App\Http\Controllers\Admin\ApiDocsController::class, 'index'])->name('api_docs.index');
     // Produtos: somente listagem (CRUD é feito no SIV legado)
     Route::get('products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
-    Route::resource('products.variants', App\Http\Controllers\Admin\VariantController::class)->shallow();
-    Route::post('variants/{variant}/sync-to-tray', [App\Http\Controllers\Admin\VariantController::class, 'syncToTray'])->name('variants.sync_to_tray');
-    Route::get('tray', [App\Http\Controllers\Admin\TrayController::class, 'index'])->name('tray.index');
-    Route::post('tray', [App\Http\Controllers\Admin\TrayController::class, 'store'])->name('tray.store');
-    Route::post('tray/tokens', [App\Http\Controllers\Admin\TrayController::class, 'generateTokens'])->name('tray.tokens');
-    Route::get('sync', [App\Http\Controllers\Admin\SyncController::class, 'index'])->name('sync.index');
-    Route::get('sync/test-db', [App\Http\Controllers\Admin\SyncController::class, 'testLegacyConnection'])->name('sync.test_db');
-    Route::post('sync/categories', [App\Http\Controllers\Admin\SyncController::class, 'syncCategories'])->name('sync.categories');
-    Route::post('sync/brands', [App\Http\Controllers\Admin\SyncController::class, 'syncBrands'])->name('sync.brands');
-    Route::post('sync/manufacturers', [App\Http\Controllers\Admin\SyncController::class, 'syncManufacturers'])->name('sync.manufacturers');
-    Route::post('sync/products', [App\Http\Controllers\Admin\SyncController::class, 'syncProducts'])->name('sync.products');
-    Route::post('sync/images', [App\Http\Controllers\Admin\SyncController::class, 'syncImages'])->name('sync.images');
-
-    Route::prefix('tray-sync')->name('tray_sync.')->group(function () {
-        Route::post('categories', [App\Http\Controllers\Admin\TraySyncController::class, 'syncCategories'])->name('categories');
-        Route::post('brands', [App\Http\Controllers\Admin\TraySyncController::class, 'syncBrands'])->name('brands');
-        Route::post('products', [App\Http\Controllers\Admin\TraySyncController::class, 'syncProducts'])->name('products');
-    });
-
     // Rotas de Layout (Cores, Fontes, Logo, Top Bar, etc.)
     Route::prefix('layout')->name('layout.')->group(function () {
         Route::get('/', [App\Http\Controllers\Admin\LayoutController::class, 'index'])->name('index');

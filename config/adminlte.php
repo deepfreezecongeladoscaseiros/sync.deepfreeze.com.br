@@ -313,13 +313,6 @@ return [
         ['text' => 'Fabricantes', 'route'  => 'admin.manufacturers.index', 'icon' => 'fas fa-fw fa-industry'],
         ['text' => 'Produtos', 'route'  => 'admin.products.index', 'icon' => 'fas fa-fw fa-box'],
         
-        ['header' => 'SINCRONIZAÇÃO'],
-        ['text' => 'Sincronizar Legado', 'route'  => 'admin.sync.index', 'icon' => 'fas fa-fw fa-sync'],
-        
-        ['header' => 'INTEGRAÇÕES'],
-        ['text' => 'Integrações', 'route'  => 'admin.integrations.index', 'icon' => 'fas fa-fw fa-plug'],
-        ['text' => 'Tray Commerce', 'route'  => 'admin.tray.index', 'icon' => 'fas fa-fw fa-store'],
-        
         ['header' => 'LOJA VIRTUAL'],
         ['text' => 'Layout', 'route'  => 'admin.layout.index', 'icon' => 'fas fa-fw fa-paint-brush'],
         ['text' => 'Montar Home Page', 'route'  => 'admin.home-blocks.index', 'icon' => 'fas fa-fw fa-puzzle-piece'],
