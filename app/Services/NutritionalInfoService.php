@@ -59,11 +59,18 @@ class NutritionalInfoService
             return null;
         }
 
+        // IMPORTANTE: O legado (nutri.ctp linha 169) sobrescreve porcao com peso_liquido
+        // antes de renderizar: $v['porcao'] = $v['peso_liquido']
+        // Ou seja, a "porção" exibida é o peso total da embalagem, não o campo porcao.
+        // Devemos replicar essa mesma lógica para manter os dados idênticos ao legado.
+        $pesoLiquido = (float) ($product->peso_liquido ?: 0);
+        $porcao = $pesoLiquido > 0 ? (int) $pesoLiquido : (int) ($product->porcao ?: 100);
+
         return [
             'nutri'           => $nutri,                                    // [nutriente_id => valor_por_100g]
             'vdr'             => self::VD_REFERENCES,                       // [nutriente_id => valor_diario]
-            'porcao'          => (int) ($product->porcao ?: 100),           // Tamanho da porção (g ou ml)
-            'peso_liquido'    => (float) ($product->peso_liquido ?: 0),     // Peso total embalagem
+            'porcao'          => $porcao,                                   // = peso_liquido (lógica do legado)
+            'peso_liquido'    => $pesoLiquido,                              // Peso total embalagem
             'unidade'         => $product->unidade_medida_peso ?: 'g',      // 'g' ou 'ml'
             'medida_caseira'  => $product->medida_caseira ?: '',            // Ex: "1 fatia"
             'tipo_etiqueta'   => (int) ($product->tipo_de_etiqueta ?: 0),   // >= 4 inclui açúcares
