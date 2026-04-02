@@ -6,6 +6,11 @@
     - $galleries: Collection de ProductGallery
 --}}
 
+@php
+    // Carrega mapa de estrelas uma vez para todas as galerias
+    $starsMap = \App\Models\Legacy\Depoimento::getStarsByProduct();
+@endphp
+
 @foreach($galleries as $index => $gallery)
     @php
         // Busca produtos filtrados para esta galeria
@@ -68,7 +73,8 @@
                             @include('storefront.partials.product.card', [
                                 'product' => $product,
                                 'columnClass' => $columnClass,
-                                'showFavorite' => false
+                                'showFavorite' => false,
+                                'starsMap' => $starsMap
                             ])
                         @endforeach
 

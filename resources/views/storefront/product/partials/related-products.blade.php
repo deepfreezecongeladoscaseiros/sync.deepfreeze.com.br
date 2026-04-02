@@ -25,12 +25,16 @@
         - columnClass: Classes de grid (opcional, padrão: col-xs-6 col-sm-4 col-lg-3)
         - showFavorite: Exibir botão de favorito (opcional, padrão: true)
     --}}
+    @php
+        $starsMap = $starsMap ?? \App\Models\Legacy\Depoimento::getStarsByProduct();
+    @endphp
     <div class="row listagem-produtos">
         @foreach($relatedProducts as $relatedProduct)
             @include('storefront.partials.product.card', [
                 'product' => $relatedProduct,
                 'columnClass' => 'col-xs-6 col-sm-4 col-md-3',
-                'showFavorite' => true
+                'showFavorite' => true,
+                'starsMap' => $starsMap
             ])
         @endforeach
     </div>

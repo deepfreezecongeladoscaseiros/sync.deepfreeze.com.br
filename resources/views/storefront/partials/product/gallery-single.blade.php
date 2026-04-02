@@ -12,6 +12,9 @@
 @php
     // Busca produtos filtrados para esta galeria
     $products = $gallery->getProducts();
+
+    // Carrega mapa de estrelas (cache de 30min, 1 query para todos os produtos)
+    $starsMap = $starsMap ?? \App\Models\Legacy\Depoimento::getStarsByProduct();
 @endphp
 
 {{-- Se não há produtos, não renderiza nada --}}
@@ -72,7 +75,8 @@
                             @include('storefront.partials.product.card', [
                                 'product' => $product,
                                 'columnClass' => $columnClass,
-                                'showFavorite' => false
+                                'showFavorite' => false,
+                                'starsMap' => $starsMap
                             ])
                         @endforeach
 

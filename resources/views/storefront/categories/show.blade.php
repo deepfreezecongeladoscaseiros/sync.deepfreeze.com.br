@@ -90,9 +90,12 @@
                     </div>
 
                     {{-- Grid de Produtos --}}
+                    @php
+                        $starsMap = $starsMap ?? \App\Models\Legacy\Depoimento::getStarsByProduct();
+                    @endphp
                     <div class="row lista-produtos">
                         @forelse($products as $product)
-                            @include('storefront.partials.product.card', ['product' => $product])
+                            @include('storefront.partials.product.card', ['product' => $product, 'starsMap' => $starsMap])
                         @empty
                             <div class="col-xs-12">
                                 <div class="alert alert-info text-center">

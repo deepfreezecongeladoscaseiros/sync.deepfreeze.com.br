@@ -6,6 +6,7 @@
     - $product: App\Models\Product (obrigatório)
     - $columnClass: Classes de coluna Bootstrap (opcional, padrão: 'col-xs-6 col-sm-4 col-lg-3')
     - $showFavorite: Exibir botão de favorito (opcional, padrão: true)
+    - $starsMap: Array de estrelas por produto (opcional, carregado pelo controller/galeria)
 --}}
 @php
     // Configurações do card
@@ -17,6 +18,19 @@
     $discountPercentage = $product->getDiscountPercentage();
     $isKit = $product->isKit();
     $isAvailable = $product->isAvailable();
+
+    // Peso: exibe apenas para produtos simples (não pacote/combo) com peso > 0
+    $showWeight = !$isKit && $product->weight > 0;
+    $weightDisplay = '';
+    if ($showWeight) {
+        $unit = $product->weight_unit ?: 'g';
+        $weightDisplay = $product->weight . $unit;
+    }
+
+    // Estrelas: usa mapa pré-carregado (evita N+1) ou busca individual
+    $stars = isset($starsMap[$product->id]) ? $starsMap[$product->id] : null;
+    $starCount = $stars ? (int) $stars['estrelas'] : 0;
+    $reviewCount = $stars ? (int) $stars['total'] : 0;
 @endphp
 
 <div class="item {{ $colClass }}">
@@ -57,14 +71,28 @@
                      title="{{ $product->name }}"
                      loading="lazy" />
             </picture>
+
+            {{-- Estrelas de avaliação (posicionadas sobre a imagem, canto superior direito) --}}
+            @if($starCount > 0)
+                <div class="product-stars">
+                    @for($i = 1; $i <= 5; $i++)
+                        <i class="fa fa-star{{ $i <= $starCount ? '' : '-o' }}"></i>
+                    @endfor
+                    <span class="stars-count">({{ $reviewCount }})</span>
+                </div>
+            @endif
         </a>
 
-        {{-- Nome do produto --}}
+        {{-- Nome e peso do produto --}}
         <div class="box-descricao">
             <div class="box-nome-produto">
                 <a href="{{ $product->url }}">
                     <h5 class="nome-produto">{{ $product->name }}</h5>
                 </a>
+                {{-- Peso: apenas para produtos simples (não pacote/combo) --}}
+                @if($showWeight)
+                    <span class="product-weight">{{ $weightDisplay }}</span>
+                @endif
             </div>
 
             {{-- Preços --}}
