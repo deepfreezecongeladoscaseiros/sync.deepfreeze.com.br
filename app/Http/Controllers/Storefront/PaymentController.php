@@ -51,6 +51,29 @@ class PaymentController extends Controller
         $this->redeService = $redeService;
     }
 
+    /**
+     * Verifica se o cliente logado é dono do pedido.
+     * Proteção contra acesso indevido a pedidos de outros clientes.
+     * Permite acesso se: é o dono do pedido OU o pedido acabou de ser criado nesta sessão.
+     */
+    private function verifyOwnership(Pedido $pedido): bool
+    {
+        $customer = auth()->user();
+
+        // Cliente logado é o dono do pedido
+        if ($customer && $pedido->pessoa_id === $customer->id) {
+            return true;
+        }
+
+        // Pedido acabou de ser criado nesta sessão (last_order_session)
+        $lastOrderSession = session('last_order_session');
+        if ($lastOrderSession !== null && (int) $lastOrderSession === (int) $pedido->sessao) {
+            return true;
+        }
+
+        return false;
+    }
+
     // ==================== A) CIELO CHECKOUT ====================
 
     /**
@@ -69,6 +92,11 @@ class PaymentController extends Controller
         if (!$pedido) {
             Log::error('[PAYMENT] redirectToCielo: pedido não encontrado', ['pedido_id' => $pedidoId]);
             return redirect('/checkout')->with('error', 'Pedido não encontrado.');
+        }
+
+        // Verifica se o cliente logado é dono do pedido
+        if (!$this->verifyOwnership($pedido)) {
+            abort(403);
         }
 
         // Cria ordem na API Cielo e obtém URL de checkout
@@ -148,6 +176,7 @@ class PaymentController extends Controller
         // O frontend faz AJAX para statusCielo a cada N segundos
         return view('storefront.payment.aguardar-cielo', [
             'pedido'    => $pedido,
+            'pedidoId'  => $pedidoId,
             'tentativa' => (int) $tentativa,
         ]);
     }
@@ -216,6 +245,11 @@ class PaymentController extends Controller
             return redirect('/checkout')->with('error', 'Pedido não encontrado.');
         }
 
+        // Verifica se o cliente logado é dono do pedido
+        if (!$this->verifyOwnership($pedido)) {
+            abort(403);
+        }
+
         // Determina tipo pelo ID da forma: 63 = débito, demais = crédito
         $tipo = ($formaPagamentoId === PaymentService::FORMA_REDE_DEBITO) ? 'DEBITO' : 'CREDITO';
 
@@ -224,6 +258,8 @@ class PaymentController extends Controller
             'lojaId'            => $lojaId,
             'formaPagamentoId'  => $formaPagamentoId,
             'tipo'              => $tipo,
+            'valorAPagar'       => (float) $pedido->valor_total,
+            'erroRede'          => request('erro_rede'),
         ]);
     }
 
@@ -247,6 +283,11 @@ class PaymentController extends Controller
 
         if (!$pedido) {
             return redirect('/checkout')->with('error', 'Pedido não encontrado.');
+        }
+
+        // Verifica se o cliente logado é dono do pedido
+        if (!$this->verifyOwnership($pedido)) {
+            abort(403);
         }
 
         // Extrai dados do cartão do request

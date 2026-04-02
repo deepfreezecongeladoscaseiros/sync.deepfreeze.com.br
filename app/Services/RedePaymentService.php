@@ -219,6 +219,14 @@ class RedePaymentService
      */
     private function processCard(Pedido $pedido, int $lojaId, array $cardData, string $kind): array
     {
+        // === 0. Proteção contra pagamento duplicado ===
+        if (PagamentoRede::approvedForOrder($pedido->id)->exists()) {
+            Log::warning("[REDE] processCard: pedido já possui pagamento aprovado", [
+                'pedido_id' => $pedido->id,
+            ]);
+            return $this->errorResult('Este pedido já foi pago.', $kind);
+        }
+
         // === 1. Busca credenciais da loja ===
         $loja = Loja::find($lojaId);
         if (!$loja || empty($loja->pv) || empty($loja->token)) {
