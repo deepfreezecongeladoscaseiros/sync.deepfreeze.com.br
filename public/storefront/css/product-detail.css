@@ -849,3 +849,62 @@
         padding: 15px;
     }
 }
+
+/* =========================================
+   BOTÕES DE COMPARTILHAR
+   ========================================= */
+
+.product-share {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.product-share .share-label {
+    font-size: 12px;
+    color: #999;
+    font-weight: 400;
+}
+
+.product-share .share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    color: #666;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.product-share .share-btn:hover {
+    transform: scale(1.1);
+}
+
+.product-share .share-whatsapp:hover {
+    background: #25D366;
+    color: #fff;
+}
+
+.product-share .share-facebook:hover {
+    background: #1877F2;
+    color: #fff;
+}
+
+.product-share .share-copy:hover {
+    background: var(--color-primary, #013E3B);
+    color: #fff;
+}
+
+/* Feedback de "link copiado" */
+.product-share .share-copy.copied {
+    background: var(--color-primary, #013E3B);
+    color: #fff;
+}
+.product-share .share-copy.copied i::before {
+    content: "\f00c"; /* fa-check */
+}

@@ -206,6 +206,27 @@ $(document).ready(function() {
             $input.val(currentQty + 1);
         }
     });
+
+    // Copiar link do produto para clipboard
+    $('.js-copy-link').on('click', function(e) {
+        e.preventDefault();
+        var $btn = $(this);
+        var url = $btn.data('url');
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(function() {
+                $btn.addClass('copied');
+                setTimeout(function() { $btn.removeClass('copied'); }, 2000);
+            });
+        } else {
+            // Fallback para navegadores antigos
+            var $temp = $('<input>').val(url).appendTo('body').select();
+            document.execCommand('copy');
+            $temp.remove();
+            $btn.addClass('copied');
+            setTimeout(function() { $btn.removeClass('copied'); }, 2000);
+        }
+    });
 });
 </script>
 @endpush

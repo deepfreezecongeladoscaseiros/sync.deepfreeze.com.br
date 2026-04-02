@@ -101,6 +101,23 @@
         </p>
     @endif
 
+    {{-- Compartilhar --}}
+    <div class="product-share">
+        <span class="share-label">Compartilhe:</span>
+        <a href="https://wa.me/?text={{ urlencode($product->name . ' — ' . $product->url) }}"
+           target="_blank" rel="noopener" class="share-btn share-whatsapp" title="WhatsApp">
+            <i class="fa fa-whatsapp"></i>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($product->url) }}"
+           target="_blank" rel="noopener" class="share-btn share-facebook" title="Facebook">
+            <i class="fa fa-facebook"></i>
+        </a>
+        <a href="javascript:" class="share-btn share-copy js-copy-link"
+           data-url="{{ $product->url }}" title="Copiar link">
+            <i class="fa fa-link"></i>
+        </a>
+    </div>
+
     {{-- Tags/Selos --}}
     <div class="product-tags">
         @if($product->contains_gluten)
