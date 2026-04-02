@@ -91,7 +91,7 @@
                     {{-- Estrelas de avaliação (Unicode para garantir renderização) --}}
                     @if($starCount > 0)
                         <span class="product-rating">
-                            <span class="rating-stars" aria-label="{{ $starCount }} de 5 estrelas">@for($i = 1; $i <= 5; $i++){{ $i <= $starCount ? '★' : '☆' }}@endfor</span>
+                            <span class="rating-stars" style="color:#f5a623;" aria-label="{{ $starCount }} de 5 estrelas">@for($i = 1; $i <= 5; $i++){{ $i <= $starCount ? '★' : '☆' }}@endfor</span>
                             <span class="rating-count">{{ $reviewCount }}</span>
                         </span>
                     @endif
