@@ -241,4 +241,58 @@ class PaymentService
             default                   => '',
         };
     }
+
+    /**
+     * Verifica se uma forma de pagamento é online (requer gateway).
+     * Consulta o campo 'online' da tabela formas_pagamentos.
+     */
+    public function isOnlinePayment(int $formaPagamentoId): bool
+    {
+        $forma = FormaPagamento::where('id', $formaPagamentoId)->where('ativo', 1)->first();
+        return $forma && $forma->online == 1;
+    }
+
+    /**
+     * Determina qual gateway usar para a forma de pagamento.
+     *
+     * @return string 'cielo', 'rede_credito', 'rede_debito', 'offline'
+     */
+    public static function getPaymentGateway(int $formaPagamentoId): string
+    {
+        return match ($formaPagamentoId) {
+            self::FORMA_CIELO        => 'cielo',
+            self::FORMA_REDE_CREDITO => 'rede_credito',
+            self::FORMA_REDE_DEBITO  => 'rede_debito',
+            default                  => 'offline',
+        };
+    }
+
+    /**
+     * Busca a loja que vai processar o pagamento.
+     *
+     * Para entrega: usa a loja de entrega (calculada pelo ShippingService via CEP→região→loja).
+     * Para retirada: usa a loja de retirada.
+     * Fallback: loja 2 (Tijuca, sede principal).
+     */
+    public function getPaymentLojaId(?int $lojaRetiradaId, ?int $lojaEntregaId): int
+    {
+        if ($lojaRetiradaId && $lojaRetiradaId > 0) {
+            return $lojaRetiradaId;
+        }
+
+        if ($lojaEntregaId && $lojaEntregaId > 0) {
+            return $lojaEntregaId;
+        }
+
+        // Fallback: loja 2 (sede principal - Tijuca)
+        return 2;
+    }
+
+    /**
+     * Verifica se o pedido foi pago via Rede (tabela pagamentos_rede).
+     */
+    public function isPaidRede(int $pedidoId): bool
+    {
+        return \App\Models\Legacy\PagamentoRede::approvedForOrder($pedidoId)->exists();
+    }
 }
