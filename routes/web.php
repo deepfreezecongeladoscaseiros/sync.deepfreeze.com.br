@@ -68,8 +68,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('integrations', IntegrationController::class);
-    Route::post('categories/{category}/sync-to-tray', [App\Http\Controllers\Admin\CategoryController::class, 'syncToTray'])->name('categories.sync_to_tray');
-    Route::resource('categories', App\Http\Controllers\Admin\CategoryController::class);
+    // Categorias: somente listagem (CRUD é feito no SIV legado)
+    Route::get('categories', [App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('categories.index');
     Route::post('brands/{brand}/sync-to-tray', [App\Http\Controllers\Admin\BrandController::class, 'syncToTray'])->name('brands.sync_to_tray');
     Route::resource('brands', App\Http\Controllers\Admin\BrandController::class);
     Route::resource('manufacturers', App\Http\Controllers\Admin\ManufacturerController::class);
