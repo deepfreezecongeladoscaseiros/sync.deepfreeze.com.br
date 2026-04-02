@@ -140,6 +140,10 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('cookie-consent', [App\Http\Controllers\Admin\CookieConsentController::class, 'edit'])->name('cookie-consent.edit');
     Route::put('cookie-consent', [App\Http\Controllers\Admin\CookieConsentController::class, 'update'])->name('cookie-consent.update');
 
+    // Ícones flutuantes (WhatsApp + Instagram)
+    Route::get('floating-buttons', [App\Http\Controllers\Admin\FloatingButtonController::class, 'edit'])->name('floating-buttons.edit');
+    Route::put('floating-buttons', [App\Http\Controllers\Admin\FloatingButtonController::class, 'update'])->name('floating-buttons.update');
+
     // Rotas de Redes Sociais
     Route::resource('social-networks', App\Http\Controllers\Admin\SocialNetworkController::class);
 

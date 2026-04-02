@@ -325,6 +325,7 @@ return [
         ['text' => 'Banners Únicos', 'route'  => 'admin.single-banners.index', 'icon' => 'fas fa-fw fa-image'],
         ['text' => 'Cookie Consent LGPD', 'route'  => 'admin.cookie-consent.edit', 'icon' => 'fas fa-fw fa-cookie-bite'],
         ['text' => 'Redes Sociais', 'route'  => 'admin.social-networks.index', 'icon' => 'fas fa-fw fa-share-alt'],
+        ['text' => 'Ícones Flutuantes', 'route'  => 'admin.floating-buttons.edit', 'icon' => 'fas fa-fw fa-comments'],
         ['text' => 'Páginas Internas', 'route'  => 'admin.pages.index', 'icon' => 'fas fa-fw fa-file-alt'],
         ['text' => 'Contato', 'route'  => 'admin.contact.edit', 'icon' => 'fas fa-fw fa-envelope'],
         ['text' => 'Menus de Navegação', 'route'  => 'admin.menus.index', 'icon' => 'fas fa-fw fa-bars'],
