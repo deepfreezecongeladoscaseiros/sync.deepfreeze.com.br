@@ -149,9 +149,9 @@
                 <div class="preco-button">
                     <h4 class="valor js-valor-barra">{{ $product->formatted_price }}</h4>
                 </div>
-                @if($product->nutritionalInfo && $product->nutritionalInfo->energy_kcal)
+                @if($nutritionalData && isset($nutritionalData['nutri'][1]))
                     <div class="kcal-button">
-                        <p class="kcal">{{ number_format($product->nutritionalInfo->energy_kcal, 0, ',', '.') }} calorias</p>
+                        <p class="kcal">{{ number_format($nutritionalData['nutri'][1], 0, ',', '.') }} calorias</p>
                     </div>
                 @endif
             </div>

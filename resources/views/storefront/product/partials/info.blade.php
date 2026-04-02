@@ -17,10 +17,10 @@
         Cód:
         <span class="produto-codigo">{{ $product->sku }}</span>
     </p>
-    @if($product->nutritionalInfo && $product->nutritionalInfo->energy_kcal)
+    @if($nutritionalData && isset($nutritionalData['nutri'][1]))
         <p class="info">|</p>
         <p class="info">
-            <span class="kcal">{{ number_format($product->nutritionalInfo->energy_kcal, 0, ',', '.') }}</span> calorias
+            <span class="kcal">{{ number_format($nutritionalData['nutri'][1], 0, ',', '.') }}</span> calorias
         </p>
     @endif
 
