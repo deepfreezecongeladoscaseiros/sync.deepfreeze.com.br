@@ -179,15 +179,53 @@ class CheckoutController extends Controller
                 $request->input('coupon_code')
             );
 
-            return redirect()
-                ->route('checkout.confirmation', ['orderNumber' => $pedido->sessao])
-                ->with('success', 'Pedido realizado com sucesso!');
+            $formaPagamentoId = (int) $validated['formas_pagamento_id'];
+            $gateway = PaymentService::getPaymentGateway($formaPagamentoId);
+
+            // Determina loja para processamento do pagamento
+            $lojaId = $this->paymentService->getPaymentLojaId(
+                $pedido->loja_retirada_id,
+                $shippingCalc['loja_id'] ?? null
+            );
+
+            // Redireciona de acordo com o gateway selecionado
+            switch ($gateway) {
+                case 'cielo':
+                    // Redirect para Cielo Checkout (pagamento no domínio Cielo)
+                    return redirect()->route('payment.cielo.redirect', [
+                        'pedidoId' => $pedido->id,
+                        'lojaId'   => $lojaId,
+                    ]);
+
+                case 'rede_credito':
+                case 'rede_debito':
+                    // Redirect para form de cartão Rede (pagamento no domínio sync)
+                    return redirect()->route('payment.rede.cartao', [
+                        'pedidoId'          => $pedido->id,
+                        'lojaId'            => $lojaId,
+                        'formaPagamentoId'  => $formaPagamentoId,
+                    ]);
+
+                default:
+                    // Pagamento offline (dinheiro, PIX, cheque)
+                    // Se for retirada na loja com dinheiro, finaliza direto (como o legado)
+                    if ($formaPagamentoId == PaymentService::FORMA_DINHEIRO && $pedido->loja_retirada_id > 0) {
+                        $pedido->update([
+                            'finalizado'      => 1,
+                            'data_finalizado' => now(),
+                        ]);
+                    }
+
+                    return redirect()
+                        ->route('checkout.confirmation', ['orderNumber' => $pedido->sessao])
+                        ->with('success', 'Pedido realizado com sucesso!');
+            }
 
         } catch (\Exception $e) {
             Log::error('[CHECKOUT] Erro ao criar pedido', [
-                'error' => $e->getMessage(),
+                'error'     => $e->getMessage(),
                 'pessoa_id' => $customer->id,
-                'ip' => $request->ip(),
+                'ip'        => $request->ip(),
             ]);
 
             return redirect()
