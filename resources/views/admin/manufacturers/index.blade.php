@@ -1,23 +1,26 @@
 @extends('adminlte::page')
 
-@section('title', 'Manufacturers')
+@section('title', 'Fabricantes')
 
 @section('content_header')
-    <h1>Manufacturers</h1>
+    <h1>Fabricantes</h1>
 @stop
 
 @section('content')
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('admin.manufacturers.create') }}" class="btn btn-primary">New Manufacturer</a>
-                
+                <span class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Dados do sistema legado (somente leitura). Para editar, acesse o SIV.
+                </span>
+
                 <form action="{{ route('admin.manufacturers.index') }}" method="GET" class="form-inline">
                     <div class="input-group">
-                        <input type="text" 
-                               name="search" 
-                               class="form-control" 
-                               placeholder="Buscar por nome ou legacy_id..." 
+                        <input type="text"
+                               name="search"
+                               class="form-control"
+                               placeholder="Buscar por nome ou ID..."
                                value="{{ request('search') }}"
                                style="min-width: 300px;">
                         <div class="input-group-append">
@@ -41,43 +44,26 @@
                     <a href="{{ route('admin.manufacturers.index') }}" class="float-right">Limpar busca</a>
                 </div>
             @endif
-            
-            <table class="table table-bordered">
+
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th style="width: 10px">#</th>
-                        <th style="width: 100px">Legacy ID</th>
-                        <th>Trade Name</th>
-                        <th>Legal Name</th>
-                        <th>City/State</th>
-                        <th style="width: 80px">Status</th>
-                        <th style="width: 150px">Actions</th>
+                        <th style="width: 60px">ID</th>
+                        <th>Nome Fantasia</th>
+                        <th>Razão Social</th>
+                        <th>Cidade/UF</th>
+                        <th style="width: 120px">Produtos</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($manufacturers as $manufacturer)
                         <tr>
                             <td>{{ $manufacturer->id }}</td>
-                            <td>
-                                <span class="badge badge-info">{{ $manufacturer->legacy_id ?? '-' }}</span>
-                            </td>
                             <td>{{ $manufacturer->trade_name }}</td>
                             <td><small class="text-muted">{{ $manufacturer->legal_name ?? '-' }}</small></td>
                             <td><small class="text-muted">{{ $manufacturer->city ?? '-' }}/{{ $manufacturer->state ?? '-' }}</small></td>
-                            <td>
-                                @if($manufacturer->active)
-                                    <span class="badge badge-success">Active</span>
-                                @else
-                                    <span class="badge badge-secondary">Inactive</span>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.manufacturers.edit', $manufacturer->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('admin.manufacturers.destroy', $manufacturer->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
+                            <td class="text-center">
+                                <span class="badge badge-secondary">{{ $manufacturer->products_count ?? '-' }}</span>
                             </td>
                         </tr>
                     @endforeach

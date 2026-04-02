@@ -72,7 +72,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('categories', [App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('categories.index');
     // Marcas: somente listagem (CRUD é feito no SIV legado)
     Route::get('brands', [App\Http\Controllers\Admin\BrandController::class, 'index'])->name('brands.index');
-    Route::resource('manufacturers', App\Http\Controllers\Admin\ManufacturerController::class);
+    // Fabricantes: somente listagem (CRUD é feito no SIV legado)
+    Route::get('manufacturers', [App\Http\Controllers\Admin\ManufacturerController::class, 'index'])->name('manufacturers.index');
     
     Route::get('api-logs', [App\Http\Controllers\Admin\ApiLogController::class, 'index'])->name('api_logs.index');
     Route::get('api-logs/{apiLog}', [App\Http\Controllers\Admin\ApiLogController::class, 'show'])->name('api_logs.show');
