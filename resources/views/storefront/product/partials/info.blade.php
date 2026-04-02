@@ -28,7 +28,7 @@
     @if($product->weight)
         <p class="info">|</p>
         <p class="info">
-            <span class="peso">{{ number_format($product->weight * 1000, 0, ',', '.') }}g</span>
+            <span class="peso">{{ $product->weight }}{{ $product->weight_unit ?: 'g' }}</span>
         </p>
     @endif
 

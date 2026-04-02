@@ -33,10 +33,10 @@
                     <div class="row">
                         @foreach($product->images as $index => $image)
                             @php
-                                $imageUrl = $image->path;
-                                if (!str_starts_with($imageUrl, 'http')) {
-                                    $imageUrl = asset('storage/' . $image->path);
-                                }
+                                // Monta URL da imagem legado: base_url + image_path + imagem_src
+                                $baseUrl = rtrim(config('legacy.image_base_url'), '/');
+                                $imagePath = rtrim(config('legacy.image_path'), '/');
+                                $imageUrl = $baseUrl . $imagePath . '/' . $image->imagem_src;
                             @endphp
                             <div class="col-xs-3">
                                 <a href="javascript:"
