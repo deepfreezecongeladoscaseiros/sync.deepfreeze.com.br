@@ -469,11 +469,37 @@ class Product extends Model
     }
 
     /**
-     * Scope: Produtos visíveis na loja (ativos + com imagem)
+     * Scope: Produtos disponíveis no canal de vendas Internet (canais_venda_id = 1).
+     *
+     * No legado, a tabela canais_vendas_produtos controla quais produtos
+     * aparecem em cada canal. O site usa canal_venda_id = 1 (Internet).
+     * Filtra por data_inicial <= agora E (data_final >= agora OU data_final IS NULL).
+     */
+    public function scopeAvailableOnline($query)
+    {
+        return $query->whereIn('produtos.id', function ($sub) {
+            $sub->select('produto_id')
+                ->from('canais_vendas_produtos')
+                ->where('canais_venda_id', 1)
+                ->where('data_inicial', '<=', now())
+                ->where(function ($q) {
+                    $q->whereNull('data_final')
+                      ->orWhere('data_final', '>=', now());
+                });
+        });
+    }
+
+    /**
+     * Scope: Produtos visíveis na loja (ativos + com imagem + canal Internet)
+     *
+     * Replica o filtro completo do legado:
+     * - ativo = 1
+     * - Possui imagem ativa
+     * - Cadastrado no canal de vendas Internet (canais_venda_id = 1) com datas válidas
      */
     public function scopeVisibleInStore($query)
     {
-        return $query->active()->withImage();
+        return $query->active()->withImage()->availableOnline();
     }
 
     /**
