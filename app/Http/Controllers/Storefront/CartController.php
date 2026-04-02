@@ -32,7 +32,7 @@ class CartController extends Controller
     public function add(Request $request): JsonResponse
     {
         $request->validate([
-            'product_id' => 'required|integer|exists:products,id',
+            'product_id' => 'required|integer|exists:mysql_legacy.produtos,id',
             'quantity'   => 'nullable|integer|min:1|max:99',
         ]);
 
