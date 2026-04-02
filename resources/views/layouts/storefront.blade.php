@@ -427,9 +427,9 @@
             if (cep.length !== 8) { return; }
 
             var $btn = $('#entrega-cep-btn');
-            var $icon = $('#entrega-cep-icon');
+            var $label = $('#entrega-cep-btn-label');
             $btn.prop('disabled', true);
-            $icon.removeClass('fa-search').addClass('fa-spinner fa-spin');
+            $label.html('<i class="fa fa-spinner fa-spin" style="color:#fff !important"></i>');
 
             $.ajax({
                 url: '/entrega/consultar-cep',
@@ -458,7 +458,7 @@
                 },
                 complete: function() {
                     $btn.prop('disabled', false);
-                    $icon.removeClass('fa-spinner fa-spin').addClass('fa-search');
+                    $label.html('Buscar');
                 }
             });
         }
