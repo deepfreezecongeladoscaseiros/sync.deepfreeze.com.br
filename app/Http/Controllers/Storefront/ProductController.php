@@ -28,22 +28,38 @@ class ProductController extends Controller
         // Busca a categoria pelo slug
         $category = Category::where('slug', $categorySlug)->firstOrFail();
 
-        // Busca o produto pelo slug (gerado a partir do nome) e categoria
-        // O slug é um accessor (Str::slug(name)), não existe como coluna no banco.
-        // Para evitar carregar TODOS os produtos da categoria e filtrar em PHP (N+1),
-        // convertemos o slug de volta para um padrão LIKE no banco de dados.
-        // Ex: "roupa-velha-arroz-branco" => "%roupa%velha%arroz%branco%"
-        $nameLike = '%' . str_replace('-', '%', $productSlug) . '%';
+        // Busca o produto pelo slug (accessor: Str::slug(codigo + '-' + descricao))
+        // O slug combina código + descrição (ex: "ice01-arroz-a-grega").
+        // Estratégia: tenta extrair o código do início do slug e buscar por ele.
+        // Se não encontrar, faz fallback com LIKE na descrição.
+        $product = null;
 
-        $product = Product::with(['category', 'images', 'brand', 'nutritionalInfo'])
-            ->where('categoria_id', $category->id)
-            ->where('descricao', 'LIKE', $nameLike)
-            ->active()
-            ->get()
-            ->first(function ($p) use ($productSlug) {
-                // Confirma match exato pelo accessor slug (LIKE pode trazer falsos positivos)
-                return $p->slug === $productSlug;
-            });
+        // Tenta extrair o código do produto do slug (parte antes do primeiro '-' que não é alfanumérico puro)
+        // Ex: "lh38-salada-oriental-congelada" → código "LH38"
+        if (preg_match('/^([a-z0-9]+)-/', $productSlug, $matches)) {
+            $possibleCode = strtoupper($matches[1]);
+            $product = Product::with(['category', 'images', 'brand'])
+                ->where('categoria_id', $category->id)
+                ->where('codigo', $possibleCode)
+                ->active()
+                ->first();
+
+            // Confirma match exato pelo slug (código pode bater mas descrição ser diferente)
+            if ($product && $product->slug !== $productSlug) {
+                $product = null;
+            }
+        }
+
+        // Fallback: busca por LIKE na descrição (para slugs sem código no início)
+        if (!$product) {
+            $nameLike = '%' . str_replace('-', '%', $productSlug) . '%';
+            $product = Product::with(['category', 'images', 'brand'])
+                ->where('categoria_id', $category->id)
+                ->where('descricao', 'LIKE', $nameLike)
+                ->active()
+                ->get()
+                ->first(fn($p) => $p->slug === $productSlug);
+        }
 
         if (!$product) {
             abort(404);
@@ -51,7 +67,7 @@ class ProductController extends Controller
 
         // Busca produtos relacionados (mesma categoria, exceto o atual)
         $relatedProducts = Product::with(['category', 'images'])
-            ->where('category_id', $category->id)
+            ->where('categoria_id', $category->id)
             ->where('id', '!=', $product->id)
             ->active()
             ->withImage()
@@ -81,7 +97,7 @@ class ProductController extends Controller
      */
     public function showBySku(string $sku)
     {
-        $product = Product::with(['category', 'images', 'brand', 'nutritionalInfo'])
+        $product = Product::with(['category', 'images', 'brand'])
             ->where('sku', $sku)
             ->active()
             ->firstOrFail();
