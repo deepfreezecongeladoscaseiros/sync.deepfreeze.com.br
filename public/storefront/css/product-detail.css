@@ -908,3 +908,84 @@
 .product-share .share-copy.copied i::before {
     content: "\f00c"; /* fa-check */
 }
+
+/* =========================================
+   BADGES DE ALÉRGENOS
+   ========================================= */
+
+.product-allergens {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 12px 0 6px;
+}
+
+.allergen-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+/* Seguro (verde) — Sem Lactose, Não Contém Glúten */
+.allergen-safe {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+/* Atenção (âmbar) — Contém Glúten, Contém Lactose */
+.allergen-warning {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffe0b2;
+}
+
+/* Info (azul) — Baixa Lactose, Kit */
+.allergen-info {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #bbdefb;
+}
+
+/* Perigo (vermelho) — Bebida Alcoólica */
+.allergen-danger {
+    background: #fce4ec;
+    color: #c62828;
+    border: 1px solid #f8bbd0;
+}
+
+/* Texto de alérgenos manuais */
+.product-allergens-text {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin: 6px 0 10px;
+    padding: 8px 12px;
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #6d4c00;
+    line-height: 1.5;
+}
+
+.product-allergens-text svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #f9a825;
+}
+
+@media (max-width: 575px) {
+    .allergen-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+    .product-allergens-text {
+        font-size: 11px;
+    }
+}

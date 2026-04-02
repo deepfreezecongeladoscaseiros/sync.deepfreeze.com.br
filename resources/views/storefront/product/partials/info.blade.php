@@ -118,22 +118,63 @@
         </a>
     </div>
 
-    {{-- Tags/Selos --}}
-    <div class="product-tags">
+    {{-- Informações de Alérgenos --}}
+    <div class="product-allergens">
+        {{-- Glúten --}}
         @if($product->contains_gluten)
-            <span class="tag tag-warning">Contém Glúten</span>
+            <span class="allergen-badge allergen-warning">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                Contém Glúten
+            </span>
+        @else
+            <span class="allergen-badge allergen-safe">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Não Contém Glúten
+            </span>
         @endif
+
+        {{-- Lactose --}}
         @if($product->lactose_free)
-            <span class="tag tag-success">Sem Lactose</span>
+            <span class="allergen-badge allergen-safe">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Sem Lactose
+            </span>
         @elseif($product->low_lactose)
-            <span class="tag tag-info">Baixa Lactose</span>
+            <span class="allergen-badge allergen-info">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                Baixa Lactose
+            </span>
         @elseif($product->contains_lactose)
-            <span class="tag tag-warning">Contém Lactose</span>
+            <span class="allergen-badge allergen-warning">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+                Contém Lactose
+            </span>
         @endif
+
+        {{-- Bebida alcoólica --}}
+        @if($product->alcoholic_beverage)
+            <span class="allergen-badge allergen-danger">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                Bebida Alcoólica
+            </span>
+        @endif
+
+        {{-- Kit/Pacote --}}
         @if($product->is_package || $product->is_combo)
-            <span class="tag tag-primary">Kit</span>
+            <span class="allergen-badge allergen-info">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v3"/></svg>
+                Kit
+            </span>
         @endif
     </div>
+
+    {{-- Alérgenos manuais (texto completo do cadastro) --}}
+    @if($product->allergens)
+        <div class="product-allergens-text">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z"/></svg>
+            <strong>Alérgenos:</strong> {{ $product->allergens }}
+        </div>
+    @endif
 
     {{-- Validade --}}
     @if($product->shelf_life_days)
