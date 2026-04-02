@@ -1214,7 +1214,7 @@ input[type=checkbox]:checked ~ span {
 
 /* Estrelas Unicode — dourado vivo, tamanho legível */
 .product-rating .rating-stars {
-    color: #f5a623;
+    color: #f5a623 !important;
     font-size: 13px;
     letter-spacing: 1px;
     line-height: 1;
