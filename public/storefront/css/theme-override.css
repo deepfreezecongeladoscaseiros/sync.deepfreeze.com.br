@@ -1193,60 +1193,52 @@ input[type=checkbox]:checked ~ span {
 
 /*
  * Linha de metadata entre nome e preço.
- * Exibe estrelas e peso lado a lado, centralizados.
- * Formato: ★★★★★ (3) · 120g
+ * Layout: ★★★★★ 3    120g
  */
 .product-meta {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    margin: 4px 0 2px;
-    font-size: 12px;
+    gap: 8px;
+    margin: 5px 0 3px;
     line-height: 1;
-    min-height: 16px;
+    min-height: 18px;
 }
 
-/* Estrelas de avaliação (inline com texto) */
+/* Bloco de avaliação (estrelas + contagem) */
 .product-rating {
     display: inline-flex;
     align-items: center;
-    gap: 1px;
+    gap: 4px;
 }
 
-/* Estrelas preenchidas — dourado quente */
-.product-rating .fa-star {
+/* Estrelas Unicode — dourado vivo, tamanho legível */
+.product-rating .rating-stars {
     color: #f5a623;
-    font-size: 11px;
-}
-
-/* Estrelas vazias — cinza sutil */
-.product-rating .fa-star-o {
-    color: #d4d4d4;
-    font-size: 11px;
-}
-
-/* Contagem de avaliações */
-.product-rating .rating-count {
-    font-size: 11px;
-    color: #999;
-    margin-left: 3px;
-    font-weight: 400;
-}
-
-/* Separador ponto central (·) entre estrelas e peso */
-.product-meta .meta-sep {
-    color: #ccc;
-    font-size: 14px;
+    font-size: 13px;
+    letter-spacing: 1px;
     line-height: 1;
 }
 
-/* Peso do produto */
-.product-meta .product-weight {
+/* Contagem de avaliações — badge discreto */
+.product-rating .rating-count {
+    font-size: 10px;
     color: #888;
-    font-size: 12px;
+    background: #f0f0f0;
+    padding: 1px 5px;
+    border-radius: 8px;
     font-weight: 500;
-    letter-spacing: 0.3px;
+}
+
+/* Peso do produto — badge com fundo sutil */
+.product-meta .product-weight {
+    font-size: 11px;
+    color: #666;
+    background: #f0f0f0;
+    padding: 1px 7px;
+    border-radius: 8px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
 }
 
 /* =========================================
@@ -1254,18 +1246,19 @@ input[type=checkbox]:checked ~ span {
    ========================================= */
 @media (max-width: 575px) {
     .product-meta {
-        gap: 4px;
-        font-size: 11px;
-        margin: 3px 0 1px;
+        gap: 5px;
+        margin: 4px 0 2px;
     }
-    .product-rating .fa-star,
-    .product-rating .fa-star-o {
-        font-size: 10px;
+    .product-rating .rating-stars {
+        font-size: 11px;
+        letter-spacing: 0.5px;
     }
     .product-rating .rating-count {
-        font-size: 10px;
+        font-size: 9px;
+        padding: 1px 4px;
     }
     .product-meta .product-weight {
-        font-size: 11px;
+        font-size: 10px;
+        padding: 1px 5px;
     }
 }

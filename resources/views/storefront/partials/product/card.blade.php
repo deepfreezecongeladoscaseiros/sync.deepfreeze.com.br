@@ -88,19 +88,12 @@
             {{-- Linha de metadata: estrelas + peso --}}
             @if($showMeta)
                 <div class="product-meta">
-                    {{-- Estrelas de avaliação --}}
+                    {{-- Estrelas de avaliação (Unicode para garantir renderização) --}}
                     @if($starCount > 0)
                         <span class="product-rating">
-                            @for($i = 1; $i <= 5; $i++)
-                                <i class="fa fa-star{{ $i <= $starCount ? '' : '-o' }}"></i>
-                            @endfor
-                            <span class="rating-count">({{ $reviewCount }})</span>
+                            <span class="rating-stars" aria-label="{{ $starCount }} de 5 estrelas">@for($i = 1; $i <= 5; $i++){{ $i <= $starCount ? '★' : '☆' }}@endfor</span>
+                            <span class="rating-count">{{ $reviewCount }}</span>
                         </span>
-                    @endif
-
-                    {{-- Separador visual (só se tiver estrelas E peso) --}}
-                    @if($starCount > 0 && $showWeight)
-                        <span class="meta-sep">&middot;</span>
                     @endif
 
                     {{-- Peso do produto --}}
