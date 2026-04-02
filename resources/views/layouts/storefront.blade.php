@@ -45,7 +45,7 @@
 
     {{-- Theme CSS --}}
     <link href="{{ theme_css_url() }}" rel="stylesheet">
-    <link href="{{ asset('storefront/css/theme-override.css') }}" rel="stylesheet">
+    <link href="{{ asset('storefront/css/theme-override.css') }}?v={{ filemtime(public_path('storefront/css/theme-override.css')) }}" rel="stylesheet">
     <link href="{{ asset('storefront/css/logo-custom.css') }}" rel="stylesheet">
     <link href="{{ asset('storefront/css/top-bar-custom.css') }}" rel="stylesheet">
     <link href="{{ asset('storefront/css/mobile-menu.css') }}" rel="stylesheet">
