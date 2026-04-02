@@ -1188,77 +1188,84 @@ input[type=checkbox]:checked ~ span {
 }
 
 /* =========================================
-   METADATA DO PRODUTO (estrelas + peso)
+   ESTRELAS DE AVALIAÇÃO (entre imagem e nome)
    ========================================= */
 
-/*
- * Linha de metadata entre nome e preço.
- * Layout: ★★★★★ 3    120g
- */
-.product-meta {
+/* Linha de estrelas — centralizada, entre imagem e nome */
+.product-rating-row {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    margin: 5px 0 3px;
-    line-height: 1;
-    min-height: 18px;
-}
-
-/* Bloco de avaliação (estrelas + contagem) */
-.product-rating {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* Estrelas Unicode — dourado vivo, tamanho legível */
-.product-rating .rating-stars {
-    color: #f5a623 !important;
-    font-size: 13px;
-    letter-spacing: 1px;
+    gap: 2px;
+    margin: 6px 0 0;
     line-height: 1;
 }
 
-/* Contagem de avaliações — badge discreto */
-.product-rating .rating-count {
-    font-size: 10px;
+/* Estrela SVG — gordinha e arredondada */
+.product-rating-row .rating-star {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Estrela preenchida — dourado quente */
+.product-rating-row .rating-star.filled {
+    fill: #f5a623;
+}
+
+/* Estrela vazia — cinza claro */
+.product-rating-row .rating-star.empty {
+    fill: #ddd;
+}
+
+/* Reduz espaço entre estrelas e nome do produto */
+.product-rating-row + .box-descricao {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+.product-rating-row + .box-descricao .box-nome-produto {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+.product-rating-row + .box-descricao .nome-produto {
+    margin-top: 6px !important;
+    font-size: 15px !important;
+}
+
+/* Contagem de avaliações */
+.product-rating-row .rating-count {
+    font-size: 12px;
+    color: #999;
+    margin-left: 3px;
+}
+
+/* =========================================
+   PESO DO PRODUTO (entre nome e preço)
+   ========================================= */
+
+/* Linha de peso — centralizada */
+.product-weight-row {
+    text-align: center;
+    margin: 2px 0 0;
+}
+
+.product-weight-row .product-weight {
+    font-size: 12px;
     color: #888;
-    background: #f0f0f0;
-    padding: 1px 5px;
-    border-radius: 8px;
-    font-weight: 500;
-}
-
-/* Peso do produto — badge com fundo sutil */
-.product-meta .product-weight {
-    font-size: 11px;
-    color: #666;
-    background: #f0f0f0;
-    padding: 1px 7px;
-    border-radius: 8px;
-    font-weight: 500;
-    letter-spacing: 0.2px;
+    font-weight: 400;
 }
 
 /* =========================================
    RESPONSIVO: Mobile
    ========================================= */
 @media (max-width: 575px) {
-    .product-meta {
-        gap: 5px;
-        margin: 4px 0 2px;
-    }
-    .product-rating .rating-stars {
+    .product-rating-row .rating-stars {
         font-size: 11px;
         letter-spacing: 0.5px;
     }
-    .product-rating .rating-count {
-        font-size: 9px;
-        padding: 1px 4px;
-    }
-    .product-meta .product-weight {
+    .product-rating-row .rating-count {
         font-size: 10px;
-        padding: 1px 5px;
+    }
+    .product-weight-row .product-weight {
+        font-size: 11px;
     }
 }
