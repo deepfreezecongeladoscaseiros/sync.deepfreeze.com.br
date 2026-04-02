@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Storefront;
 
 use App\Http\Controllers\Controller;
+use App\Models\CepQueryLog;
 use App\Services\ShippingService;
 use App\Services\PaymentService;
+use App\Services\ViaCepService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -28,29 +30,46 @@ class ShippingController extends Controller
 
     /**
      * Consulta CEP: verifica se é atendido e retorna região/loja.
+     * Registra a consulta no log de estatísticas (banco sync).
      * GET /entrega/consultar-cep?cep=20551030
      */
     public function consultarCep(Request $request): JsonResponse
     {
         $cep = $request->input('cep', '');
-
         $result = $this->shippingService->lookupCep($cep);
 
-        if (!$result) {
+        $atendido = $result !== null && $result['loja'] !== null;
+
+        // Enriquece com dados de localização via ViaCEP (cache 24h)
+        $viaCep = app(ViaCepService::class)->lookup($cep);
+
+        // Registra consulta no log de estatísticas (banco sync)
+        CepQueryLog::create([
+            'cep'        => preg_replace('/\D/', '', $cep),
+            'atendido'   => $atendido,
+            'estado'     => $viaCep['uf'] ?? null,
+            'cidade'     => $viaCep['localidade'] ?? null,
+            'bairro'     => $viaCep['bairro'] ?? null,
+            'regiao_id'  => $atendido ? $result['regiao']?->id : null,
+            'loja_id'    => $atendido ? $result['loja']?->id : null,
+            'created_at' => now(),
+        ]);
+
+        if (!$atendido) {
             return response()->json([
                 'atendido' => false,
-                'mensagem' => 'CEP não encontrado ou não atendido para entrega.',
+                'mensagem' => 'Infelizmente ainda não atendemos sua região. Registramos seu interesse para futura expansão.',
             ]);
         }
 
         return response()->json([
-            'atendido' => $result['loja'] !== null,
+            'atendido' => true,
             'regiao'   => $result['regiao']?->nome,
             'loja'     => $result['loja'] ? [
                 'id'   => $result['loja']->id,
                 'nome' => $result['loja']->nome,
             ] : null,
-            'endereco' => $result['logradouro']?->Endereco,
+            'endereco' => $viaCep ? ($viaCep['bairro'] . ', ' . $viaCep['localidade'] . ' - ' . $viaCep['uf']) : null,
         ]);
     }
 
