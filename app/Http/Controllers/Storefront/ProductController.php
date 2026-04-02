@@ -74,6 +74,19 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
+        // Avaliações do produto — apenas aprovadas, com nome do cliente
+        $reviews = \App\Models\Legacy\Depoimento::approved()
+            ->forProducts()
+            ->where('depoimentos.produto_id', $product->id)
+            ->join('pessoas', 'pessoas.id', '=', 'depoimentos.pessoa_id')
+            ->select('depoimentos.*', 'pessoas.nome as reviewer_name')
+            ->orderBy('depoimentos.id', 'desc')
+            ->limit(10)
+            ->get();
+
+        // Média de estrelas e total de avaliações do produto
+        $productStars = \App\Models\Legacy\Depoimento::getStarsForProduct($product->id);
+
         // Prepara dados para breadcrumb
         $breadcrumb = [
             ['title' => 'Home', 'url' => url('/')],
@@ -85,7 +98,9 @@ class ProductController extends Controller
             'product',
             'category',
             'relatedProducts',
-            'breadcrumb'
+            'breadcrumb',
+            'reviews',
+            'productStars'
         ));
     }
 
@@ -118,10 +133,16 @@ class ProductController extends Controller
 
         $relatedProducts = collect();
 
+        // showBySku não carrega avaliações (redireciona para URL amigável quando tem categoria)
+        $reviews = collect();
+        $productStars = ['estrelas' => 0, 'total' => 0];
+
         return view('storefront.product.show', compact(
             'product',
             'relatedProducts',
-            'breadcrumb'
+            'breadcrumb',
+            'reviews',
+            'productStars'
         ));
     }
 }

@@ -270,6 +270,9 @@ Route::middleware('customer.guard')->group(function () {
         Route::get('/lojas-retirada', [App\Http\Controllers\Storefront\ShippingController::class, 'lojasRetirada'])->name('pickup_stores');
     });
 
+    // Rota para enviar avaliação de produto (AJAX, requer login)
+    Route::post('/produto/avaliar', [App\Http\Controllers\Storefront\ReviewController::class, 'store'])->name('review.store');
+
     // Rota de produto por SKU (ex: /produto/KR57)
     Route::get('/produto/{sku}', [App\Http\Controllers\Storefront\ProductController::class, 'showBySku'])
         ->name('product.show.sku')

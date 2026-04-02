@@ -124,6 +124,9 @@
                                 </article>
                             </div>
 
+                            {{-- Avaliações dos Clientes --}}
+                            @include('storefront.product.partials.reviews')
+
                         </div>
                     </div>
 
