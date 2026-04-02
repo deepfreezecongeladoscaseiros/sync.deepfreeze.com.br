@@ -68,6 +68,9 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('integrations', IntegrationController::class);
+    // Estatísticas de consultas de CEP
+    Route::get('cep-stats', [App\Http\Controllers\Admin\CepStatsController::class, 'index'])->name('cep-stats.index');
+
     // Gestão de usuários do painel admin (banco sync)
     Route::resource('users', App\Http\Controllers\Admin\UserController::class)->except(['show']);
     // Categorias: somente listagem (CRUD é feito no SIV legado)

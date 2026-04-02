@@ -330,6 +330,9 @@ return [
         ['text' => 'Contato', 'route'  => 'admin.contact.edit', 'icon' => 'fas fa-fw fa-envelope'],
         ['text' => 'Menus de Navegação', 'route'  => 'admin.menus.index', 'icon' => 'fas fa-fw fa-bars'],
 
+        ['header' => 'ESTATÍSTICAS'],
+        ['text' => 'Consultas de CEP', 'route'  => 'admin.cep-stats.index', 'icon' => 'fas fa-fw fa-chart-bar'],
+
         ['header' => 'ADMINISTRAÇÃO'],
         ['text' => 'Usuários', 'route'  => 'admin.users.index', 'icon' => 'fas fa-fw fa-users'],
 
