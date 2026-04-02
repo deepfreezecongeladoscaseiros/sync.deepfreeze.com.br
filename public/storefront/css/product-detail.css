@@ -998,11 +998,18 @@
 .product-reviews {
     width: 100%;
     padding: 0 15px;
+    border: none !important;
+    box-shadow: none !important;
 }
 
-/* Card da seção de avaliações */
+/* Card da seção de avaliações — limpo, sem bordas externas */
 .box-avaliacoes {
     background: #fff;
+    border: none !important;
+    box-shadow: none !important;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee !important;
 }
 
 /* Resumo: estrelas + média + total */
