@@ -237,10 +237,20 @@ Route::middleware('customer.guard')->group(function () {
         Route::post('/', [App\Http\Controllers\Storefront\AddressController::class, 'store'])->name('store');
     });
 
-    // Rotas de pagamento (callback do gateway e retorno do cliente)
+    // Rotas de pagamento (gateways, polling, callback)
     Route::prefix('pagamento')->name('payment.')->group(function () {
+        // Callback genérico (POST - webhook)
         Route::post('/callback', [App\Http\Controllers\Storefront\PaymentController::class, 'callback'])->name('callback');
-        Route::get('/retorno', [App\Http\Controllers\Storefront\PaymentController::class, 'returnFromGateway'])->name('return');
+
+        // Cielo Checkout
+        Route::get('/cielo/{pedidoId}/{lojaId}', [App\Http\Controllers\Storefront\PaymentController::class, 'redirectToCielo'])->name('cielo.redirect');
+        Route::get('/aguardar-cielo/{pedidoId}/{tentativa?}', [App\Http\Controllers\Storefront\PaymentController::class, 'aguardarCielo'])->name('cielo.aguardar');
+        Route::get('/status-cielo/{pedidoId}', [App\Http\Controllers\Storefront\PaymentController::class, 'statusCielo'])->name('cielo.status');
+
+        // Rede e-Rede
+        Route::get('/rede/cartao/{pedidoId}/{lojaId}/{formaPagamentoId}', [App\Http\Controllers\Storefront\PaymentController::class, 'redeCartao'])->name('rede.cartao');
+        Route::post('/rede/cartao/{pedidoId}/{lojaId}/{formaPagamentoId}', [App\Http\Controllers\Storefront\PaymentController::class, 'redeProcessar'])->name('rede.processar');
+        Route::get('/rede/consultar-tid/{pedidoId}/{lojaId}', [App\Http\Controllers\Storefront\PaymentController::class, 'redeConsultarTid'])->name('rede.consultar_tid');
     });
 
     // Rota de validação de cupom (AJAX para checkout)
