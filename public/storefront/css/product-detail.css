@@ -284,114 +284,107 @@
 
 /* ============================================
    TABELA NUTRICIONAL
-   Segue o padrão visual dos demais blocos (.group-box):
-   card branco, border-radius, sombra sutil.
+   Usa .group-box como base (card branco, radius, shadow)
+   e .box-nutricional para cor temática própria.
    ============================================ */
 
-.box-tabela-nutricional {
-    margin: 30px 0;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+/* Cor temática: verde-menta, harmoniza com a marca */
+.box-nutricional {
+    background: linear-gradient(135deg, #e0f2f1 0%, #fff 100%);
+    border-left: 4px solid #26a69a;
 }
 
-.box-tabela-nutricional .tabela-padrao {
+/* Info da porção — entre título e tabela */
+.nutri-porcao-info {
+    margin-bottom: 15px;
+    padding: 10px 14px;
+    background: rgba(38, 166, 154, 0.06);
+    border-radius: 6px;
+    font-size: 0.88em;
+    line-height: 1.6;
+}
+
+.nutri-porcao-embalagem {
+    display: block;
+    color: #777;
+    font-size: 0.92em;
+}
+
+.nutri-porcao-detalhe {
+    display: block;
+    color: #333;
+    font-weight: 600;
+}
+
+/* Tabela de nutrientes */
+.tabela-nutri {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9em;
-    line-height: 1.4;
 }
 
-/* Título: segue padrão .group-box .titulo-desc */
-.box-tabela-nutricional .tb-title th {
-    background: transparent;
-    color: var(--primary-color, #013E3B);
-    padding: 0 0 12px 0;
-    font-size: 1.2em;
-    font-weight: 700;
-    text-align: left;
-    border-bottom: 2px solid var(--primary-color, #013E3B);
-}
-
-/* Subtítulo: porção e embalagem */
-.box-tabela-nutricional .tb-subtitle th {
-    background: transparent;
-    padding: 12px 0 10px;
-    font-size: 0.9em;
-    color: #555;
-    text-align: left;
-    font-weight: 400;
-    border-bottom: 1px solid #eee;
-}
-
-.box-tabela-nutricional .tb-subtitle .tb-porcao-embalagem {
-    display: block;
-    margin-bottom: 2px;
-    font-size: 0.88em;
-    color: #888;
-}
-
-.box-tabela-nutricional .tb-subtitle .tb-porcao {
-    font-weight: 600;
-    color: #333;
-}
-
-/* Legenda: cabeçalhos das colunas de valores */
-.box-tabela-nutricional .tb-legend th {
-    background: #f8f8f8;
+/* Cabeçalho da tabela */
+.tabela-nutri thead th {
     padding: 8px 10px;
     font-size: 0.82em;
-    color: #666;
     font-weight: 600;
+    color: #555;
+    text-align: center;
+    background: rgba(38, 166, 154, 0.08);
+    border-bottom: 2px solid #26a69a;
+}
+
+.tabela-nutri thead th.nutri-col-nome {
+    text-align: left;
+}
+
+/* Linhas de nutrientes */
+.tabela-nutri tbody td {
+    padding: 8px 10px;
     border-bottom: 1px solid #eee;
-}
-
-/* Corpo: linhas de nutrientes */
-.box-tabela-nutricional tbody td {
-    padding: 9px 10px;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 0.9em;
     color: #333;
+    text-align: center;
 }
 
-/* Última linha sem borda inferior */
-.box-tabela-nutricional tbody tr:last-child td {
+.tabela-nutri tbody td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+.tabela-nutri tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* Indentação: sub-nutrientes (açúcares, gorduras saturadas/trans) */
-.box-tabela-nutricional tbody td.pl-2 {
+/* Linhas alternadas */
+.tabela-nutri tbody tr:nth-child(even) {
+    background: rgba(38, 166, 154, 0.03);
+}
+
+.tabela-nutri tbody tr:hover {
+    background: rgba(38, 166, 154, 0.07);
+}
+
+/* Sub-nutrientes indentados */
+.tabela-nutri tbody tr.nutri-sub td:first-child {
     padding-left: 24px;
-    font-size: 0.87em;
+    font-weight: 400;
+    font-size: 0.92em;
     color: #666;
 }
 
-.box-tabela-nutricional tbody td.pl-3 {
+.tabela-nutri tbody tr.nutri-sub-2 td:first-child {
     padding-left: 36px;
-    font-size: 0.85em;
+    font-size: 0.88em;
     color: #777;
 }
 
-/* Linhas alternadas sutis */
-.box-tabela-nutricional tbody tr:nth-child(even) {
-    background: #fcfcfc;
-}
-
-/* Hover sutil */
-.box-tabela-nutricional tbody tr:hover {
-    background: #f5f5f5;
-}
-
-/* Rodapé: nota de %VD */
-.box-tabela-nutricional .caption {
+/* Nota de %VD */
+.nutri-caption {
     margin-top: 12px;
-    padding: 10px 0 0;
     font-size: 0.78em;
     color: #999;
     font-style: italic;
     line-height: 1.4;
-    border-top: 1px solid #eee;
 }
 
 /* Selos "Alto em" (RDC 429 ANVISA) */
@@ -412,30 +405,12 @@
     width: auto;
 }
 
-/* Placeholder "Em breve" */
-.nutritional-coming-soon {
+/* Placeholder: Em breve */
+.box-nutricional .nutritional-coming-soon {
     text-align: center;
-    padding: 40px 20px;
-    background: #fff;
-    border-radius: 8px;
-    border: 2px dashed #ddd;
-}
-
-.nutritional-coming-soon .icon {
-    font-size: 3em;
-    color: var(--primary-color, #013E3B);
-    margin-bottom: 15px;
-}
-
-.nutritional-coming-soon h4 {
-    font-size: 1.2em;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.nutritional-coming-soon p {
-    color: #666;
-    font-size: 0.95em;
+    padding: 20px;
+    color: #888;
+    font-size: 0.93em;
 }
 
 /* ============================================
@@ -809,8 +784,8 @@
         padding: 0 15px;
     }
 
-    .box-tabela-nutricional {
-        padding: 15px;
+    .tabela-nutri {
+        font-size: 0.85em;
     }
 
     /**
@@ -901,8 +876,9 @@
         cursor: not-allowed;
     }
 
-    .box-tabela-nutricional .tabela-padrao {
-        font-size: 0.85em;
+    .tabela-nutri tbody td,
+    .tabela-nutri thead th {
+        padding: 6px 8px;
     }
 
     .group-box {
