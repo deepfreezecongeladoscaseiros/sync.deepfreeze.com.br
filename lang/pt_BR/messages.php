@@ -56,8 +56,6 @@ return [
     'manufacturers' => 'Fabricantes',
     'product' => 'Produto',
     'products' => 'Produtos',
-    'property' => 'Propriedade',
-    'properties' => 'Propriedades',
     'variant' => 'Variação',
     'variants' => 'Variações',
     'integration' => 'Integração',

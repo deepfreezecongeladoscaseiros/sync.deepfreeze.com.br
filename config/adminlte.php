@@ -312,7 +312,6 @@ return [
         ['text' => 'Marcas', 'route'  => 'admin.brands.index', 'icon' => 'fas fa-fw fa-copyright'],
         ['text' => 'Fabricantes', 'route'  => 'admin.manufacturers.index', 'icon' => 'fas fa-fw fa-industry'],
         ['text' => 'Produtos', 'route'  => 'admin.products.index', 'icon' => 'fas fa-fw fa-box'],
-        ['text' => 'Propriedades', 'route'  => 'admin.properties.index', 'icon' => 'fas fa-fw fa-list-alt'],
         
         ['header' => 'SINCRONIZAÇÃO'],
         ['text' => 'Sincronizar Legado', 'route'  => 'admin.sync.index', 'icon' => 'fas fa-fw fa-sync'],

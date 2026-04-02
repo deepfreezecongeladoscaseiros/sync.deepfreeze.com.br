@@ -82,11 +82,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('api-docs', [App\Http\Controllers\Admin\ApiDocsController::class, 'index'])->name('api_docs.index');
     // Produtos: somente listagem (CRUD é feito no SIV legado)
     Route::get('products', [App\Http\Controllers\Admin\ProductController::class, 'index'])->name('products.index');
-    Route::post('properties/{property}/sync-to-tray', [App\Http\Controllers\Admin\PropertyController::class, 'syncToTray'])->name('properties.sync_to_tray');
-    Route::resource('properties', App\Http\Controllers\Admin\PropertyController::class);
     Route::resource('products.variants', App\Http\Controllers\Admin\VariantController::class)->shallow();
     Route::post('variants/{variant}/sync-to-tray', [App\Http\Controllers\Admin\VariantController::class, 'syncToTray'])->name('variants.sync_to_tray');
-    Route::resource('properties.values', App\Http\Controllers\Admin\PropertyValueController::class)->shallow();
     Route::get('tray', [App\Http\Controllers\Admin\TrayController::class, 'index'])->name('tray.index');
     Route::post('tray', [App\Http\Controllers\Admin\TrayController::class, 'store'])->name('tray.store');
     Route::post('tray/tokens', [App\Http\Controllers\Admin\TrayController::class, 'generateTokens'])->name('tray.tokens');
