@@ -31,6 +31,9 @@
     $stars = isset($starsMap[$product->id]) ? $starsMap[$product->id] : null;
     $starCount = $stars ? (int) $stars['estrelas'] : 0;
     $reviewCount = $stars ? (int) $stars['total'] : 0;
+
+    // Exibe linha de metadata se tiver peso OU estrelas
+    $showMeta = $showWeight || $starCount > 0;
 @endphp
 
 <div class="item {{ $colClass }}">
@@ -71,29 +74,41 @@
                      title="{{ $product->name }}"
                      loading="lazy" />
             </picture>
-
-            {{-- Estrelas de avaliação (posicionadas sobre a imagem, canto superior direito) --}}
-            @if($starCount > 0)
-                <div class="product-stars">
-                    @for($i = 1; $i <= 5; $i++)
-                        <i class="fa fa-star{{ $i <= $starCount ? '' : '-o' }}"></i>
-                    @endfor
-                    <span class="stars-count">({{ $reviewCount }})</span>
-                </div>
-            @endif
         </a>
 
-        {{-- Nome e peso do produto --}}
+        {{-- Informações do produto --}}
         <div class="box-descricao">
+            {{-- Nome do produto --}}
             <div class="box-nome-produto">
                 <a href="{{ $product->url }}">
                     <h5 class="nome-produto">{{ $product->name }}</h5>
                 </a>
-                {{-- Peso: apenas para produtos simples (não pacote/combo) --}}
-                @if($showWeight)
-                    <span class="product-weight">{{ $weightDisplay }}</span>
-                @endif
             </div>
+
+            {{-- Linha de metadata: estrelas + peso --}}
+            @if($showMeta)
+                <div class="product-meta">
+                    {{-- Estrelas de avaliação --}}
+                    @if($starCount > 0)
+                        <span class="product-rating">
+                            @for($i = 1; $i <= 5; $i++)
+                                <i class="fa fa-star{{ $i <= $starCount ? '' : '-o' }}"></i>
+                            @endfor
+                            <span class="rating-count">({{ $reviewCount }})</span>
+                        </span>
+                    @endif
+
+                    {{-- Separador visual (só se tiver estrelas E peso) --}}
+                    @if($starCount > 0 && $showWeight)
+                        <span class="meta-sep">&middot;</span>
+                    @endif
+
+                    {{-- Peso do produto --}}
+                    @if($showWeight)
+                        <span class="product-weight">{{ $weightDisplay }}</span>
+                    @endif
+                </div>
+            @endif
 
             {{-- Preços --}}
             <div class="box-precos">
