@@ -47,8 +47,8 @@
     <div class="escolher">
         <div class="quantidade">
             <div class="box-number">
-                <div class="add-qtd js-btn-minus-detail">
-                    <i class="fa fa-minus"><span>-</span></i>
+                <div class="add-qtd js-btn-minus-detail" style="cursor:pointer;">
+                    <span style="font-size:18px; font-weight:bold; line-height:1; user-select:none;">&minus;</span>
                 </div>
                 <input name="quantidade"
                        type="text"
@@ -56,8 +56,8 @@
                        value="1"
                        id="qtd-{{ $product->id }}"
                        readonly />
-                <div class="add-qtd js-btn-plus-detail">
-                    <i class="fa fa-plus"><span>+</span></i>
+                <div class="add-qtd js-btn-plus-detail" style="cursor:pointer;">
+                    <span style="font-size:18px; font-weight:bold; line-height:1; user-select:none;">+</span>
                 </div>
             </div>
         </div>
