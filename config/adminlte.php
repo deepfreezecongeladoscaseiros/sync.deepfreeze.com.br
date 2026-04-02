@@ -329,6 +329,9 @@ return [
         ['text' => 'Contato', 'route'  => 'admin.contact.edit', 'icon' => 'fas fa-fw fa-envelope'],
         ['text' => 'Menus de Navegação', 'route'  => 'admin.menus.index', 'icon' => 'fas fa-fw fa-bars'],
 
+        ['header' => 'ADMINISTRAÇÃO'],
+        ['text' => 'Usuários', 'route'  => 'admin.users.index', 'icon' => 'fas fa-fw fa-users'],
+
         ['header' => 'API PÚBLICA'],
         [
             'text' => 'Documentação',

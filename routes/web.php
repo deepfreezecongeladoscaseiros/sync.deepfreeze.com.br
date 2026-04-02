@@ -68,6 +68,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('integrations', IntegrationController::class);
+    // Gestão de usuários do painel admin (banco sync)
+    Route::resource('users', App\Http\Controllers\Admin\UserController::class)->except(['show']);
     // Categorias: somente listagem (CRUD é feito no SIV legado)
     Route::get('categories', [App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('categories.index');
     // Marcas: somente listagem (CRUD é feito no SIV legado)
