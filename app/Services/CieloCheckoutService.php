@@ -46,17 +46,33 @@ class CieloCheckoutService
     public function createCheckoutOrder(Pedido $pedido, int $lojaId): ?string
     {
         // Busca a loja para obter o merchant_id (credencial Cielo)
+        // Nem todas as lojas têm merchant_id cadastrado — fallback para qualquer loja ativa que tenha
         $loja = Loja::find($lojaId);
+        $merchantId = $loja?->merchant_id;
 
-        if (!$loja || empty($loja->merchant_id)) {
-            Log::error('[CIELO] Loja não encontrada ou sem merchant_id', [
-                'loja_id' => $lojaId,
+        if (empty($merchantId)) {
+            // Fallback: busca qualquer loja ativa que tenha merchant_id
+            $lojaFallback = Loja::active()
+                ->whereNotNull('merchant_id')
+                ->where('merchant_id', '!=', '')
+                ->first();
+
+            $merchantId = $lojaFallback?->merchant_id;
+
+            Log::warning('[CIELO] Loja do pedido sem merchant_id, usando fallback', [
+                'loja_pedido'   => $lojaId,
+                'loja_fallback' => $lojaFallback?->id,
+                'pedido_id'     => $pedido->id,
+            ]);
+        }
+
+        if (empty($merchantId)) {
+            Log::error('[CIELO] Nenhuma loja com merchant_id encontrada', [
+                'loja_id'   => $lojaId,
                 'pedido_id' => $pedido->id,
             ]);
             return null;
         }
-
-        $merchantId = $loja->merchant_id;
 
         // Marca o pedido como Cielo e pendente (replica legado: T670)
         $pedido->formas_pagamento_id = PaymentService::FORMA_CIELO;
