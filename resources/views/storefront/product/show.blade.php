@@ -98,12 +98,12 @@
                             {{-- Informações do Produto --}}
                             @include('storefront.product.partials.info')
 
-                            {{-- Avaliações dos Clientes (primeiro bloco após info do produto) --}}
-                            @include('storefront.product.partials.reviews')
-
                             {{-- Descrição do Produto --}}
                             <div class="col-xs-12">
                                 <article class="conteudo">
+
+                                    {{-- Avaliações dos Clientes --}}
+                                    @include('storefront.product.partials.reviews')
 
                                     {{-- Tabela Nutricional --}}
                                     @include('storefront.product.partials.nutritional-info')

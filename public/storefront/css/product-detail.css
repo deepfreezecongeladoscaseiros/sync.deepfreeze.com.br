@@ -994,31 +994,30 @@
    AVALIAÇÕES DOS CLIENTES
    ============================================ */
 
-/* Container principal — ocupa largura total dentro do box-detalhe-produto */
+/* Container principal — dentro de article.conteudo, sem padding extra */
 .product-reviews {
     width: 100%;
-    padding: 0 15px;
     border: none !important;
     box-shadow: none !important;
 }
 
-/* Card da seção de avaliações — limpo, sem bordas externas */
+/* Card da seção de avaliações — compacto, separado por borda sutil */
 .box-avaliacoes {
     background: #fff;
     border: none !important;
     box-shadow: none !important;
-    margin-top: 20px;
-    padding-top: 20px;
+    margin-top: 15px;
+    padding-top: 15px;
     border-top: 1px solid #eee !important;
 }
 
-/* Resumo: estrelas + média + total */
+/* Resumo: estrelas + média + total — compacto */
 .reviews-summary {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
     border-bottom: 1px solid #eee;
 }
 
@@ -1042,11 +1041,11 @@
 
 /* Lista de avaliações individuais */
 .reviews-list {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
 }
 
 .review-item {
-    padding: 16px 0;
+    padding: 12px 0;
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -1087,8 +1086,8 @@
 
 /* Formulário de avaliação */
 .review-form-wrapper {
-    margin-top: 20px;
-    padding-top: 20px;
+    margin-top: 16px;
+    padding-top: 16px;
     border-top: 1px solid #eee;
 }
 
