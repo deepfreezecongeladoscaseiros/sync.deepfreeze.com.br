@@ -991,30 +991,45 @@
 }
 
 /* ============================================
-   AVALIAÇÕES DOS CLIENTES
+   AVALIAÇÕES DOS CLIENTES — CARROSSEL
    ============================================ */
 
-/* Container principal — dentro de article.conteudo */
+/* Container principal */
 .product-reviews {
     width: 100%;
-}
-
-/* Card da seção de avaliações — compacto, separado por borda sutil */
-.box-avaliacoes {
-    background: #fff;
-    margin-top: 15px;
-    padding-top: 15px;
+    margin-top: 30px;
+    padding-top: 25px;
     border-top: 1px solid #eee;
 }
 
-/* Resumo: estrelas + média + total — compacto */
-.reviews-summary {
+/* Header: título centralizado + accent bar */
+.reviews-section-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.reviews-section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 10px 0;
+}
+
+/* Barra decorativa verde abaixo do título */
+.reviews-accent-bar {
+    width: 40px;
+    height: 3px;
+    background: var(--color-primary, #013E3B);
+    margin: 0 auto 15px auto;
+    border-radius: 2px;
+}
+
+/* Resumo: estrelas + média centralizados */
+.reviews-summary-line {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #eee;
+    justify-content: center;
+    gap: 8px;
 }
 
 .reviews-stars-summary {
@@ -1022,68 +1037,154 @@
     gap: 2px;
 }
 
-.reviews-average {
-    font-size: 1.1em;
-    font-weight: 700;
-    color: #333;
+.reviews-summary-text {
+    font-size: 0.9em;
+    color: #666;
+    font-weight: 500;
 }
 
-.reviews-count {
-    font-size: 0.85em;
-    font-weight: 400;
-    color: #888;
-    margin-left: 4px;
+/* Wrapper do carrossel */
+.reviews-carousel-wrapper {
+    position: relative;
+    margin-bottom: 20px;
 }
 
-/* Lista de avaliações individuais */
-.reviews-list {
-    margin-bottom: 16px;
+/* Cada card de review */
+.review-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.2s ease;
+    height: 100%;
 }
 
-.review-item {
-    padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
+.review-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.review-item:last-child {
-    border-bottom: none;
-}
-
-.review-header {
+/* Header do card: avatar + nome + estrelas */
+.review-card-header {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
 }
 
-.review-stars {
+/* Avatar circular com iniciais */
+.review-avatar {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.95em;
+    letter-spacing: 0.5px;
+}
+
+/* Meta: nome + estrelas empilhados */
+.review-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.review-card-author {
+    font-weight: 600;
+    font-size: 0.95em;
+    color: #333;
+    line-height: 1.2;
+}
+
+.review-card-stars {
     display: flex;
     gap: 1px;
 }
 
-.review-author {
-    font-weight: 600;
-    color: #333;
-    font-size: 0.95em;
-}
-
-.review-date {
-    font-size: 0.8em;
-    color: #aaa;
-}
-
-.review-text {
+/* Texto do depoimento */
+.review-card-text {
     color: #555;
+    font-size: 0.9em;
     line-height: 1.6;
-    font-size: 0.93em;
     margin: 0;
 }
 
-/* Formulário de avaliação */
+/* Mensagem de vazio */
+.reviews-empty-text {
+    text-align: center;
+    color: #999;
+    font-size: 0.95em;
+    padding: 20px 0;
+}
+
+/* SVG estrelas — alinhamento vertical */
+.star-icon {
+    vertical-align: middle;
+}
+
+/* ============================================
+   OWL CAROUSEL — SETAS DE NAVEGAÇÃO (reviews)
+   Posiciona setas nas laterais do carrossel
+   ============================================ */
+
+.reviews-carousel-wrapper .owl-nav {
+    position: absolute;
+    top: 50%;
+    left: -15px;
+    right: -15px;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.reviews-carousel-wrapper .owl-nav button {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 14px;
+    pointer-events: all;
+    transition: all 0.2s ease;
+    padding: 0;
+    margin: 0;
+}
+
+.reviews-carousel-wrapper .owl-nav button:hover {
+    background: var(--color-primary, #013E3B);
+    color: #fff;
+    border-color: var(--color-primary, #013E3B);
+}
+
+.reviews-carousel-wrapper .owl-nav button.disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.reviews-carousel-wrapper .owl-nav button.disabled:hover {
+    background: #fff;
+    color: #666;
+    border-color: #ddd;
+}
+
+/* ============================================
+   FORMULÁRIO DE AVALIAÇÃO
+   ============================================ */
+
 .review-form-wrapper {
-    margin-top: 16px;
-    padding-top: 16px;
+    margin-top: 25px;
+    padding-top: 20px;
     border-top: 1px solid #eee;
 }
 
@@ -1222,28 +1323,35 @@
     color: var(--color-secondary, #FFA733);
 }
 
-/* SVG estrelas — alinhamento vertical */
-.star-icon {
-    vertical-align: middle;
-}
-
 /* ============================================
    AVALIAÇÕES — RESPONSIVO
    ============================================ */
 
 @media (max-width: 767px) {
-    .reviews-summary {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 6px;
+    .reviews-section-title {
+        font-size: 1.2em;
     }
 
-    .review-header {
-        gap: 6px;
+    .review-card {
+        padding: 16px;
     }
 
-    .review-author {
-        font-size: 0.88em;
+    .review-avatar {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        font-size: 0.85em;
+    }
+
+    .reviews-carousel-wrapper .owl-nav {
+        left: -5px;
+        right: -5px;
+    }
+
+    .reviews-carousel-wrapper .owl-nav button {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
     }
 
     .star-picker svg {
