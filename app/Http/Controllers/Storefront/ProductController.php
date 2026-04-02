@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Storefront;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\Category;
+use App\Services\NutritionalInfoService;
 use Illuminate\Http\Request;
 
 /**
@@ -87,6 +88,10 @@ class ProductController extends Controller
         // Média de estrelas e total de avaliações do produto
         $productStars = \App\Models\Legacy\Depoimento::getStarsForProduct($product->id);
 
+        // Informações nutricionais — leitura direta do banco legado
+        $nutritionalInfoService = app(NutritionalInfoService::class);
+        $nutritionalData = $nutritionalInfoService->getForProduct($product);
+
         // Prepara dados para breadcrumb
         $breadcrumb = [
             ['title' => 'Home', 'url' => url('/')],
@@ -100,7 +105,8 @@ class ProductController extends Controller
             'relatedProducts',
             'breadcrumb',
             'reviews',
-            'productStars'
+            'productStars',
+            'nutritionalData'
         ));
     }
 
