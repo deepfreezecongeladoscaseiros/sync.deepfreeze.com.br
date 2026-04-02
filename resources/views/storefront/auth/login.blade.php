@@ -29,23 +29,6 @@
         font-size: 2.5em;
     }
 
-    /* Toggle entre modos de login */
-    .login-toggle-link {
-        display: inline-block;
-        margin-top: 12px;
-        font-size: 13px;
-        color: var(--primary-color, #013E3B);
-        cursor: pointer;
-        text-decoration: underline;
-        transition: color 0.2s;
-    }
-    .login-toggle-link:hover {
-        color: var(--secondary-color, #FFA733);
-    }
-    .login-toggle-link i {
-        margin-right: 4px;
-    }
-
     /* Esconde modo CPF por padrão */
     .login-mode-cpf { display: none; }
 </style>
@@ -112,14 +95,14 @@
                                                 <i class="fa fa-sign-in js-icon-loading"></i> Entrar
                                             </button>
 
-                                            {{-- Link para alternar para modo CPF --}}
-                                            <span class="login-toggle-link" id="toggle-to-cpf">
+                                            {{-- Botão para alternar para modo CPF (estilo secundário) --}}
+                                            <button type="button" class="btn btn-2 btn-large w-100 icon-left" id="toggle-to-cpf" style="margin-top: 10px;">
                                                 <i class="fa fa-id-card"></i> Entrar com CPF + Nascimento
-                                            </span>
+                                            </button>
 
                                             @if (Route::has('password.request'))
-                                                <div style="margin-top: 10px;">
-                                                    <a href="{{ route('password.request') }}" class="btn-link text-nowrap" style="font-size: 13px;">
+                                                <div style="margin-top: 15px; text-align: center;">
+                                                    <a href="{{ route('password.request') }}" class="btn-link" style="font-size: 15px; padding: 8px 0; display: inline-block;">
                                                         Esqueci minha senha &raquo;
                                                     </a>
                                                 </div>
@@ -161,10 +144,10 @@
                                                 <i class="fa fa-id-card js-icon-loading-cpf"></i> Entrar com CPF
                                             </button>
 
-                                            {{-- Link para voltar ao modo email --}}
-                                            <span class="login-toggle-link" id="toggle-to-email">
+                                            {{-- Botão para voltar ao modo email --}}
+                                            <button type="button" class="btn btn-2 btn-large w-100 icon-left" id="toggle-to-email" style="margin-top: 10px;">
                                                 <i class="fa fa-envelope"></i> Voltar para login com E-mail
-                                            </span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
