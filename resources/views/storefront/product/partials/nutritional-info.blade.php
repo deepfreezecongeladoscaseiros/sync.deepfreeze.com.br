@@ -108,17 +108,14 @@
             <span class="nutri-porcao-detalhe">Porção: {{ (int) $porcao }}{{ $unidadeLabel }} ({{ $descricaoMedida() }})</span>
         </div>
 
-        {{-- Oculta coluna de porção se porcao == 100 (seria redundante com coluna 100g) --}}
-        @if($ocultarPorcao)
-            <style>.ocultar-porcao { display: none; }</style>
-        @endif
-
         <table class="tabela-nutri">
             <thead>
                 <tr>
                     <th class="nutri-col-nome">&nbsp;</th>
                     <th class="nutri-col-valor">100{{ $unidadeLabel }}</th>
-                    <th class="nutri-col-valor ocultar-porcao">{{ (int) $porcao }}{{ $unidadeLabel }}</th>
+                    @if(!$ocultarPorcao)
+                        <th class="nutri-col-valor">{{ (int) $porcao }}{{ $unidadeLabel }}</th>
+                    @endif
                     <th class="nutri-col-vd">%VD*</th>
                 </tr>
             </thead>
@@ -126,63 +123,63 @@
                 <tr>
                     <td>Valor energético (kcal)</td>
                     <td>{{ $arredondar($nutri[1] ?? null) }}</td>
-                    <td class="ocultar-porcao">{{ $valorPorcao(1) }}</td>
+                    @if(!$ocultarPorcao)<td>{{ $valorPorcao(1) }}</td>@endif
                     <td>{{ $percentVD(1) }}</td>
                 </tr>
                 <tr>
                     <td>Carboidratos totais (g)</td>
                     <td>{{ $arredondar($nutri[4] ?? null) }}</td>
-                    <td class="ocultar-porcao">{{ $valorPorcao(4) }}</td>
+                    @if(!$ocultarPorcao)<td>{{ $valorPorcao(4) }}</td>@endif
                     <td>{{ $percentVD(4) }}</td>
                 </tr>
                 @if($tipoEtiqueta >= 4)
                     <tr class="nutri-sub">
                         <td>Açúcares totais (g)</td>
                         <td>{{ $arredondar($nutri[187] ?? null) }}</td>
-                        <td class="ocultar-porcao">{{ $valorPorcao(187) }}</td>
+                        @if(!$ocultarPorcao)<td>{{ $valorPorcao(187) }}</td>@endif
                         <td>{{ $percentVD(187) }}</td>
                     </tr>
                     <tr class="nutri-sub nutri-sub-2">
                         <td>Açúcares adicionados (g)</td>
                         <td>{{ $arredondar($nutri[188] ?? null) }}</td>
-                        <td class="ocultar-porcao">{{ $valorPorcao(188) }}</td>
+                        @if(!$ocultarPorcao)<td>{{ $valorPorcao(188) }}</td>@endif
                         <td>{{ $percentVD(188) }}</td>
                     </tr>
                 @endif
                 <tr>
                     <td>Proteínas (g)</td>
                     <td>{{ $arredondar($nutri[2] ?? null) }}</td>
-                    <td class="ocultar-porcao">{{ $valorPorcao(2) }}</td>
+                    @if(!$ocultarPorcao)<td>{{ $valorPorcao(2) }}</td>@endif
                     <td>{{ $percentVD(2) }}</td>
                 </tr>
                 <tr>
                     <td>Gorduras totais (g)</td>
                     <td>{{ $arredondar($nutri[3] ?? null) }}</td>
-                    <td class="ocultar-porcao">{{ $valorPorcao(3) }}</td>
+                    @if(!$ocultarPorcao)<td>{{ $valorPorcao(3) }}</td>@endif
                     <td>{{ $percentVD(3) }}</td>
                 </tr>
                 <tr class="nutri-sub">
                     <td>Gorduras saturadas (g)</td>
                     <td>{{ $arredondar($nutri[185] ?? null) }}</td>
-                    <td class="ocultar-porcao">{{ $valorPorcao(185) }}</td>
+                    @if(!$ocultarPorcao)<td>{{ $valorPorcao(185) }}</td>@endif
                     <td>{{ $percentVD(185) }}</td>
                 </tr>
                 <tr class="nutri-sub">
                     <td>Gorduras trans (g)</td>
                     <td>{{ $arredondar($nutri[186] ?? null) }}</td>
-                    <td class="ocultar-porcao">{{ $valorPorcao(186) }}</td>
+                    @if(!$ocultarPorcao)<td>{{ $valorPorcao(186) }}</td>@endif
                     <td>{{ $percentVD(186) }}</td>
                 </tr>
                 <tr>
                     <td>Fibras alimentares (g)</td>
                     <td>{{ $arredondar($nutri[69] ?? null) }}</td>
-                    <td class="ocultar-porcao">{{ $valorPorcao(69) }}</td>
+                    @if(!$ocultarPorcao)<td>{{ $valorPorcao(69) }}</td>@endif
                     <td>{{ $percentVD(69) }}</td>
                 </tr>
                 <tr>
                     <td>Sódio (mg)</td>
                     <td>{{ $arredondar($nutri[58] ?? null, 'mg') }}</td>
-                    <td class="ocultar-porcao">{{ $valorPorcao(58, 'mg') }}</td>
+                    @if(!$ocultarPorcao)<td>{{ $valorPorcao(58, 'mg') }}</td>@endif
                     <td>{{ $percentVD(58) }}</td>
                 </tr>
             </tbody>
