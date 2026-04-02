@@ -387,6 +387,9 @@
 
     {{-- Page Scripts --}}
     @stack('scripts')
+
+    {{-- Ícones Flutuantes (WhatsApp + Instagram) --}}
+    @include('storefront.partials.floating-buttons')
 </body>
 
 </html>
