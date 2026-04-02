@@ -10,14 +10,17 @@
     <div class="card">
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="{{ route('admin.brands.create') }}" class="btn btn-primary">Nova Marca</a>
-                
+                <span class="text-muted">
+                    <i class="fas fa-info-circle"></i>
+                    Dados do sistema legado (somente leitura). Para editar, acesse o SIV.
+                </span>
+
                 <form action="{{ route('admin.brands.index') }}" method="GET" class="form-inline">
                     <div class="input-group">
-                        <input type="text" 
-                               name="search" 
-                               class="form-control" 
-                               placeholder="Buscar por nome ou legacy_id..." 
+                        <input type="text"
+                               name="search"
+                               class="form-control"
+                               placeholder="Buscar por nome ou ID..."
                                value="{{ request('search') }}"
                                style="min-width: 300px;">
                         <div class="input-group-append">
@@ -41,33 +44,24 @@
                     <a href="{{ route('admin.brands.index') }}" class="float-right">Limpar busca</a>
                 </div>
             @endif
-            
-            <table class="table table-bordered">
+
+            <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th style="width: 10px">#</th>
-                        <th style="width: 100px">ID Legado</th>
+                        <th style="width: 60px">ID</th>
                         <th>Nome</th>
                         <th>Slug</th>
-                        <th style="width: 150px">Ações</th>
+                        <th style="width: 120px">Produtos</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($brands as $brand)
                         <tr>
                             <td>{{ $brand->id }}</td>
-                            <td>
-                                <span class="badge badge-info">{{ $brand->legacy_id ?? '-' }}</span>
-                            </td>
                             <td>{{ $brand->brand }}</td>
                             <td><small class="text-muted">{{ $brand->slug }}</small></td>
-                            <td>
-                                <a href="{{ route('admin.brands.edit', $brand->id) }}" class="btn btn-sm btn-warning">Editar</a>
-                                <form action="{{ route('admin.brands.destroy', $brand->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
-                                </form>
+                            <td class="text-center">
+                                <span class="badge badge-secondary">{{ $brand->products_count ?? '-' }}</span>
                             </td>
                         </tr>
                     @endforeach

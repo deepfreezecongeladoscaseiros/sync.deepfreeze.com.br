@@ -70,8 +70,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('integrations', IntegrationController::class);
     // Categorias: somente listagem (CRUD é feito no SIV legado)
     Route::get('categories', [App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('categories.index');
-    Route::post('brands/{brand}/sync-to-tray', [App\Http\Controllers\Admin\BrandController::class, 'syncToTray'])->name('brands.sync_to_tray');
-    Route::resource('brands', App\Http\Controllers\Admin\BrandController::class);
+    // Marcas: somente listagem (CRUD é feito no SIV legado)
+    Route::get('brands', [App\Http\Controllers\Admin\BrandController::class, 'index'])->name('brands.index');
     Route::resource('manufacturers', App\Http\Controllers\Admin\ManufacturerController::class);
     
     Route::get('api-logs', [App\Http\Controllers\Admin\ApiLogController::class, 'index'])->name('api_logs.index');
