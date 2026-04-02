@@ -13,7 +13,7 @@
 --}}
 
 <section class="product-reviews">
-    <div class="group-box box-avaliacoes">
+    <div class="box-avaliacoes">
 
         {{-- Título da seção --}}
         <h3 class="titulo-desc">
@@ -81,7 +81,7 @@
                             <label>Sua nota:</label>
                             <div class="star-picker" id="starPicker">
                                 @for($i = 1; $i <= 5; $i++)
-                                    <svg class="star-icon star-pickable" data-value="{{ $i }}" viewBox="0 0 24 24" width="28" height="28" style="cursor: pointer;">
+                                    <svg class="star-icon star-pickable" data-value="{{ $i }}" viewBox="0 0 24 24" width="28" height="28">
                                         <path d="M12 2.5c.4 0 .7.2.9.5l2.5 5 5.5.8c.5.1.8.5.8 1 0 .2-.1.5-.3.7l-4 3.9.9 5.5c.1.5-.1.9-.5 1.1-.2.1-.4.2-.6.2-.2 0-.3 0-.5-.1L12 18.3l-4.9 2.6c-.4.2-.9.2-1.3-.1-.3-.2-.5-.6-.4-1.1l.9-5.5-4-3.9c-.3-.3-.4-.8-.2-1.2.2-.4.5-.6.9-.7l5.5-.8 2.5-5c.2-.3.6-.5 1-.5z"
                                               fill="#ddd"/>
                                     </svg>
@@ -123,6 +123,7 @@
     </div>
 </section>
 
+@auth('customer')
 @push('scripts')
 <script>
 $(document).ready(function() {
@@ -204,3 +205,4 @@ $(document).ready(function() {
 });
 </script>
 @endpush
+@endauth

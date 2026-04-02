@@ -102,9 +102,6 @@
                             <div class="col-xs-12">
                                 <article class="conteudo">
 
-                                    {{-- Avaliações dos Clientes --}}
-                                    @include('storefront.product.partials.reviews')
-
                                     {{-- Tabela Nutricional --}}
                                     @include('storefront.product.partials.nutritional-info')
 
@@ -123,6 +120,9 @@
                                     @if($product->benefits)
                                         @include('storefront.product.partials.benefits')
                                     @endif
+
+                                    {{-- Avaliações dos Clientes (após todo o conteúdo do produto) --}}
+                                    @include('storefront.product.partials.reviews')
 
                                 </article>
                             </div>
