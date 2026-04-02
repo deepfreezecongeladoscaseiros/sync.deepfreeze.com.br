@@ -188,9 +188,7 @@
                                 @foreach($topCategories as $category)
                                     <tr>
                                         <td>
-                                            <a href="{{ route('admin.categories.show', $category->id) }}">
-                                                {{ $category->name }}
-                                            </a>
+                                            {{ $category->name }}
                                         </td>
                                         <td class="text-right">
                                             <span class="badge badge-primary">{{ $category->products_count }}</span>
