@@ -2,27 +2,14 @@
     Página: Detalhe do Pedido
     Exibe informações completas de um pedido específico:
     itens, valores, endereço, status, forma de pagamento.
+    Usa layout da área do cliente (sidebar + banner "Minha Conta").
 --}}
-@extends('layouts.storefront')
+@extends('storefront.customer.layout')
 
 @section('title', 'Pedido #' . $pedido->id . ' - ' . config('app.name'))
-@section('body_class', 'pg-interna')
 
 @push('styles')
 <style>
-    .banner-interna {
-        background-size: cover;
-        background-position: center;
-        min-height: 200px;
-        display: flex;
-        align-items: center;
-    }
-    .banner-interna .pg-titulo h1 {
-        color: #fff;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        margin: 0;
-        font-size: 2.5em;
-    }
     .box-detalhe-pedido { padding: 40px 0; }
     .detalhe-section {
         background: #fff;
@@ -73,23 +60,8 @@
 </style>
 @endpush
 
-@section('content')
+@section('customer-content')
 
-{{-- Banner --}}
-<section class="banner-interna" style="background-image: url('{{ asset('storefront/img/ban-interna-1.jpg') }}');">
-    <div class="pg-titulo">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1 class="animated fadeIn">Pedido #{{ $pedido->id }}</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<main class="pg-internas bg-loja">
-    <div class="container">
         <div class="box-detalhe-pedido animated fadeIn">
 
             {{-- Voltar --}}
@@ -213,7 +185,5 @@
             </div>
 
         </div>
-    </div>
-</main>
 
 @endsection

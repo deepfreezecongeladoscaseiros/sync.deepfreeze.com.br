@@ -1,28 +1,14 @@
 {{--
     Página: Meus Pedidos
     Lista os pedidos do cliente logado com status, data e valor.
-    Usa layout storefront e tabela padrão do tema.
+    Usa layout da área do cliente (sidebar + banner "Minha Conta").
 --}}
-@extends('layouts.storefront')
+@extends('storefront.customer.layout')
 
 @section('title', 'Meus Pedidos - ' . config('app.name'))
-@section('body_class', 'pg-interna')
 
 @push('styles')
 <style>
-    .banner-interna {
-        background-size: cover;
-        background-position: center;
-        min-height: 200px;
-        display: flex;
-        align-items: center;
-    }
-    .banner-interna .pg-titulo h1 {
-        color: #fff;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        margin: 0;
-        font-size: 2.5em;
-    }
     .badge-status {
         display: inline-block;
         padding: 4px 10px;
@@ -60,23 +46,8 @@
 </style>
 @endpush
 
-@section('content')
+@section('customer-content')
 
-{{-- Banner --}}
-<section class="banner-interna" style="background-image: url('{{ asset('storefront/img/ban-interna-1.jpg') }}');">
-    <div class="pg-titulo">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1 class="animated fadeIn">Meus Pedidos</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<main class="pg-internas bg-loja">
-    <div class="container">
         <div class="box-meus-pedidos animated fadeIn">
 
             {{-- Saudação --}}
@@ -147,7 +118,5 @@
             @endif
 
         </div>
-    </div>
-</main>
 
 @endsection
