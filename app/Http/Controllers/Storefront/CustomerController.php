@@ -162,6 +162,95 @@ class CustomerController extends Controller
     }
 
     /**
+     * Lista endereços do cliente.
+     * GET /minha-conta/enderecos
+     */
+    public function addresses(): View|RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        // Busca endereços ativos, priorizando o principal no topo
+        $addresses = Endereco::where('pessoa_id', $customer->id)
+            ->where('ativo', 1)
+            ->orderByDesc('end_principal')
+            ->get();
+
+        $activeMenu = 'addresses';
+
+        return view('storefront.customer.addresses', compact('customer', 'addresses', 'activeMenu'));
+    }
+
+    /**
+     * Remove endereço (soft delete — marca ativo=0).
+     * DELETE /minha-conta/enderecos/{id}
+     */
+    public function deleteAddress(int $id): RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        // Garante que o endereço pertence ao cliente logado
+        $address = Endereco::where('id', $id)
+            ->where('pessoa_id', $customer->id)
+            ->first();
+
+        if (!$address) {
+            return redirect()->route('customer.addresses')->with('error', 'Endereço não encontrado.');
+        }
+
+        // Soft delete — mesma operação que EnderecosController::remover() do legado
+        $address->ativo = 0;
+        $address->save();
+
+        return redirect()->route('customer.addresses')->with('success', 'Endereço removido com sucesso.');
+    }
+
+    /**
+     * Cadastra novo endereço.
+     * POST /minha-conta/enderecos
+     */
+    public function storeAddress(Request $request): RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        $validated = $request->validate([
+            'zip_code'     => 'required|string|max:10',
+            'street'       => 'required|string|max:190',
+            'number'       => 'required|string|max:40',
+            'complement'   => 'nullable|string|max:80',
+            'neighborhood' => 'required|string|max:90',
+            'city'         => 'required|string|max:90',
+            'state'        => 'required|string|size:2',
+        ]);
+
+        // Cria endereço no banco legado — mesma estrutura que o cadastro original
+        Endereco::create([
+            'pessoa_id'                     => $customer->id,
+            'cep'                           => $validated['zip_code'],
+            'logradouro'                    => $validated['street'],
+            'logradouro_complemento_numero' => $validated['number'],
+            'logradouro_complemento'        => $validated['complement'] ?? null,
+            'bairro'                        => $validated['neighborhood'],
+            'cidade'                        => $validated['city'],
+            'uf'                            => $validated['state'],
+            'ativo'                         => 1,
+        ]);
+
+        return redirect()->route('customer.addresses')->with('success', 'Endereço cadastrado com sucesso!');
+    }
+
+    /**
      * Lista de pedidos do cliente logado.
      * GET /minha-conta/pedidos
      */
