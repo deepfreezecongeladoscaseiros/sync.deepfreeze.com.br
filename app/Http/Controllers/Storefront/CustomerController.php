@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Storefront;
 
 use App\Http\Controllers\Controller;
+use App\Models\Legacy\Endereco;
 use App\Models\Legacy\Pedido;
 use App\Models\Legacy\Pessoa;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
@@ -17,6 +19,148 @@ use Illuminate\View\View;
  */
 class CustomerController extends Controller
 {
+    /**
+     * Dashboard da área do cliente.
+     * GET /minha-conta
+     */
+    public function dashboard(): View|RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        // Conta endereços ativos do cliente
+        $addressCount = Endereco::where('pessoa_id', $customer->id)->where('ativo', 1)->count();
+
+        // Conta pedidos finalizados (exclui carrinhos abandonados)
+        $orderCount = Pedido::where('pessoa_id', $customer->id)->where('finalizado', '>', 0)->count();
+
+        $activeMenu = 'dashboard';
+
+        return view('storefront.customer.dashboard', compact('customer', 'addressCount', 'orderCount', 'activeMenu'));
+    }
+
+    /**
+     * Exibe formulário de edição de perfil.
+     * GET /minha-conta/dados
+     */
+    public function profile(): View|RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        $activeMenu = 'profile';
+
+        return view('storefront.customer.profile', compact('customer', 'activeMenu'));
+    }
+
+    /**
+     * Atualiza dados do perfil no banco legado.
+     * PUT /minha-conta/dados
+     */
+    public function updateProfile(Request $request): RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        $validated = $request->validate([
+            'nome'                => 'required|string|max:255',
+            'email_primario'      => 'required|email|max:255',
+            'cpf'                 => 'nullable|string|max:50',
+            'telefone_celular'    => 'nullable|string|max:15',
+            'nascimento'          => 'nullable|string|max:10',
+            'sexo'                => 'nullable|in:M,F,O',
+        ], [
+            'nome.required'           => 'O nome é obrigatório.',
+            'email_primario.required' => 'O e-mail é obrigatório.',
+            'email_primario.email'    => 'Informe um e-mail válido.',
+        ]);
+
+        // Converte data de DD/MM/YYYY para YYYY-MM-DD
+        $nascimento = null;
+        if (!empty($validated['nascimento'])) {
+            $parts = explode('/', $validated['nascimento']);
+            if (count($parts) === 3) {
+                $nascimento = "{$parts[2]}-{$parts[1]}-{$parts[0]}";
+            }
+        }
+
+        // Atualiza no banco legado (mesma operação que o perfil.ctp do legado faz)
+        $customer->nome              = $validated['nome'];
+        $customer->email_primario    = $validated['email_primario'];
+        $customer->cpf               = $validated['cpf'] ?? $customer->cpf;
+        $customer->telefone_celular  = $validated['telefone_celular'] ?? $customer->telefone_celular;
+        $customer->nascimento        = $nascimento;
+        $customer->sexo              = $validated['sexo'] ?? $customer->sexo;
+        $customer->autoriza_newsletter = $request->has('autoriza_newsletter') ? 1 : 0;
+        $customer->aceita_whats_app    = $request->has('aceita_whats_app') ? 1 : 0;
+        $customer->aceita_sms          = $request->has('aceita_sms') ? 1 : 0;
+        $customer->aceita_ligacao      = $request->has('aceita_ligacao') ? 1 : 0;
+        $customer->save();
+
+        return redirect()->route('customer.profile')->with('success', 'Dados atualizados com sucesso!');
+    }
+
+    /**
+     * Exibe formulário de alteração de senha.
+     * GET /minha-conta/senha
+     */
+    public function password(): View|RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        $activeMenu = 'password';
+
+        return view('storefront.customer.password', compact('customer', 'activeMenu'));
+    }
+
+    /**
+     * Atualiza senha do cliente no banco legado.
+     * Senha armazenada em MD5 para compatibilidade com o SIV.
+     * PUT /minha-conta/senha
+     */
+    public function updatePassword(Request $request): RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        $request->validate([
+            'current_password'     => 'required|string',
+            'new_password'         => 'required|string|min:6|confirmed',
+        ], [
+            'current_password.required'     => 'Informe sua senha atual.',
+            'new_password.required'         => 'Informe a nova senha.',
+            'new_password.min'              => 'A nova senha deve ter no mínimo 6 caracteres.',
+            'new_password.confirmed'        => 'A confirmação da senha não confere.',
+        ]);
+
+        // Verifica senha atual (MD5 — compatibilidade com legado)
+        if (md5($request->input('current_password')) !== $customer->senha) {
+            return redirect()->back()->withErrors(['current_password' => 'Senha atual incorreta.']);
+        }
+
+        // Grava nova senha em MD5 (mesma operação que senha.ctp do legado faz)
+        $customer->senha = md5($request->input('new_password'));
+        $customer->save();
+
+        return redirect()->route('customer.password')->with('success', 'Senha alterada com sucesso!');
+    }
+
     /**
      * Lista de pedidos do cliente logado.
      * GET /minha-conta/pedidos
@@ -41,7 +185,9 @@ class CustomerController extends Controller
             ->orderByDesc('id')
             ->paginate(10);
 
-        return view('storefront.customer.orders', compact('pedidos', 'customer'));
+        $activeMenu = 'orders';
+
+        return view('storefront.customer.orders', compact('pedidos', 'customer', 'activeMenu'));
     }
 
     /**
@@ -66,6 +212,8 @@ class CustomerController extends Controller
             abort(404);
         }
 
-        return view('storefront.customer.order-detail', compact('pedido', 'customer'));
+        $activeMenu = 'orders';
+
+        return view('storefront.customer.order-detail', compact('pedido', 'customer', 'activeMenu'));
     }
 }
