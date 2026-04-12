@@ -36,8 +36,17 @@
                     {{ $address->cidade }}/{{ $address->uf }} — CEP {{ $address->cep }}
                 </div>
                 <div class="address-actions">
+                    @if(!$address->end_principal)
+                        <form action="{{ route('customer.address.setPrimary', $address->id) }}" method="POST" style="display: inline-block; margin-right: 6px;">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn-save" style="padding: 6px 12px; font-size: 0.82em;">
+                                <i class="fa fa-star"></i> Definir como principal
+                            </button>
+                        </form>
+                    @endif
                     <form action="{{ route('customer.address.delete', $address->id) }}" method="POST"
-                          onsubmit="return confirm('Deseja remover este endereço?')">
+                          onsubmit="return confirm('Deseja remover este endereço?')" style="display: inline-block;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn-remove">

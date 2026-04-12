@@ -93,8 +93,12 @@
         </div>
     </li>
 
+        @auth('customer')
+            <li class="entrar"><a href="{{ route('customer.dashboard') }}"><i class="icon-perfil fa fa-user-o"></i>Minha Conta</a></li>
+        @else
             <li class="cadastre-se"><a href="{{ route('register') }}"><i class="icon-perfil fa fa-user-o"></i>Cadastre-se</a></li>
-        <li class="entrar"><a href="{{ route('login') }}"><i class="icon-entrar fa fa-share"></i>Login</a></li>
+            <li class="entrar"><a href="{{ route('login') }}"><i class="icon-entrar fa fa-share"></i>Login</a></li>
+        @endauth
 
 </ul>                                </div>
                             </div>
@@ -130,7 +134,11 @@
                                         </a>
                                         <div class="flex-end">
                                             <a href="javascript:" class="item-busca btn-abrir js-abrir-busca"><span class="sr-only">Busca</span></a>
-                                                                                            <a href="{{ route('login') }}" class="item-login"><span class="sr-only">Entrar</span></a>
+                                                                                            @auth('customer')
+                                                <a href="{{ route('customer.dashboard') }}" class="item-login"><span class="sr-only">Minha Conta</span></a>
+                                            @else
+                                                <a href="{{ route('login') }}" class="item-login"><span class="sr-only">Entrar</span></a>
+                                            @endauth
                                                                                         <div class="box-carrinho-mobile">
                                                 <a href="javascript:" onclick="openCarrinhoRight()" class="btn-open">
                                                     <span class="badge js-cesta-total-produtos-notext">

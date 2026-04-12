@@ -251,6 +251,38 @@ class CustomerController extends Controller
     }
 
     /**
+     * Define um endereço como principal.
+     * Replica lógica do legado: desmarca todos, marca o selecionado.
+     * PUT /minha-conta/enderecos/{id}/principal
+     */
+    public function setPrimaryAddress(int $id): RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        $address = Endereco::where('id', $id)->where('pessoa_id', $customer->id)->first();
+
+        if (!$address) {
+            return redirect()->route('customer.addresses')->with('error', 'Endereço não encontrado.');
+        }
+
+        // Mesma lógica do legado (app/Model/Endereco.php:103-104):
+        // Desmarca todos os endereços do cliente
+        Endereco::where('pessoa_id', $customer->id)
+            ->update(['ultimo_endereco_usado' => null, 'end_principal' => null]);
+
+        // Marca o selecionado como principal
+        $address->end_principal = 1;
+        $address->ultimo_endereco_usado = 1;
+        $address->save();
+
+        return redirect()->route('customer.addresses')->with('success', 'Endereço definido como principal.');
+    }
+
+    /**
      * Lista de pedidos do cliente logado.
      * GET /minha-conta/pedidos
      */

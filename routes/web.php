@@ -244,6 +244,15 @@ Route::middleware('customer.guard')->group(function () {
 
     // Área do cliente (requer login)
     Route::prefix('minha-conta')->middleware('auth:customer')->group(function () {
+        Route::get('/', [App\Http\Controllers\Storefront\CustomerController::class, 'dashboard'])->name('customer.dashboard');
+        Route::get('/dados', [App\Http\Controllers\Storefront\CustomerController::class, 'profile'])->name('customer.profile');
+        Route::put('/dados', [App\Http\Controllers\Storefront\CustomerController::class, 'updateProfile'])->name('customer.profile.update');
+        Route::get('/senha', [App\Http\Controllers\Storefront\CustomerController::class, 'password'])->name('customer.password');
+        Route::put('/senha', [App\Http\Controllers\Storefront\CustomerController::class, 'updatePassword'])->name('customer.password.update');
+        Route::get('/enderecos', [App\Http\Controllers\Storefront\CustomerController::class, 'addresses'])->name('customer.addresses');
+        Route::delete('/enderecos/{id}', [App\Http\Controllers\Storefront\CustomerController::class, 'deleteAddress'])->name('customer.address.delete');
+        Route::post('/enderecos', [App\Http\Controllers\Storefront\CustomerController::class, 'storeAddress'])->name('customer.address.store');
+        Route::put('/enderecos/{id}/principal', [App\Http\Controllers\Storefront\CustomerController::class, 'setPrimaryAddress'])->name('customer.address.setPrimary');
         Route::get('/pedidos', [App\Http\Controllers\Storefront\CustomerController::class, 'orders'])->name('customer.orders');
         Route::get('/pedidos/{id}', [App\Http\Controllers\Storefront\CustomerController::class, 'orderDetail'])->name('customer.order.detail');
     });
