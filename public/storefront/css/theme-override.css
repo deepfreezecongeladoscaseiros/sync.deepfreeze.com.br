@@ -1269,3 +1269,77 @@ input[type=checkbox]:checked ~ span {
         font-size: 11px;
     }
 }
+
+/* ============================================
+   SETAS DO CARROSSEL DE BANNERS
+   Owl Carousel gera .owl-nav > .owl-prev/.owl-next
+   ============================================ */
+
+/* Container do banner precisa ser relative para posicionar setas */
+#banner-principal,
+#banner-principal-mob {
+    position: relative;
+}
+
+/* Container das setas gerado pelo Owl */
+#banner-principal .owl-nav,
+#banner-principal-mob .owl-nav {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    margin: 0;
+    padding: 0 12px;
+}
+
+/* Cada botão de seta */
+#banner-principal .owl-nav button,
+#banner-principal-mob .owl-nav button {
+    width: 40px;
+    height: 40px;
+    background: rgba(128, 128, 128, 0.55) !important;
+    border: none !important;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    padding: 0 !important;
+    margin: 0 !important;
+    pointer-events: all;
+    color: #fff;
+    font-size: 0;
+    line-height: 0;
+}
+
+#banner-principal .owl-nav button:hover,
+#banner-principal-mob .owl-nav button:hover {
+    background: rgba(128, 128, 128, 0.75) !important;
+}
+
+/* SVG dentro dos botões */
+#banner-principal .owl-nav button svg,
+#banner-principal-mob .owl-nav button svg {
+    width: 18px;
+    height: 18px;
+    stroke: #ffffff;
+    fill: none;
+}
+
+/* Mobile: setas menores */
+@media (max-width: 768px) {
+    #banner-principal-mob .owl-nav button {
+        width: 36px;
+        height: 36px;
+    }
+
+    #banner-principal-mob .owl-nav button svg {
+        width: 16px;
+        height: 16px;
+    }
+}
