@@ -45,12 +45,8 @@
 
     {{-- Theme CSS --}}
     <link href="{{ theme_css_url() }}" rel="stylesheet">
-    <link href="{{ asset('storefront/css/theme-override.css') }}?v={{ filemtime(public_path('storefront/css/theme-override.css')) }}" rel="stylesheet">
-    <link href="{{ asset('storefront/css/logo-custom.css') }}" rel="stylesheet">
-    <link href="{{ asset('storefront/css/top-bar-custom.css') }}" rel="stylesheet">
-    <link href="{{ asset('storefront/css/mobile-menu.css') }}" rel="stylesheet">
-    <link href="{{ asset('storefront/css/product-detail.css') }}?v={{ filemtime(public_path('storefront/css/product-detail.css')) }}" rel="stylesheet">
-    <link href="{{ asset('storefront/css/customer-area.css') }}?v={{ filemtime(public_path('storefront/css/customer-area.css')) }}" rel="stylesheet">
+    {{-- Deep Freeze CSS Unificado (substitui theme-override, product-detail, customer-area, mobile-menu, logo-custom, top-bar-custom) --}}
+    <link href="{{ asset('storefront/css/deepfreeze.css') }}?v={{ filemtime(public_path('storefront/css/deepfreeze.css')) }}" rel="stylesheet">
 
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
