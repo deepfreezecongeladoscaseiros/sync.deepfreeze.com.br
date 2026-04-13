@@ -137,20 +137,10 @@
                 {{-- Para produtos normais: quantidade + comprar --}}
                 <div class="box-comprar-inline">
                     {{-- Seletor de quantidade --}}
-                    <div class="quantidade-inline">
-                        <button type="button" class="btn-qtd js-btn-minus" data-product-id="{{ $product->id }}">
-                            <i class="fa fa-minus"></i>
-                        </button>
-                        <input type="text"
-                               class="qtd-input js-qtd-input"
-                               id="qtd-{{ $product->id }}"
-                               value="1"
-                               readonly
-                               data-product-id="{{ $product->id }}">
-                        <button type="button" class="btn-qtd js-btn-plus" data-product-id="{{ $product->id }}">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                    </div>
+                    @include('storefront.components.qty-selector', [
+                        'productId' => $product->id,
+                        'size' => 'sm',
+                    ])
 
                     {{-- Botão comprar --}}
                     <a href="javascript:"

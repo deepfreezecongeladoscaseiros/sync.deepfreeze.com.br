@@ -46,20 +46,13 @@
     {{-- Seletor de Quantidade e Preço --}}
     <div class="escolher">
         <div class="quantidade">
-            <div class="box-number">
-                <div class="add-qtd js-btn-minus-detail" style="cursor:pointer;">
-                    <span style="font-size:18px; font-weight:bold; line-height:1; user-select:none;">&minus;</span>
-                </div>
-                <input name="quantidade"
-                       type="text"
-                       class="qtd"
-                       value="1"
-                       id="qtd-{{ $product->id }}"
-                       readonly />
-                <div class="add-qtd js-btn-plus-detail" style="cursor:pointer;">
-                    <span style="font-size:18px; font-weight:bold; line-height:1; user-select:none;">+</span>
-                </div>
-            </div>
+            @include('storefront.components.qty-selector', [
+                'productId' => $product->id,
+                'size' => 'lg',
+                'minusClass' => 'js-btn-minus-detail',
+                'plusClass' => 'js-btn-plus-detail',
+                'inputClass' => 'qtd',
+            ])
         </div>
     </div>
 
