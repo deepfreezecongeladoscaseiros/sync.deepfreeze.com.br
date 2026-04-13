@@ -90,17 +90,7 @@
 @section('content')
 
 {{-- Banner Interno --}}
-<section class="banner-interna" style="background-image: url('{{ $settings->getBannerUrl() }}');">
-    <div class="pg-titulo">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1 class="animated fadeInDown">{{ $settings->page_title }}</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+@include('storefront.components.banner-interno', ['title' => $settings->page_title, 'image' => $settings->getBannerUrl(), 'animation' => 'fadeInDown'])
 
 {{-- Conteúdo Principal --}}
 <main class="pg-internas">

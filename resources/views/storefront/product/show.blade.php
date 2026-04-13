@@ -31,43 +31,11 @@
 
 @section('content')
 
-    {{-- Banner internas - ESTRUTURA EXATA DO ORIGINAL --}}
-    <section class="banner-interna" style="background-image: url('{{ asset('storefront/img/ban-interna-1.jpg') }}');">
-        <div class="pg-titulo">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h2 class="animated fadeIn">{{ $category->name ?? 'Produto' }}</h2>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{-- Banner internas --}}
+    @include('storefront.components.banner-interno', ['title' => $category->name ?? 'Produto', 'tag' => 'h2'])
 
-    {{-- Breadcrumbs - ESTRUTURA EXATA DO ORIGINAL --}}
-    <section class="box-breadcrumb">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            @foreach($breadcrumb as $item)
-                                @if($item['url'])
-                                    <li class="breadcrumb-item">
-                                        <a href="{{ $item['url'] }}">{{ $item['title'] }}</a>
-                                    </li>
-                                @else
-                                    <li class="breadcrumb-item active" aria-current="page">
-                                        {{ $item['title'] }}
-                                    </li>
-                                @endif
-                            @endforeach
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </section>
+    {{-- Breadcrumbs --}}
+    @include('storefront.components.breadcrumb', ['items' => $breadcrumb])
 
     {{-- Content - ESTRUTURA EXATA DO ORIGINAL --}}
     <main class="pg-internas">

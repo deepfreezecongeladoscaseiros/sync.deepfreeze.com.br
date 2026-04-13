@@ -15,14 +15,7 @@
 @section('content')
 
 {{-- Breadcrumb --}}
-<div class="box-breadcrumb">
-    <div class="container">
-        <ol class="breadcrumb">
-            <li><a href="/">Home</a></li>
-            <li class="active">{{ $page->title }}</li>
-        </ol>
-    </div>
-</div>
+@include('storefront.components.breadcrumb', ['items' => [['title' => 'Home', 'url' => url('/')], ['title' => $page->title, 'url' => null]]])
 
 {{-- Conteúdo da Página --}}
 <section class="page-content" style="padding: 40px 0; min-height: 400px;">

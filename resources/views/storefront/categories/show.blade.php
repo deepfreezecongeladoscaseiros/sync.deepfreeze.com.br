@@ -11,37 +11,10 @@
 
 @section('content')
     {{-- Banner da Categoria --}}
-    <section class="banner-interna" style="background-image: url({{ $category->banner_url ?? '' }});">
-        <div class="pg-titulo">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h1 class="animated fadeIn">{{ $category->name }}</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    @include('storefront.components.banner-interno', ['title' => $category->name, 'image' => $category->banner_url ?? ''])
 
     {{-- Breadcrumb --}}
-    <section class="box-breadcrumb">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="{{ url('/') }}">Home</a>
-                            </li>
-                            <li class="breadcrumb-item active" aria-current="page">
-                                {{ $category->name }}
-                            </li>
-                        </ol>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </section>
+    @include('storefront.components.breadcrumb', ['items' => [['title' => 'Home', 'url' => url('/')], ['title' => $category->name, 'url' => null]]])
 
     {{-- Vitrine de Produtos --}}
     <section class="vitrine-home">
@@ -93,7 +66,7 @@
                     @php
                         $starsMap = $starsMap ?? \App\Models\Legacy\Depoimento::getStarsByProduct();
                     @endphp
-                    <div class="row lista-produtos">
+                    <div class="row listagem-produtos">
                         @forelse($products as $product)
                             @include('storefront.partials.product.card', ['product' => $product, 'starsMap' => $starsMap])
                         @empty

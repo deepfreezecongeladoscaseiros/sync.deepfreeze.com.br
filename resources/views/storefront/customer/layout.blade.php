@@ -14,17 +14,7 @@
 @section('content')
 
 {{-- Banner Interno --}}
-<section class="banner-interna" style="background-image: url('{{ asset('storefront/img/ban-interna-1.jpg') }}');">
-    <div class="pg-titulo">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1 class="animated fadeIn">Minha Conta</h1>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+@include('storefront.components.banner-interno', ['title' => 'Minha Conta'])
 
 <main class="pg-internas bg-loja">
     <div class="container">
