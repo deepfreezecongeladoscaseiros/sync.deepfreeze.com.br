@@ -76,17 +76,12 @@
             </picture>
         </a>
 
-        {{-- Estrelas de avaliação (entre imagem e nome) --}}
-        @if($starCount > 0)
-            <div class="product-rating-row">
-                @for($i = 1; $i <= 5; $i++)
-                    <svg class="rating-star {{ $i <= $starCount ? 'filled' : 'empty' }}" viewBox="0 0 24 24" width="18" height="18">
-                        <path d="M12 2.5c.4 0 .7.2.9.5l2.5 5 5.5.8c.5.1.8.5.8 1 0 .2-.1.5-.3.7l-4 3.9.9 5.5c.1.5-.1.9-.5 1.1-.2.1-.4.2-.6.2-.2 0-.3 0-.5-.1L12 18.3l-4.9 2.6c-.4.2-.9.2-1.3-.1-.3-.2-.5-.6-.4-1.1l.9-5.5-4-3.9c-.3-.3-.4-.8-.2-1.2.2-.4.5-.6.9-.7l5.5-.8 2.5-5c.2-.3.6-.5 1-.5z"/>
-                    </svg>
-                @endfor
-                <span class="rating-count">({{ $reviewCount }})</span>
-            </div>
-        @endif
+        {{-- Estrelas de avaliação --}}
+        @include('storefront.components.product-rating', [
+            'starCount' => $starCount,
+            'reviewCount' => $reviewCount,
+            'size' => 'sm',
+        ])
 
         {{-- Informações do produto --}}
         <div class="box-descricao">
@@ -124,39 +119,13 @@
             </div>
         </div>
 
-        {{-- Área de compra: Quantidade + Botão --}}
-        @if($isAvailable)
-            @if($isKit)
-                {{-- Para kits: apenas link para ver detalhes --}}
-                <a href="{{ $product->url }}" class="adicionar btn-store txt-adicionar">
-                    <div class="box-adicionar">
-                        <span>Ver Kit</span>
-                    </div>
-                </a>
-            @else
-                {{-- Para produtos normais: quantidade + comprar --}}
-                <div class="box-comprar-inline">
-                    {{-- Seletor de quantidade --}}
-                    @include('storefront.components.qty-selector', [
-                        'productId' => $product->id,
-                        'size' => 'sm',
-                    ])
-
-                    {{-- Botão comprar --}}
-                    <a href="javascript:"
-                       class="btn-comprar-inline js-add-to-cart"
-                       data-product-id="{{ $product->id }}">
-                        <span>Comprar</span>
-                    </a>
-                </div>
-            @endif
-        @else
-            <a href="{{ $product->url }}" class="adicionar btn-store txt-adicionar indisponivel">
-                <div class="box-adicionar">
-                    <span>Indisponível</span>
-                </div>
-            </a>
-        @endif
+        {{-- Comprar --}}
+        @include('storefront.components.buy-button', [
+            'product' => $product,
+            'isKit' => $isKit,
+            'isAvailable' => $isAvailable,
+            'size' => 'sm',
+        ])
 
     </div>
 </div>
