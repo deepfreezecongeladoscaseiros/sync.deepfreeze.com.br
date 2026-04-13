@@ -99,24 +99,8 @@
                 </div>
             @endif
 
-            {{-- Preços --}}
-            <div class="box-precos">
-                @if($isOnPromotion)
-                    {{-- Preço original riscado --}}
-                    <div class="preco-original">
-                        de <span>{{ $product->formatted_original_price }}</span>
-                    </div>
-                    {{-- Preço promocional --}}
-                    <div class="preco-atual preco-promo">
-                        {{ $product->formatted_price }}
-                    </div>
-                @else
-                    {{-- Preço normal --}}
-                    <div class="preco-atual">
-                        {{ $product->formatted_price }}
-                    </div>
-                @endif
-            </div>
+            {{-- Preço --}}
+            @include('storefront.components.product-price', ['product' => $product, 'size' => 'sm'])
         </div>
 
         {{-- Comprar --}}
