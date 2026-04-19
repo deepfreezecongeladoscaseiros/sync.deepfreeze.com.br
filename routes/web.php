@@ -280,9 +280,12 @@ Route::middleware('customer.guard')->group(function () {
         ->where('categorySlug', '[a-z0-9_\-]+')
         ->where('productSlug', '[a-z0-9\-]+');
 
+    // Rota de busca de produtos (ex: /busca?palavra=frango)
+    Route::get('/busca', [App\Http\Controllers\Storefront\SearchController::class, 'index'])->name('search.index');
+
     // IMPORTANTE: Wildcard route para Páginas Internas - DEVE FICAR NO FINAL
     // Captura qualquer URL não encontrada e verifica se é uma página interna
     Route::get('/{slug}', [App\Http\Controllers\PageController::class, 'show'])->name('pages.show')
-        ->where('slug', '^(?!admin|login|logout|register|cadastro|api|css|js|storage|images|carrinho|contato|checkout).*$');
+        ->where('slug', '^(?!admin|login|logout|register|cadastro|api|css|js|storage|images|carrinho|contato|checkout|busca).*$');
 
 }); // Fim do grupo customer.guard
