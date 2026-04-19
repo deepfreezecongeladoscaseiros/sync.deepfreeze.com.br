@@ -10,14 +10,15 @@
     - $minusClass: string (opcional) — classe JS extra para o botão minus. Default: 'js-btn-minus'
     - $plusClass: string (opcional) — classe JS extra para o botão plus. Default: 'js-btn-plus'
     - $inputClass: string (opcional) — classe CSS extra para o input. Default: ''
-    - $value: int (opcional) — valor inicial. Default: 1
+    - $qtyValue: int (opcional) — valor inicial. Default: 1
+      ATENÇÃO: não usar $value — conflita com @foreach do Blade
 --}}
 @php
     $sizeClass = ($size ?? 'sm') === 'lg' ? 'df-qty--lg' : 'df-qty--sm';
     $btnMinus = $minusClass ?? 'js-btn-minus';
     $btnPlus = $plusClass ?? 'js-btn-plus';
     $inputExtraClass = $inputClass ?? '';
-    $initialValue = $value ?? 1;
+    $initialValue = $qtyValue ?? 1;
 @endphp
 
 <div class="df-qty {{ $sizeClass }}">

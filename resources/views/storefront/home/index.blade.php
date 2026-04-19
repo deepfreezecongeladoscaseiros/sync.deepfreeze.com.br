@@ -49,10 +49,7 @@ $(document).ready(function() {
         items: 1,
         margin: 0,
         nav: true,
-        navText: [
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>'
-        ],
+        navText: ['<span>&lsaquo;</span>', '<span>&rsaquo;</span>'],
         dots: true,
         autoplay: true,
         autoplayTimeout: 5000,
@@ -64,14 +61,14 @@ $(document).ready(function() {
         loop: false,
         margin: 15,
         nav: true,
-        navText: ['<i class="fa fa-chevron-left"></i>', '<i class="fa fa-chevron-right"></i>'],
+        navText: ['<span>&lsaquo;</span>', '<span>&rsaquo;</span>'],
         dots: false,
         responsive: {
             0: { items: 2 },
             576: { items: 2 },
             768: { items: 3 },
             992: { items: 4 },
-            1200: { items: 4 }
+            1200: { items: 5 }
         }
     });
 

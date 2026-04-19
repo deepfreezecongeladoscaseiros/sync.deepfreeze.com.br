@@ -1,12 +1,21 @@
 {{--
-    Partial: Card de Produto Unificado
-    Usado em listagens de categoria e galerias de produtos na home
+    Componente: Card de Produto (Unificado)
+
+    Orquestrador que compõe sub-componentes reutilizáveis.
+    Usado em: categoria, galeria home, relacionados, busca.
+
+    Hierarquia:
+    product-card
+      ├── product-rating    (estrelas de avaliação)
+      ├── product-price     (preço normal/promocional)
+      └── buy-button        (comprar + quantidade)
+           └── qty-selector (botões +/- input)
 
     Variáveis:
-    - $product: App\Models\Product (obrigatório)
-    - $columnClass: Classes de coluna Bootstrap (opcional, padrão: 'col-xs-6 col-sm-4 col-lg-3')
-    - $showFavorite: Exibir botão de favorito (opcional, padrão: true)
-    - $starsMap: Array de estrelas por produto (opcional, carregado pelo controller/galeria)
+    - $product: Product model (obrigatório)
+    - $columnClass: string (opcional, default: 'col-xs-6 col-sm-4 col-lg-3')
+    - $showFavorite: bool (opcional, default: true)
+    - $starsMap: array (opcional, mapa de estrelas por produto)
 --}}
 @php
     // Configurações do card
@@ -32,8 +41,6 @@
     $starCount = $stars ? (int) $stars['estrelas'] : 0;
     $reviewCount = $stars ? (int) $stars['total'] : 0;
 
-    // Exibe linha de metadata se tiver peso OU estrelas
-    $showMeta = $showWeight || $starCount > 0;
 @endphp
 
 <div class="item {{ $colClass }}">
