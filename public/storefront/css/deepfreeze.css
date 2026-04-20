@@ -1179,20 +1179,25 @@ hr,
     transform: translateY(-50%) !important;
 }
 
-/* Menu principal header — controle de dropdown
-   !important para sobrescrever display do tema base */
+/* Menu principal header — controle de dropdown com delay
+   Usa opacity/visibility em vez de display para permitir transition-delay.
+   O delay de 150ms evita abertura acidental ao passar o mouse (ex: trajeto
+   do "Cadastre-se" que cruza o item "Produtos"). */
 .menu-principal .dropdown .dropdown-menu {
-    display: none !important;
-}
-
-.menu-principal .dropdown:hover .dropdown-menu,
-.menu-principal .dropdown.open .dropdown-menu {
     display: block !important;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    /* Ao sair do hover: fecha rápido */
+    transition: opacity 0.1s ease, visibility 0s linear 0.1s;
 }
 
-/* Remove classe open que pode ser adicionada incorretamente */
-.menu-principal .dropdown.open:not(:hover) .dropdown-menu {
-    display: none !important;
+.menu-principal .dropdown:hover > .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    /* Ao entrar no hover: 150ms de delay antes de abrir */
+    transition: opacity 0.15s ease 0.15s, visibility 0s linear 0.15s;
 }
 
 /* Navegacao ativa */
