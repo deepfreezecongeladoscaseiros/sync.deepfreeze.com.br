@@ -1679,6 +1679,15 @@ input[type=checkbox]:checked ~ span {
     margin-bottom: 30px;
 }
 
+/* Dentro do carrossel, o card (.item) deve ocupar 100% do owl-item.
+   O Owl Carousel já controla quantos items aparecem por breakpoint,
+   então col-xs-* dentro do owl-item é redundante e causa cards minúsculos. */
+.owl-carousel .owl-item > .item {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
 /* O box-produto preenche toda a altura disponivel */
 .listagem-produtos > .item > .box-produto,
 .lista-produtos > .item > .box-produto,
@@ -3490,6 +3499,7 @@ input[type=checkbox]:checked ~ span {
     .box-produto .nome-produto {
         font-size: 13px !important;
         line-height: 1.3 !important;
+        -webkit-line-clamp: 3 !important; /* Mobile: 3 linhas para nomes longos */
     }
 
     .box-produto .box-precos,
