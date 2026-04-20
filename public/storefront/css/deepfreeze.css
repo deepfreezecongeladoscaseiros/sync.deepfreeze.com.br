@@ -1036,6 +1036,12 @@ hr,
     color: inherit !important;
 }
 
+/* Icone "Entrega na minha regiao?" — mesma cor grafite dos demais icones do header.
+   O style.css aplica a cor primaria (teal) no icone, destoando dos outros. */
+.btn-consultar-entrega i {
+    color: #4D4849 !important;
+}
+
 /* ----------------------------------------------------------------
    6.3 Menu Desktop (sidebar categorias)
 
