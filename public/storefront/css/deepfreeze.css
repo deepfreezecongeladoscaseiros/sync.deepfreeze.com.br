@@ -1200,6 +1200,15 @@ hr,
     transition: opacity 0.15s ease 0.15s, visibility 0s linear 0.15s;
 }
 
+/* Mega-menu — espaçamento entre título da categoria e primeiro item.
+   Sobrescreve margin-bottom: 7px do style-extend.css que deixa
+   título e primeiro item visualmente sobrepostos. */
+.col-menu-full .submenu-full .dropdown-menu .group-menu h5 {
+    margin-bottom: 12px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #e9e9e9;
+}
+
 /* Navegacao ativa */
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:focus {
