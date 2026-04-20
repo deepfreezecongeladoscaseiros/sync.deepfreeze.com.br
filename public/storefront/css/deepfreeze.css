@@ -1679,9 +1679,15 @@ input[type=checkbox]:checked ~ span {
     margin-bottom: 30px;
 }
 
-/* Dentro do carrossel, o card (.item) deve ocupar 100% do owl-item.
-   O Owl Carousel já controla quantos items aparecem por breakpoint,
-   então col-xs-* dentro do owl-item é redundante e causa cards minúsculos. */
+/* Carrossel de produtos — corrige cards minúsculos no mobile.
+   O style-extend.css aplica padding-right: 70px no owl-item em telas <= 420px,
+   comendo a área útil do card (166px - 70px = 96px). O Owl Carousel já controla
+   o espaçamento via margin: 15 na inicialização JS, então zeramos o padding.
+   Também força o .item a ocupar 100% do owl-item (col-xs-* é redundante aqui). */
+.carrossel-produtos .owl-item {
+    padding-right: 0 !important;
+}
+
 .owl-carousel .owl-item > .item {
     width: 100% !important;
     padding-left: 0;
