@@ -96,7 +96,9 @@
         @auth('customer')
             <li class="entrar"><a href="{{ route('customer.dashboard') }}"><i class="icon-perfil fa fa-user-o"></i>Minha Conta</a></li>
         @else
-            <li class="cadastre-se"><a href="{{ route('register') }}"><i class="icon-perfil fa fa-user-o"></i>Cadastre-se</a></li>
+            @if(!Route::is('login'))
+                <li class="cadastre-se"><a href="{{ route('register') }}"><i class="icon-perfil fa fa-user-o"></i>Cadastre-se</a></li>
+            @endif
             <li class="entrar"><a href="{{ route('login') }}"><i class="icon-entrar fa fa-share"></i>Login</a></li>
         @endauth
 
