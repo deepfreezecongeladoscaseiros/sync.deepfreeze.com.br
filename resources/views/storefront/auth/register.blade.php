@@ -313,7 +313,7 @@
                                 <div class="form-group @error('phone') has-error @enderror">
                                     <label for="phone">Celular ou telefone fixo <span>*</span></label>
                                     <input type="tel" name="phone" id="phone" value="{{ old('phone') }}"
-                                           class="form-control js-phone-mask" placeholder="(__) ____-____">
+                                           class="form-control js-phone-mask" placeholder="(XX) XXXXX-XXXX">
                                     @error('phone')
                                         <span class="help-block">{{ $message }}</span>
                                     @enderror
