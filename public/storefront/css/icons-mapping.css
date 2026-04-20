@@ -24,9 +24,27 @@
 
 /* Ícones de interface */
 .fa-times::before { content: "\f659"; } /* bi-x-lg */
+.fa-times-circle::before { content: "\f623"; } /* bi-x-circle */
 .fa-caret-right::before { content: "\f285"; } /* bi-caret-right-fill */
 .fa-caret-down::before { content: "\f282"; } /* bi-caret-down-fill */
 .fa-thumbs-o-up::before { content: "\f634"; } /* bi-hand-thumbs-up */
+.fa-search::before { content: "\f52a"; } /* bi-search */
+.fa-refresh::before { content: "\f116"; } /* bi-arrow-clockwise */
+.fa-undo::before { content: "\f117"; } /* bi-arrow-counterclockwise */
+.fa-link::before { content: "\f470"; } /* bi-link-45deg */
+.fa-print::before { content: "\f501"; } /* bi-printer */
+.fa-th-large::before { content: "\f3f9"; } /* bi-grid-3x3-gap */
+.fa-info-circle::before { content: "\f430"; } /* bi-info-circle-fill */
+.fa-question-circle::before { content: "\f505"; } /* bi-question-circle */
+.fa-exclamation-circle::before { content: "\f332"; } /* bi-exclamation-circle-fill */
+.fa-exclamation-triangle::before { content: "\f33a"; } /* bi-exclamation-triangle-fill */
+
+/* Navegação */
+.fa-angle-left::before { content: "\f284"; } /* bi-chevron-left */
+.fa-angle-right::before { content: "\f285"; } /* bi-chevron-right */
+.fa-chevron-left::before { content: "\f284"; } /* bi-chevron-left */
+.fa-chevron-right::before { content: "\f285"; } /* bi-chevron-right */
+.fa-arrow-left::before { content: "\f12f"; } /* bi-arrow-left */
 
 /* Redes sociais */
 .fa-facebook::before { content: "\f344"; } /* bi-facebook */
@@ -34,19 +52,51 @@
 .fa-whatsapp::before { content: "\f618"; } /* bi-whatsapp */
 
 /* Usuário e autenticação */
+.fa-user::before { content: "\f4e1"; } /* bi-person */
 .fa-user-o::before { content: "\f4da"; } /* bi-person */
+.fa-user-plus::before { content: "\f4dd"; } /* bi-person-plus */
 .fa-share::before { content: "\f10e"; } /* bi-box-arrow-in-right */
+.fa-sign-in::before { content: "\f1be"; } /* bi-box-arrow-in-right */
+.fa-sign-out::before { content: "\f1c3"; } /* bi-box-arrow-right */
+.fa-lock::before { content: "\f47b"; } /* bi-lock */
+.fa-eye::before { content: "\f341"; } /* bi-eye */
+.fa-eye-slash::before { content: "\f340"; } /* bi-eye-slash */
+.fa-id-card::before { content: "\f8c9"; } /* bi-person-vcard */
 
 /* Localização e contato */
 .fa-map-marker::before { content: "\f3f4"; } /* bi-geo-alt-fill */
 .fa-envelope::before { content: "\f32f"; } /* bi-envelope */
+.fa-paper-plane::before { content: "\f6c0"; } /* bi-send */
+.fa-truck::before { content: "\f5ea"; } /* bi-truck */
+.fa-building::before { content: "\f1dd"; } /* bi-building */
+.fa-university::before { content: "\f62e"; } /* bi-bank */
+
+/* Formulários — checkboxes e radios */
+.fa-square-o::before { content: "\f584"; } /* bi-square */
+.fa-check-square-o::before { content: "\f26d"; } /* bi-check-square */
+.fa-check::before { content: "\f633"; } /* bi-check-lg */
+.fa-check-circle::before { content: "\f26a"; } /* bi-check-circle-fill */
 
 /* Ações de produto */
 .fa-heart-o::before { content: "\f417"; } /* bi-heart */
 .fa-minus::before { content: "\f286"; } /* bi-dash-lg */
 .fa-plus::before { content: "\f4fe"; } /* bi-plus-lg */
 .fa-trash-o::before { content: "\f5de"; } /* bi-trash */
+.fa-trash::before { content: "\f5de"; } /* bi-trash */
 .fa-shopping-cart::before { content: "\f217"; } /* bi-cart3 */
+.fa-shopping-bag::before { content: "\f179"; } /* bi-bag */
+.fa-tag::before { content: "\f5b0"; } /* bi-tag */
+.fa-star::before { content: "\f586"; } /* bi-star-fill */
+.fa-pencil-square-o::before { content: "\f4ca"; } /* bi-pencil-square */
+
+/* Dados e tempo */
+.fa-calendar::before { content: "\f1f6"; } /* bi-calendar */
+.fa-clock-o::before { content: "\f293"; } /* bi-clock */
+.fa-credit-card::before { content: "\f2dc"; } /* bi-credit-card */
+.fa-cutlery::before { content: "\f312"; } /* bi-egg-fried */
+
+/* Feedback e loading */
+.fa-spinner::before { content: "\f130"; } /* bi-arrow-repeat */
 
 /* Classes customizadas do tema */
 .icon-perfil::before {
