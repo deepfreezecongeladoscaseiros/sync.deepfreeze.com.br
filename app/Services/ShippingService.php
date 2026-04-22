@@ -15,10 +15,8 @@ use App\Models\Legacy\PrecoFrete;
 use App\Models\Legacy\SoDisponivelData;
 use App\Models\Legacy\VeiculoPeriodo;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Service de Frete e Entregas.
@@ -377,18 +375,8 @@ class ShippingService
             $whitelistVpIds[$sd->veiculo_periodo_id] = true;
         }
 
-        // Verifica se existem vpIds com registros em so_disponiveis (pode ter datas fora do range)
-        if (empty($whitelistVpIds)) {
-            $hasWhitelist = SoDisponivelData::whereIn('veiculo_periodo_id', $vpIds)->exists();
-            if ($hasWhitelist) {
-                // Há registros mas todos fora do range — precisa verificar quais vpIds têm whitelist
-                $whitelistVpIds = SoDisponivelData::whereIn('veiculo_periodo_id', $vpIds)
-                    ->distinct()
-                    ->pluck('veiculo_periodo_id')
-                    ->flip()
-                    ->toArray();
-            }
-        }
+        // Se nenhuma data whitelist caiu no range, o veículo é tratado como irrestrito
+        // (não bloquear slots com base em datas históricas fora do range)
 
         // Filtra slots
         return array_values(array_filter($slots, function ($slot) use ($blacklist, $whitelist, $whitelistVpIds) {
@@ -626,57 +614,50 @@ class ShippingService
         }
 
         $margem = 0;
-        $placeholders = implode(',', array_map('intval', $productIds));
+        $ids = array_map('intval', $productIds);
+        $bindings = implode(',', array_fill(0, count($ids), '?'));
 
         // Query 1: Produtos diretos
-        $result = DB::connection('mysql_legacy')->select("
-            SELECT
-                MAX(produtos.margem_hora) as m,
-                MIN(produtos.cardapio) as min_cardapio,
-                MAX(produtos.cardapio) as max_cardapio
-            FROM produtos
-            WHERE produtos.id IN ({$placeholders})
-        ");
+        $result = DB::connection('mysql_legacy')->select(
+            "SELECT MAX(produtos.margem_hora) as m,
+                    MIN(produtos.cardapio) as min_cardapio,
+                    MAX(produtos.cardapio) as max_cardapio
+             FROM produtos
+             WHERE produtos.id IN ({$bindings})",
+            $ids
+        );
 
         if (!empty($result) && $result[0]->m !== null) {
-            $row = $result[0];
+            $m = (int) $result[0]->m;
 
             // Produto fora do cardápio: mínimo 14h
-            if ($row->min_cardapio == 0 || $row->max_cardapio == 0) {
-                if (14 > $row->m) {
-                    $row->m = 14;
-                }
+            if ($result[0]->min_cardapio == 0 || $result[0]->max_cardapio == 0) {
+                $m = max($m, 14);
             }
 
-            if ($row->m > $margem) {
-                $margem = (int) $row->m;
-            }
+            $margem = max($margem, $m);
         }
 
         // Query 2: Produtos dentro de pacotes
-        $result2 = DB::connection('mysql_legacy')->select("
-            SELECT
-                MAX(produtos.margem_hora) as m,
-                MIN(produtos.cardapio) as min_cardapio,
-                MAX(produtos.cardapio) as max_cardapio
-            FROM produtos
-            INNER JOIN pacotes_produtos ON (pacotes_produtos.produto_id = produtos.id)
-            INNER JOIN produtos as pacotes ON (pacotes.id = pacotes_produtos.pacote_id)
-            WHERE pacotes.id IN ({$placeholders})
-        ");
+        $result2 = DB::connection('mysql_legacy')->select(
+            "SELECT MAX(produtos.margem_hora) as m,
+                    MIN(produtos.cardapio) as min_cardapio,
+                    MAX(produtos.cardapio) as max_cardapio
+             FROM produtos
+             INNER JOIN pacotes_produtos ON (pacotes_produtos.produto_id = produtos.id)
+             INNER JOIN produtos as pacotes ON (pacotes.id = pacotes_produtos.pacote_id)
+             WHERE pacotes.id IN ({$bindings})",
+            $ids
+        );
 
         if (!empty($result2) && $result2[0]->m !== null) {
-            $row = $result2[0];
+            $m = (int) $result2[0]->m;
 
-            if ($row->min_cardapio == 0 || $row->max_cardapio == 0) {
-                if (14 > $row->m) {
-                    $row->m = 14;
-                }
+            if ($result2[0]->min_cardapio == 0 || $result2[0]->max_cardapio == 0) {
+                $m = max($m, 14);
             }
 
-            if ($row->m > $margem) {
-                $margem = (int) $row->m;
-            }
+            $margem = max($margem, $m);
         }
 
         return $margem;
@@ -723,10 +704,7 @@ class ShippingService
         ");
 
         foreach ($registros as $r) {
-            $date = $r->data_disponivel;
-            if ($date instanceof \DateTime || $date instanceof Carbon) {
-                $date = $date->format('Y-m-d');
-            }
+            $date = date('Y-m-d', strtotime($r->data_disponivel));
             $feriados[(int) $r->loja_id][$date] = true;
         }
 

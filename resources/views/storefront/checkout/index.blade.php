@@ -1006,10 +1006,10 @@ $(document).ready(function() {
         html += '</div>';
         $container.html(html);
 
-        // Se já tem data selecionada, mostra info
-        if (dataRetiradaAtual && diasDisponiveis[parseInt(dataRetiradaAtual.split('-')[2])]) {
-            var dSel = diasDisponiveis[parseInt(dataRetiradaAtual.split('-')[2])];
-            showPickupSelectedInfo(dSel);
+        // Se já tem data selecionada, mostra info (compara data completa, não só o dia)
+        if (dataRetiradaAtual) {
+            var selEntry = mesAtual.dias.find(function(d) { return d.date === dataRetiradaAtual; });
+            if (selEntry) showPickupSelectedInfo(selEntry);
         }
 
         // Eventos: clique nas tabs de mês
