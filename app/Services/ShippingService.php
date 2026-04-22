@@ -100,27 +100,33 @@ class ShippingService
      *
      * Calcula as próximas datas de entrega baseado nos períodos
      * cadastrados para a região, excluindo datas bloqueadas.
+     * Aplica regras de logística (regras_entregas) quando existem para a loja.
      *
      * @param string $cep CEP do cliente
      * @param int $days Número de dias para frente para buscar (padrão 14)
-     * @return array Lista de datas/horários disponíveis
+     * @param float $orderTotal Valor total do carrinho (para regras de pedido mínimo)
+     * @param int|null $pessoaId ID do cliente logado (para regra de cliente novo)
+     * @return array ['slots' => array, 'avisos' => array, 'pedido_minimo' => float|null]
      */
-    public function getDeliverySlots(string $cep, int $days = 14): array
+    public function getDeliverySlots(string $cep, int $days = 14, float $orderTotal = 0, ?int $pessoaId = null): array
     {
+        $emptyResult = ['slots' => [], 'avisos' => [], 'pedido_minimo' => null];
+
         $lookup = $this->lookupCep($cep);
 
         if (!$lookup || !$lookup['regiao'] || !$lookup['loja']) {
-            return [];
+            return $emptyResult;
         }
 
         $regiao = $lookup['regiao'];
         $loja = $lookup['loja'];
+        $logradouro = $lookup['logradouro'];
 
         // Busca períodos de entrega para esta região
         $periodos = EntregaPeriodo::where('entregas_regiao_id', $regiao->id)->get();
 
         if ($periodos->isEmpty()) {
-            return [];
+            return $emptyResult;
         }
 
         // Busca datas bloqueadas para a loja
@@ -180,20 +186,32 @@ class ShippingService
                     ->first();
 
                 $slots[] = [
-                    'date'              => $dataStr,
-                    'date_formatted'    => $data->format('d/m/Y') . ' (' . $periodo->dia_nome . ')',
-                    'time_start'        => substr($periodo->hora_inicial, 0, 5),
-                    'time_end'          => substr($periodo->hora_final, 0, 5),
-                    'time_formatted'    => $periodo->horario_formatado,
-                    'periodo_id'        => $periodo->id,
+                    'date'               => $dataStr,
+                    'date_formatted'     => $data->format('d/m/Y') . ' (' . $periodo->dia_nome . ')',
+                    'time_start'         => substr($periodo->hora_inicial, 0, 5),
+                    'time_end'           => substr($periodo->hora_final, 0, 5),
+                    'time_formatted'     => $periodo->horario_formatado,
+                    'periodo_id'         => $periodo->id,
                     'veiculo_periodo_id' => $vp?->id,
-                    'loja_id'           => $loja->id,
-                    'regiao_id'         => $regiao->id,
+                    'loja_id'            => $loja->id,
+                    'regiao_id'          => $regiao->id,
+                    'margem_hora'        => $periodo->margem_hora ?? 0,
+                    'dia_semana'         => $diaSemana,
                 ];
             }
         }
 
-        return $slots;
+        // Aplica regras de logística (regras_entregas)
+        $deliveryRuleService = app(DeliveryRuleService::class);
+
+        return $deliveryRuleService->filterSlots(
+            $slots,
+            $loja->id,
+            $regiao->id,
+            $orderTotal,
+            $logradouro,
+            $pessoaId
+        );
     }
 
     /**

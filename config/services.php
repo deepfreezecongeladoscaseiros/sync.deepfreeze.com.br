@@ -35,4 +35,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'google' => [
+        'directions_api_key' => env('GOOGLE_DIRECTIONS_API_KEY'),
+    ],
+
 ];

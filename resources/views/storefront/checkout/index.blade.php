@@ -664,8 +664,9 @@ $(document).ready(function() {
             data: { cep: cep },
             dataType: 'json',
             success: function(data) {
-                if (!data.disponivel || !data.dias.length) {
-                    $('#delivery_slots_container').html('<p style="color: #e74c3c;"><i class="fa fa-exclamation-circle"></i> Não há horários de entrega disponíveis para este CEP.</p>');
+                if (!data.disponivel || !data.dias || !data.dias.length) {
+                    var msg = (data.mensagem) ? data.mensagem : 'Não há horários de entrega disponíveis para este CEP.';
+                    $('#delivery_slots_container').html('<p style="color: #e74c3c;"><i class="fa fa-exclamation-circle"></i> ' + msg + '</p>');
                     return;
                 }
 

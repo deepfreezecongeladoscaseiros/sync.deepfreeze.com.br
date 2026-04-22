@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Storefront;
 
 use App\Http\Controllers\Controller;
 use App\Models\CepQueryLog;
+use App\Services\CartService;
 use App\Services\ShippingService;
 use App\Services\PaymentService;
 use App\Services\ViaCepService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Controller de Frete e Entregas (AJAX).
@@ -102,19 +104,33 @@ class ShippingController extends Controller
 
     /**
      * Retorna períodos de entrega disponíveis para um CEP.
+     * Aplica regras de logística (regras_entregas) baseado no valor do carrinho.
      * GET /entrega/periodos?cep=20551030
      */
     public function periodos(Request $request): JsonResponse
     {
         $cep = $request->input('cep', '');
 
-        $slots = $this->shippingService->getDeliverySlots($cep);
+        // Valor do carrinho (server-side, não confia em input do cliente)
+        $orderTotal = app(CartService::class)->getSubtotal();
+
+        // ID do cliente logado (para regra de pedido mínimo de cliente novo)
+        $pessoaId = Auth::guard('customer')->check()
+            ? Auth::guard('customer')->id()
+            : null;
+
+        $result = $this->shippingService->getDeliverySlots($cep, 14, $orderTotal, $pessoaId);
+
+        $slots = $result['slots'];
+        $avisos = $result['avisos'];
 
         if (empty($slots)) {
             return response()->json([
-                'disponivel' => false,
-                'mensagem'   => 'Não há períodos de entrega disponíveis para este CEP.',
-                'slots'      => [],
+                'disponivel'    => false,
+                'mensagem'      => $avisos[0] ?? 'Não há períodos de entrega disponíveis para este CEP.',
+                'avisos'        => $avisos,
+                'pedido_minimo' => $result['pedido_minimo'],
+                'slots'         => [],
             ]);
         }
 
@@ -136,6 +152,7 @@ class ShippingController extends Controller
         return response()->json([
             'disponivel' => true,
             'dias'       => $grouped,
+            'avisos'     => $avisos,
         ]);
     }
 
