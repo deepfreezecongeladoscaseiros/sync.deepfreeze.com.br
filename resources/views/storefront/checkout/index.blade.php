@@ -771,6 +771,7 @@ $(document).ready(function() {
 
         $.ajax({
             url: '{{ route("shipping.slots") }}',
+            type: 'GET',
             data: { cep: cep },
             dataType: 'json',
             success: function(data) {
@@ -853,6 +854,7 @@ $(document).ready(function() {
 
         $.ajax({
             url: '{{ route("shipping.pickup_stores") }}',
+            type: 'GET',
             data: { cep: cep },
             dataType: 'json',
             success: function(data) {
@@ -921,6 +923,7 @@ $(document).ready(function() {
 
         $.ajax({
             url: '{{ route("shipping.pickup_dates") }}',
+            type: 'GET',
             data: { loja_id: lojaId },
             dataType: 'json',
             success: function(data) {
