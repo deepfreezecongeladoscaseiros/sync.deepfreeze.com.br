@@ -171,6 +171,112 @@
         margin-bottom: 20px;
     }
 
+    /* Seleção de data de retirada — navegação Mês → Dia → Horário */
+    .pickup-dates-box {
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 20px;
+        background: #fff;
+    }
+    .pickup-dates-box label.pickup-dates-title {
+        font-weight: 600;
+        margin-bottom: 12px;
+        display: block;
+        font-size: 14px;
+    }
+    .pickup-month-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+    .pickup-month-tabs .month-tab {
+        padding: 8px 16px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        background: #fff;
+        color: #555;
+        transition: all 0.2s;
+    }
+    .pickup-month-tabs .month-tab:hover {
+        border-color: #bbb;
+    }
+    .pickup-month-tabs .month-tab.active {
+        border-color: var(--color-primary, #013E3B);
+        background: var(--color-primary, #013E3B);
+        color: #fff;
+    }
+    .pickup-days-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 6px;
+        margin-bottom: 12px;
+    }
+    .pickup-days-grid .day-header {
+        text-align: center;
+        font-size: 11px;
+        font-weight: 600;
+        color: #999;
+        padding: 4px 0;
+        text-transform: uppercase;
+    }
+    .pickup-days-grid .day-cell {
+        text-align: center;
+        padding: 10px 4px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        color: #333;
+        background: #f8f9fa;
+    }
+    .pickup-days-grid .day-cell:hover {
+        background: #e8f5e9;
+        border-color: var(--color-primary, #013E3B);
+    }
+    .pickup-days-grid .day-cell.selected {
+        background: var(--color-primary, #013E3B);
+        color: #fff;
+        border-color: var(--color-primary, #013E3B);
+    }
+    .pickup-days-grid .day-cell.empty {
+        background: transparent;
+        cursor: default;
+        border: none;
+    }
+    .pickup-days-grid .day-cell.empty:hover {
+        background: transparent;
+        border-color: transparent;
+    }
+    .pickup-selected-info {
+        padding: 12px 16px;
+        background: #f0f9f0;
+        border-radius: 8px;
+        border: 1px solid #c3e6cb;
+        font-size: 14px;
+        display: none;
+    }
+    .pickup-selected-info i {
+        color: var(--color-primary, #013E3B);
+        margin-right: 6px;
+    }
+    .pickup-badge-proxima {
+        display: inline-block;
+        background: var(--color-primary, #013E3B);
+        color: #fff;
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        margin-left: 6px;
+        font-weight: 600;
+        vertical-align: middle;
+    }
+
     /* Seção separadora */
     .secao-checkout {
         margin-bottom: 25px;
@@ -511,11 +617,15 @@
                                 </div>
                             </div>
 
-                            {{-- PICKUP: Seleção de loja --}}
+                            {{-- PICKUP: Seleção de loja + data de retirada --}}
                             <div id="box_pickup" style="display: {{ old('tipo_entrega') == 'pickup' ? 'block' : 'none' }};">
                                 <div id="pickup_stores_container">
                                     <p style="color: #888;"><i class="fa fa-spinner fa-spin"></i> Carregando lojas...</p>
                                 </div>
+
+                                {{-- Seleção de data de retirada (carregado via AJAX após selecionar loja) --}}
+                                <div id="pickup_dates_container" style="display: none; margin-top: 15px;"></div>
+
                                 <input type="hidden" name="loja_retirada_id" id="loja_retirada_id" value="{{ old('loja_retirada_id') }}">
                                 <input type="hidden" name="data_retirada" id="data_retirada" value="{{ old('data_retirada') }}">
                             </div>
@@ -739,8 +849,11 @@ $(document).ready(function() {
     // CARREGAR LOJAS PARA RETIRADA (AJAX)
     // ==========================================
     function loadPickupStores() {
+        var cep = $('#shipping_zip_code').val() ? $('#shipping_zip_code').val().replace(/\D/g, '') : '';
+
         $.ajax({
             url: '{{ route("shipping.pickup_stores") }}',
+            data: { cep: cep },
             dataType: 'json',
             success: function(data) {
                 if (!data.lojas || !data.lojas.length) {
@@ -751,24 +864,183 @@ $(document).ready(function() {
                 var html = '<label style="font-weight: 600; margin-bottom: 10px; display: block;">Selecione a loja:</label>';
                 data.lojas.forEach(function(loja) {
                     var checked = ($('#loja_retirada_id').val() == loja.id) ? 'checked' : '';
-                    html += '<label style="display: flex; align-items: flex-start; gap: 10px; padding: 12px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 8px; cursor: pointer;">';
+                    var borderColor = checked ? 'var(--color-primary, #013E3B)' : '#eee';
+                    var bgColor = checked ? '#f0f9f0' : '#fff';
+                    html += '<label class="pickup-store-option" style="display: flex; align-items: flex-start; gap: 10px; padding: 12px; border: 2px solid ' + borderColor + '; border-radius: 10px; margin-bottom: 8px; cursor: pointer; background: ' + bgColor + '; transition: all 0.2s;">';
                     html += '<input type="radio" name="loja_pickup" value="' + loja.id + '" ' + checked + ' style="margin-top: 3px;">';
                     html += '<div>';
-                    html += '<strong>' + loja.nome + '</strong><br>';
-                    html += '<small style="color: #888;">' + loja.endereco + '</small>';
-                    if (loja.horarios && loja.horarios.weekdays) {
-                        html += '<br><small style="color: #888;"><i class="fa fa-clock-o"></i> Seg-Sex: ' + loja.horarios.weekdays + '</small>';
+                    html += '<strong>' + loja.nome + '</strong>';
+                    if (loja.atende_regiao) {
+                        html += '<span class="pickup-badge-proxima">Mais próxima</span>';
+                    }
+                    html += '<br><small style="color: #888;">' + loja.endereco + '</small>';
+                    if (loja.horarios) {
+                        if (loja.horarios.weekdays) {
+                            html += '<br><small style="color: #888;"><i class="fa fa-clock-o"></i> Seg-Sex: ' + loja.horarios.weekdays + '</small>';
+                        }
+                        if (loja.horarios.saturday) {
+                            html += '<small style="color: #888;"> | Sáb: ' + loja.horarios.saturday + '</small>';
+                        }
                     }
                     html += '</div></label>';
                 });
                 $('#pickup_stores_container').html(html);
 
-                // Ao selecionar loja, preenche hidden
+                // Ao selecionar loja, preenche hidden + carrega datas
                 $(document).off('change', 'input[name="loja_pickup"]').on('change', 'input[name="loja_pickup"]', function() {
-                    $('#loja_retirada_id').val($(this).val());
+                    var lojaId = $(this).val();
+                    $('#loja_retirada_id').val(lojaId);
+                    // Limpa data selecionada anteriormente
+                    $('#data_retirada').val('');
+
+                    // Highlight visual na loja selecionada
+                    $('.pickup-store-option').css({ 'border-color': '#eee', 'background': '#fff' });
+                    $(this).closest('.pickup-store-option').css({ 'border-color': 'var(--color-primary, #013E3B)', 'background': '#f0f9f0' });
+
+                    // Carrega datas de retirada para a loja selecionada
+                    loadPickupDates(lojaId);
                 });
+
+                // Se já tinha loja selecionada (old values), carrega datas
+                if ($('#loja_retirada_id').val()) {
+                    loadPickupDates($('#loja_retirada_id').val());
+                }
             }
         });
+    }
+
+    // ==========================================
+    // CARREGAR DATAS DE RETIRADA (AJAX)
+    // Navegação progressiva: Mês → Dia → Horário
+    // ==========================================
+    var pickupDatesData = null; // Cache dos dados de datas
+
+    function loadPickupDates(lojaId) {
+        var $container = $('#pickup_dates_container');
+        $container.show().html('<p style="color: #888;"><i class="fa fa-spinner fa-spin"></i> Buscando datas disponíveis...</p>');
+
+        $.ajax({
+            url: '{{ route("shipping.pickup_dates") }}',
+            data: { loja_id: lojaId },
+            dataType: 'json',
+            success: function(data) {
+                if (!data.disponivel || !data.meses || !data.meses.length) {
+                    var msg = data.mensagem || 'Nenhuma data disponível para retirada nesta loja.';
+                    $container.html('<p style="color: #e74c3c;"><i class="fa fa-exclamation-circle"></i> ' + msg + '</p>');
+                    return;
+                }
+
+                pickupDatesData = data.meses;
+                renderPickupDates(0); // Renderiza primeiro mês
+            },
+            error: function() {
+                $container.html('<p style="color: #e74c3c;">Erro ao buscar datas. Tente novamente.</p>');
+            }
+        });
+    }
+
+    function renderPickupDates(selectedMonthIndex) {
+        if (!pickupDatesData || !pickupDatesData.length) return;
+
+        var $container = $('#pickup_dates_container');
+        var html = '<div class="pickup-dates-box">';
+        html += '<label class="pickup-dates-title"><i class="fa fa-calendar"></i> Selecione a data de retirada:</label>';
+
+        // Tabs de meses
+        html += '<div class="pickup-month-tabs">';
+        pickupDatesData.forEach(function(mes, idx) {
+            var activeClass = (idx === selectedMonthIndex) ? ' active' : '';
+            html += '<span class="month-tab' + activeClass + '" data-month-idx="' + idx + '">' + mes.label + '</span>';
+        });
+        html += '</div>';
+
+        // Grid de dias do mês selecionado
+        var mesAtual = pickupDatesData[selectedMonthIndex];
+        var diasDisponiveis = {};
+        mesAtual.dias.forEach(function(d) {
+            diasDisponiveis[d.dia] = d;
+        });
+
+        // Determina o primeiro dia do mês e total de dias
+        var primeiroDia = new Date(mesAtual.mes + '-01');
+        var ano = primeiroDia.getFullYear();
+        var mesNum = primeiroDia.getMonth();
+        var diasNoMes = new Date(ano, mesNum + 1, 0).getDate();
+        var diaSemanaInicio = primeiroDia.getDay(); // 0=Dom
+
+        html += '<div class="pickup-days-grid">';
+
+        // Headers dos dias da semana
+        var diasHeader = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+        diasHeader.forEach(function(d) {
+            html += '<div class="day-header">' + d + '</div>';
+        });
+
+        // Células vazias antes do primeiro dia
+        for (var i = 0; i < diaSemanaInicio; i++) {
+            html += '<div class="day-cell empty"></div>';
+        }
+
+        // Dias do mês
+        var dataRetiradaAtual = $('#data_retirada').val();
+        for (var dia = 1; dia <= diasNoMes; dia++) {
+            if (diasDisponiveis[dia]) {
+                var d = diasDisponiveis[dia];
+                var selectedClass = (d.date === dataRetiradaAtual) ? ' selected' : '';
+                html += '<div class="day-cell' + selectedClass + '" data-date="' + d.date + '" data-dia-nome="' + d.dia_nome + '" data-horario="' + (d.horario || '') + '">' + dia + '</div>';
+            } else {
+                html += '<div class="day-cell empty" style="color: #ddd; background: transparent;">' + dia + '</div>';
+            }
+        }
+
+        html += '</div>';
+
+        // Info da data selecionada
+        html += '<div class="pickup-selected-info" id="pickup_selected_info">';
+        html += '<i class="fa fa-check-circle"></i> <span id="pickup_selected_text"></span>';
+        html += '</div>';
+
+        html += '</div>';
+        $container.html(html);
+
+        // Se já tem data selecionada, mostra info
+        if (dataRetiradaAtual && diasDisponiveis[parseInt(dataRetiradaAtual.split('-')[2])]) {
+            var dSel = diasDisponiveis[parseInt(dataRetiradaAtual.split('-')[2])];
+            showPickupSelectedInfo(dSel);
+        }
+
+        // Eventos: clique nas tabs de mês
+        $container.find('.month-tab').on('click', function() {
+            renderPickupDates(parseInt($(this).data('month-idx')));
+        });
+
+        // Eventos: clique nos dias disponíveis
+        $container.find('.day-cell:not(.empty)').on('click', function() {
+            var date = $(this).data('date');
+            var diaNome = $(this).data('dia-nome');
+            var horario = $(this).data('horario');
+
+            // Atualiza seleção visual
+            $container.find('.day-cell').removeClass('selected');
+            $(this).addClass('selected');
+
+            // Preenche hidden field
+            $('#data_retirada').val(date);
+
+            // Mostra info
+            showPickupSelectedInfo({ date: date, dia_nome: diaNome, horario: horario });
+        });
+    }
+
+    function showPickupSelectedInfo(d) {
+        var parts = d.date.split('-');
+        var formatted = parts[2] + '/' + parts[1] + '/' + parts[0];
+        var texto = '<strong>' + formatted + '</strong>, ' + d.dia_nome;
+        if (d.horario) {
+            texto += ' — <i class="fa fa-clock-o"></i> ' + d.horario;
+        }
+        $('#pickup_selected_text').html(texto);
+        $('#pickup_selected_info').show();
     }
 
     // Se tipo pickup já selecionado (old values), carregar lojas

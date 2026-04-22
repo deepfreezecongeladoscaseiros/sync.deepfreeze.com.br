@@ -26,12 +26,14 @@ class EntregaDataBloqueada extends Model
     // ==================== SCOPES ====================
 
     /**
-     * Datas bloqueadas para uma loja (ou globais)
+     * Datas bloqueadas para uma loja (ou globais).
+     * No legado, loja_id = 0 indica bloqueio global (todas as lojas).
      */
     public function scopeForStore($query, int $lojaId)
     {
         return $query->where(function ($q) use ($lojaId) {
             $q->where('loja_id', $lojaId)
+              ->orWhere('loja_id', 0)
               ->orWhereNull('loja_id');
         });
     }

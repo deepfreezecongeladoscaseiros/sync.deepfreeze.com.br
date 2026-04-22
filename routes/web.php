@@ -264,6 +264,7 @@ Route::middleware('customer.guard')->group(function () {
         Route::post('/calcular-frete', [App\Http\Controllers\Storefront\ShippingController::class, 'calcularFrete'])->name('calculate');
         Route::get('/periodos', [App\Http\Controllers\Storefront\ShippingController::class, 'periodos'])->name('slots');
         Route::get('/lojas-retirada', [App\Http\Controllers\Storefront\ShippingController::class, 'lojasRetirada'])->name('pickup_stores');
+        Route::get('/datas-retirada', [App\Http\Controllers\Storefront\ShippingController::class, 'datasRetirada'])->name('pickup_dates');
     });
 
     // Rota para enviar avaliação de produto (AJAX, requer login)
