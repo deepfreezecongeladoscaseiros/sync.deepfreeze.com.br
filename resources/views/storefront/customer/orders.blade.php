@@ -103,10 +103,16 @@
                             {{ $pedido->items->take(3)->pluck('produto')->implode(', ') }}{{ $pedido->items->count() > 3 ? '...' : '' }}
                         </div>
 
-                        <div style="margin-top: 12px;">
+                        <div style="margin-top: 12px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
                             <a href="{{ route('customer.order.detail', $pedido->id) }}" class="btn-link" style="font-weight: 600;">
                                 Ver detalhes <i class="fa fa-angle-right"></i>
                             </a>
+                            <form action="{{ route('customer.order.repeat', $pedido->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="btn-link" style="font-weight: 600; color: var(--color-primary, #013E3B); border: none; background: none; cursor: pointer; padding: 0;">
+                                    <i class="fa fa-repeat"></i> Repetir pedido
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @endforeach

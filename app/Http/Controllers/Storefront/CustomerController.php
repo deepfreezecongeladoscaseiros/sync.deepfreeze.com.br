@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Legacy\Endereco;
 use App\Models\Legacy\Pedido;
 use App\Models\Legacy\Pessoa;
+use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -336,5 +337,80 @@ class CustomerController extends Controller
         $activeMenu = 'orders';
 
         return view('storefront.customer.order-detail', compact('pedido', 'customer', 'activeMenu'));
+    }
+
+    /**
+     * Repetir pedido: adiciona os itens de um pedido anterior ao carrinho.
+     * POST /minha-conta/pedidos/{id}/repetir
+     *
+     * Replica o comportamento do legado (PedidosController::repetir):
+     * - Usa preço atual do produto (não o preço do pedido original)
+     * - Faz merge com carrinho existente (soma quantidade)
+     * - Pula itens com desconto especial (log_desconto)
+     * - Pula produtos inativos ou sem estoque
+     */
+    public function repeatOrder(int $id): RedirectResponse
+    {
+        $customer = auth()->user();
+
+        if (!$customer || !($customer instanceof Pessoa)) {
+            return redirect()->route('login');
+        }
+
+        // Busca pedido garantindo que pertence ao cliente logado
+        $pedido = Pedido::with('items.product')
+            ->where('id', $id)
+            ->where('pessoa_id', $customer->id)
+            ->first();
+
+        if (!$pedido) {
+            abort(404);
+        }
+
+        $cartService = app(CartService::class);
+        $added = 0;
+        $skipped = [];
+
+        foreach ($pedido->items as $item) {
+            // Pula itens sem produto_id (pedidos muito antigos)
+            if (!$item->produto_id) {
+                $skipped[] = $item->product_name ?: 'Produto desconhecido';
+                continue;
+            }
+
+            // Pula itens com desconto especial (campanhas/cupons do legado)
+            if ($item->log_desconto) {
+                continue;
+            }
+
+            // Pula brindes (gift = 1)
+            if ($item->gift) {
+                continue;
+            }
+
+            try {
+                $cartService->add($item->produto_id, $item->quantidade);
+                $added++;
+            } catch (\Exception $e) {
+                // Produto inativo, sem estoque ou removido
+                $skipped[] = $item->product_name;
+            }
+        }
+
+        // Monta mensagens de feedback
+        if ($added > 0 && empty($skipped)) {
+            return redirect()->route('cart.index')
+                ->with('success', $added . ($added === 1 ? ' produto adicionado' : ' produtos adicionados') . ' ao carrinho.');
+        }
+
+        if ($added > 0 && !empty($skipped)) {
+            return redirect()->route('cart.index')
+                ->with('success', $added . ($added === 1 ? ' produto adicionado' : ' produtos adicionados') . ' ao carrinho.')
+                ->with('warning', count($skipped) . (count($skipped) === 1 ? ' produto não estava disponível e foi ignorado' : ' produtos não estavam disponíveis e foram ignorados') . ': ' . implode(', ', $skipped) . '.');
+        }
+
+        // Nenhum item adicionado
+        return redirect()->route('customer.order.detail', $id)
+            ->with('error', 'Nenhum produto deste pedido está disponível no momento.');
     }
 }

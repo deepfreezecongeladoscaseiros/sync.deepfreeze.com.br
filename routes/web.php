@@ -255,6 +255,7 @@ Route::middleware('customer.guard')->group(function () {
         Route::put('/enderecos/{id}/principal', [App\Http\Controllers\Storefront\CustomerController::class, 'setPrimaryAddress'])->name('customer.address.setPrimary');
         Route::get('/pedidos', [App\Http\Controllers\Storefront\CustomerController::class, 'orders'])->name('customer.orders');
         Route::get('/pedidos/{id}', [App\Http\Controllers\Storefront\CustomerController::class, 'orderDetail'])->name('customer.order.detail');
+        Route::post('/pedidos/{id}/repetir', [App\Http\Controllers\Storefront\CustomerController::class, 'repeatOrder'])->name('customer.order.repeat');
     });
 
     // Rotas de entrega/frete (AJAX para checkout)

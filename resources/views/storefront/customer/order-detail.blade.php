@@ -64,6 +64,10 @@
 
         <div class="box-detalhe-pedido animated fadeIn">
 
+            @if(session('error'))
+                <div class="alert alert-danger" style="border-radius: 8px; margin-bottom: 20px;">{{ session('error') }}</div>
+            @endif
+
             {{-- Voltar --}}
             <p style="margin-bottom: 20px;">
                 <a href="{{ route('customer.orders') }}" class="btn-link">
@@ -177,9 +181,15 @@
                 </div>
             @endif
 
-            {{-- Botão continuar comprando --}}
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="{{ url('/') }}" class="btn btn-confirmar">
+            {{-- Botões de ação --}}
+            <div style="text-align: center; margin-top: 20px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <form action="{{ route('customer.order.repeat', $pedido->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-confirmar">
+                        <i class="fa fa-repeat"></i> Repetir Pedido
+                    </button>
+                </form>
+                <a href="{{ url('/') }}" class="btn btn-confirmar" style="background: #666; border-color: #666;">
                     <i class="fa fa-cutlery"></i> Continuar Comprando
                 </a>
             </div>

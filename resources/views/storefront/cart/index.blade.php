@@ -201,6 +201,16 @@
         <div class="row">
             <div class="col-xs-12 animated fadeIn">
 
+                @if(session('success'))
+                    <div class="alert alert-success" style="border-radius: 8px;">{{ session('success') }}</div>
+                @endif
+                @if(session('warning'))
+                    <div class="alert alert-warning" style="border-radius: 8px;">{{ session('warning') }}</div>
+                @endif
+                @if(session('error'))
+                    <div class="alert alert-danger" style="border-radius: 8px;">{{ session('error') }}</div>
+                @endif
+
                 @if(count($cart) === 0)
                     {{-- Carrinho vazio --}}
                     <div class="box-carrinho-vazio">
