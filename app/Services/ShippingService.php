@@ -14,6 +14,7 @@ use App\Models\Legacy\PedidoInformacaoFrete;
 use App\Models\Legacy\PrecoFrete;
 use App\Models\Legacy\SoDisponivelData;
 use App\Models\Legacy\VeiculoPeriodo;
+use App\Models\OtmEstoqueLoja;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -526,6 +527,17 @@ class ShippingService
         $margemPedido = $this->getProductionMargin($productIds);
         $atual = time();
 
+        // Pré-calcula menor estoque disponível por loja para check de delivery (legado linha 1234)
+        // Fórmula legado: MIN(estoque_atual - (estoque_reservado + giro_balcao))
+        $estoqueDeliveryPorLoja = [];
+        if (!empty($productIds)) {
+            $estoqueDeliveryPorLoja = OtmEstoqueLoja::whereIn('produto_id', $productIds)
+                ->selectRaw('loja_id, MIN(estoque_atual - (estoque_reservado + giro_balcao)) as menor_estoque')
+                ->groupBy('loja_id')
+                ->pluck('menor_estoque', 'loja_id')
+                ->toArray();
+        }
+
         // Ordena por data + hora para acumulação correta
         usort($slots, function ($a, $b) {
             $cmp = strcmp($a['date'], $b['date']);
@@ -535,8 +547,15 @@ class ShippingService
         $remover = [];
 
         foreach ($slots as $key => $data) {
-            // --- Pre-filtros eh_delivery (legado linhas 1240-1264) ---
+            // --- Pre-filtros eh_delivery (legado linhas 1234-1264) ---
             if ($data['eh_delivery'] == 1) {
+                // Estoque insuficiente na loja bloqueia delivery (legado linha 1234)
+                $menorEstoque = $estoqueDeliveryPorLoja[$data['loja_id']] ?? 0;
+                if (!empty($productIds) && $menorEstoque <= 0) {
+                    $remover[$key] = true;
+                    continue;
+                }
+
                 // Margem > 5 bloqueia delivery completamente (regra Juçaí)
                 if ($margemPedido > 5) {
                     $remover[$key] = true;
