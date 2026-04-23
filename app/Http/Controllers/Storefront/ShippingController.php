@@ -111,15 +111,20 @@ class ShippingController extends Controller
     {
         $cep = $request->input('cep', '');
 
-        // Valor do carrinho (server-side, não confia em input do cliente)
-        $orderTotal = app(CartService::class)->getSubtotal();
+        // Valor do carrinho e produtos (server-side, não confia em input do cliente)
+        $cartService = app(CartService::class);
+        $orderTotal = $cartService->getSubtotal();
+
+        // IDs dos produtos no carrinho para cálculo de margem de produção (#196)
+        $cart = $cartService->getCart();
+        $productIds = array_column($cart, 'product_id');
 
         // ID do cliente logado (para regra de pedido mínimo de cliente novo)
         $pessoaId = Auth::guard('customer')->check()
             ? Auth::guard('customer')->id()
             : null;
 
-        $result = $this->shippingService->getDeliverySlots($cep, 14, $orderTotal, $pessoaId);
+        $result = $this->shippingService->getDeliverySlots($cep, 14, $orderTotal, $pessoaId, $productIds);
 
         $slots = $result['slots'];
         $avisos = $result['avisos'];

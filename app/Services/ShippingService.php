@@ -107,9 +107,10 @@ class ShippingService
      * @param int $days Número de dias para frente para buscar (padrão 14)
      * @param float $orderTotal Valor total do carrinho (para regras de pedido mínimo)
      * @param int|null $pessoaId ID do cliente logado (para regra de cliente novo)
+     * @param array $productIds IDs dos produtos no carrinho (para margem de produção #196)
      * @return array ['slots' => array, 'avisos' => array, 'pedido_minimo' => float|null]
      */
-    public function getDeliverySlots(string $cep, int $days = 14, float $orderTotal = 0, ?int $pessoaId = null): array
+    public function getDeliverySlots(string $cep, int $days = 14, float $orderTotal = 0, ?int $pessoaId = null, array $productIds = []): array
     {
         $emptyResult = ['slots' => [], 'avisos' => [], 'pedido_minimo' => null];
 
@@ -171,39 +172,49 @@ class ShippingService
             });
 
             foreach ($periodosHoje as $periodo) {
-                // Verifica margem de antecedência (em horas)
-                $horaLimite = $data->copy()->setTimeFromTimeString($periodo->hora_inicial)
-                    ->subHours($periodo->margem_hora ?? 0);
-
-                // Se for hoje, verifica se ainda dá tempo
-                if ($i === 0 && $hoje->gt($horaLimite)) {
-                    continue;
-                }
-
-                // Busca veículo_período associado para obter o ID que o legado espera
+                // Busca veículo_período associado para obter o ID e eh_delivery
                 $vp = VeiculoPeriodo::where('entregas_periodo_id', $periodo->id)
                     ->where('loja_id', $loja->id)
                     ->where('ativo', 1)
                     ->first();
 
+                // Se for hoje, pula períodos já encerrados (hora_final < agora)
+                // O check de margem completo (acumulativo) é feito em filterDeliverySlotsByMargin
+                if ($i === 0) {
+                    $horaFinal = $data->copy()->setTimeFromTimeString($periodo->hora_final);
+                    if ($hoje->gt($horaFinal)) {
+                        continue;
+                    }
+                }
+
+                // Duração do período em segundos (legado: segundos_duracao_periodo)
+                // Ancora numa data fixa para evitar problemas com strtotime em hora isolada
+                $segundosDuracao = strtotime('1970-01-01 ' . $periodo->hora_final)
+                                 - strtotime('1970-01-01 ' . $periodo->hora_inicial);
+
                 $slots[] = [
-                    'date'               => $dataStr,
-                    'date_formatted'     => $data->format('d/m/Y') . ' (' . $periodo->dia_nome . ')',
-                    'time_start'         => substr($periodo->hora_inicial, 0, 5),
-                    'time_end'           => substr($periodo->hora_final, 0, 5),
-                    'time_formatted'     => $periodo->horario_formatado,
-                    'periodo_id'         => $periodo->id,
-                    'veiculo_periodo_id' => $vp?->id,
-                    'loja_id'            => $loja->id,
-                    'regiao_id'          => $regiao->id,
-                    'margem_hora'        => $periodo->margem_hora ?? 0,
-                    'dia_semana'         => $diaSemana,
+                    'date'                     => $dataStr,
+                    'date_formatted'           => $data->format('d/m/Y') . ' (' . $periodo->dia_nome . ')',
+                    'time_start'               => substr($periodo->hora_inicial, 0, 5),
+                    'time_end'                 => substr($periodo->hora_final, 0, 5),
+                    'time_formatted'           => $periodo->horario_formatado,
+                    'periodo_id'               => $periodo->id,
+                    'veiculo_periodo_id'       => $vp?->id,
+                    'loja_id'                  => $loja->id,
+                    'regiao_id'                => $regiao->id,
+                    'margem_hora'              => $periodo->margem_hora ?? 0,
+                    'dia_semana'               => $diaSemana,
+                    'eh_delivery'              => (int) ($vp?->eh_delivery ?? 0),
+                    'segundos_duracao_periodo' => max($segundosDuracao, 0),
                 ];
             }
         }
 
         // Aplica filtros de disponibilidade por veículo (#195)
         $slots = $this->filterSlotsByVehicleAvailability($slots);
+
+        // Aplica filtro de margem de produção e eh_delivery (#196)
+        $slots = $this->filterDeliverySlotsByMargin($slots, $productIds);
 
         // Aplica regras de logística (regras_entregas)
         $deliveryRuleService = app(DeliveryRuleService::class);
@@ -490,6 +501,147 @@ class ShippingService
                 'endereco' => $loja->full_address,
             ],
         ];
+    }
+
+    /**
+     * Filtra slots de entrega por margem de produção e regras de delivery.
+     *
+     * Replica bloquear_margens() do legado (end_margem.php linha 1221).
+     *
+     * Algoritmo:
+     * - Pre-filtra slots eh_delivery (margem > 5 bloqueia, delivery só "agora" e só hoje)
+     * - Remove períodos já encerrados (hora_final < agora)
+     * - Para cada slot, calcula segundos disponíveis de produção:
+     *   - Limitado pela duração do período (segundos_duracao_periodo)
+     *   - Sábado não conta se margem > 5h (T7286)
+     * - Acumula contribuição de slots anteriores da mesma loja
+     * - Remove se horas acumuladas < margem_hora do período OU < margem_pedido
+     *
+     * @param array $slots Slots candidatos
+     * @param array $productIds IDs dos produtos no carrinho
+     * @return array Slots filtrados
+     */
+    protected function filterDeliverySlotsByMargin(array $slots, array $productIds): array
+    {
+        $margemPedido = $this->getProductionMargin($productIds);
+        $atual = time();
+
+        // Ordena por data + hora para acumulação correta
+        usort($slots, function ($a, $b) {
+            $cmp = strcmp($a['date'], $b['date']);
+            return $cmp !== 0 ? $cmp : strcmp($a['time_start'], $b['time_start']);
+        });
+
+        $remover = [];
+
+        foreach ($slots as $key => $data) {
+            // --- Pre-filtros eh_delivery (legado linhas 1240-1264) ---
+            if ($data['eh_delivery'] == 1) {
+                // Margem > 5 bloqueia delivery completamente (regra Juçaí)
+                if ($margemPedido > 5) {
+                    $remover[$key] = true;
+                    continue;
+                }
+
+                // Delivery só vale para "agora" — hora_inicial deve estar no passado ou agora
+                $tsHoraInicial = strtotime($data['date'] . ' ' . $data['time_start'] . ':00');
+                if ($tsHoraInicial > $atual) {
+                    $remover[$key] = true;
+                    continue;
+                }
+
+                // Delivery só vale para hoje
+                if (strtotime($data['date']) > strtotime(date('Y-m-d'))) {
+                    $remover[$key] = true;
+                    continue;
+                }
+            }
+
+            // Remove períodos já encerrados (legado linha 1254)
+            $tsHoraFinal = strtotime($data['date'] . ' ' . $data['time_end'] . ':00');
+            if ($tsHoraFinal < $atual) {
+                $remover[$key] = true;
+                continue;
+            }
+
+            // --- Cálculo acumulativo de segundos disponíveis (legado linhas 1266-1331) ---
+            $segundos = $tsHoraFinal - $atual;
+
+            // Cap pela duração do período
+            if ($segundos > $data['segundos_duracao_periodo']) {
+                $segundos = $data['segundos_duracao_periodo'];
+            }
+
+            // Sábado não conta se margem > 5h (T7286)
+            // Nota: o legado tem um bug — compara date string com int 6 ($data['dia'] == 6),
+            // que é sempre false. Aqui usamos dia_semana (int 0-6), que é o comportamento correto
+            // previsto pelo ticket T7286 (mesma decisão aplicada em filterPickupDatesByMargin)
+            if ($margemPedido > 5 && $data['dia_semana'] === 6) {
+                $segundos = 0;
+            }
+
+            // Acumula contribuição de slots anteriores da mesma loja
+            $jaForam = [];
+
+            foreach ($slots as $d) {
+                // Pula slots eh_delivery na acumulação
+                if ($d['eh_delivery'] == 1) {
+                    continue;
+                }
+
+                // Sábado não conta na acumulação se margem > 5h (T7286)
+                if ($margemPedido > 5 && $d['dia_semana'] === 6) {
+                    continue;
+                }
+
+                // Mesma loja apenas
+                if ($data['loja_id'] !== $d['loja_id']) {
+                    continue;
+                }
+
+                // Slot anterior deve estar no futuro
+                $tsD = strtotime($d['date'] . ' ' . $d['time_end'] . ':00');
+                if ($tsD <= $atual) {
+                    continue;
+                }
+
+                // Deduplica por dia + horário (legado linha 1307)
+                $dedup = $d['date'] . $d['time_start'] . $d['time_end'];
+                if (isset($jaForam[$dedup])) {
+                    continue;
+                }
+
+                // Apenas slots ANTES do slot avaliado
+                if ($tsHoraFinal > $tsD) {
+                    $s = $tsD - $atual;
+
+                    if ($s > $d['segundos_duracao_periodo']) {
+                        $segundos += $d['segundos_duracao_periodo'];
+                    } else {
+                        $segundos += $s;
+                    }
+
+                    $jaForam[$dedup] = true;
+                } else {
+                    break;
+                }
+            }
+
+            // Converte para horas
+            $horas = $segundos / 3600;
+
+            // Remove se margem insuficiente: período OU produto (legado linha 1341)
+            if ($horas < $data['margem_hora'] || $horas < $margemPedido) {
+                $remover[$key] = true;
+            }
+        }
+
+        // Remove slots marcados
+        foreach ($remover as $key => $_) {
+            unset($slots[$key]);
+        }
+
+        return array_values($slots);
     }
 
     /**
