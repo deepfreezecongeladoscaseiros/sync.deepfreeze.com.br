@@ -9,6 +9,7 @@ use App\Models\Legacy\Pessoa;
 use App\Models\Legacy\SessaoPedido;
 use App\Models\Legacy\StatusPedido;
 use App\Services\CouponService;
+use App\Services\GiftCardService;
 use App\Models\Product;
 use App\Mail\OrderConfirmation;
 use Illuminate\Support\Facades\DB;
@@ -173,23 +174,44 @@ class LegacyOrderService
             $statusPedido->observacao = 'Pedido criado pela nova loja virtual (sync)';
             $statusPedido->save();
 
-            // ====== APLICAR CUPOM DE DESCONTO ======
+            // ====== APLICAR CUPOM DE DESCONTO OU GIFT CARD ======
+            // Mesmo campo aceita cupom ou gift card (replica legado).
+            // Tenta cupom primeiro; só tenta gift card se o código NÃO existe como cupom.
             if ($couponCode) {
-                $couponService = app(CouponService::class);
-                $couponResult = $couponService->apply($couponCode, $pedidoId, $customer->id, $subtotal);
+                $discount = 0;
+                $discountLog = [];
 
-                if ($couponResult['success'] && $couponResult['discount'] > 0) {
-                    $discount = $couponResult['discount'];
+                // Verifica se o código existe como cupom na tabela promocionais
+                $couponService = app(CouponService::class);
+                $couponValidation = $couponService->validate($couponCode, $subtotal);
+
+                if ($couponValidation['valid']) {
+                    // É um cupom válido — aplica
+                    $couponResult = $couponService->apply($couponCode, $pedidoId, $customer->id, $subtotal);
+                    if ($couponResult['success'] && $couponResult['discount'] > 0) {
+                        $discount = $couponResult['discount'];
+                        $discountLog = ['cupom' => $couponCode];
+                    }
+                } elseif ($couponValidation['message'] === 'Cupom não encontrado.') {
+                    // Código não existe como cupom — tenta como gift card
+                    $giftCardService = app(GiftCardService::class);
+                    $giftResult = $giftCardService->apply($couponCode, $pedidoId, $customer->id, $subtotal);
+                    if ($giftResult['success'] && $giftResult['discount'] > 0) {
+                        $discount = $giftResult['discount'];
+                        $discountLog = ['gift_card' => $couponCode];
+                    }
+                }
+                // Se o cupom existe mas está expirado/usado/inválido, não tenta gift card
+
+                if ($discount > 0) {
                     $total = max(0, $subtotal + $shippingCost - $discount);
 
-                    // Atualiza valores do pedido com desconto
                     $pedido->desconto = $discount;
                     $pedido->valor_total = $total;
-                    $pedido->log_desconto = json_encode([
-                        'cupom' => $couponCode,
+                    $pedido->log_desconto = json_encode(array_merge($discountLog, [
                         'desconto' => $discount,
                         'aplicado_em' => now()->toDateTimeString(),
-                    ]);
+                    ]));
                     $pedido->save();
                 }
             }

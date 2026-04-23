@@ -80,6 +80,18 @@ class Promocional extends Model
         return $query->where('codigo', trim($code));
     }
 
+    // ==================== RELATIONSHIPS ====================
+
+    public function pedido()
+    {
+        return $this->belongsTo(Pedido::class, 'pedido_id');
+    }
+
+    public function giftCard()
+    {
+        return $this->belongsTo(GiftCard::class, 'gift_card_id');
+    }
+
     // ==================== HELPERS ====================
 
     /**
